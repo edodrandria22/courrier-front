@@ -1,0 +1,76 @@
+@import 'tailwindcss';
+@import 'tw-animate-css';
+
+@custom-variant dark (&:is(.dark *));
+
+:root {
+  /* Fond Bleu Nuit Profond */
+  --background: oklch(0.18 0.04 250); 
+  --foreground: oklch(0.98 0.01 250);
+
+  /* Cartes et Popovers (Légèrement plus clair que le fond) */
+  --card: oklch(0.22 0.04 250);
+  --card-foreground: oklch(0.98 0.01 250);
+  --popover: oklch(0.22 0.04 250);
+  --popover-foreground: oklch(0.98 0.01 250);
+
+  /* Primary: Le Cyan/Turquoise de l'image */
+  --primary: oklch(0.75 0.15 190); 
+  --primary-foreground: oklch(0.18 0.04 250);
+
+  /* Secondary: Le Orange de l'image */
+  --secondary: oklch(0.70 0.18 45); 
+  --secondary-foreground: oklch(0.98 0.01 250);
+
+  --muted: oklch(0.35 0.04 250);
+  --muted-foreground: oklch(0.75 0.02 250);
+
+  --accent: oklch(0.25 0.06 190);
+  --accent-foreground: oklch(0.98 0.01 250);
+
+  --destructive: oklch(0.60 0.18 25);
+  --destructive-foreground: oklch(0.98 0.01 250);
+
+  --border: oklch(0.30 0.04 250);
+  --input: oklch(0.30 0.04 250);
+  --ring: oklch(0.75 0.15 190);
+
+  /* Couleurs spécifiques pour tes graphiques (Charts) */
+  --chart-1: oklch(0.75 0.15 190); /* Cyan */
+  --chart-2: oklch(0.70 0.18 45);  /* Orange */
+  --chart-3: oklch(0.60 0.15 250); /* Bleu clair */
+  --chart-4: oklch(0.85 0.12 200); /* Turquoise pâle */
+  --chart-5: oklch(0.65 0.10 30);  /* Corail */
+
+  --radius: 0.75rem;
+}
+
+/* Mode Sombre (on garde une base sombre très proche) */
+.dark {
+  --background: oklch(0.12 0.03 250);
+  --card: oklch(0.16 0.03 250);
+  --primary: oklch(0.70 0.15 190);
+}
+
+@theme inline {
+  --font-sans: 'Geist', sans-serif;
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-primary: var(--primary);
+  --color-secondary: var(--secondary);
+  --color-card: var(--card);
+  --color-border: var(--border);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+}
+
+@layer base {
+  * {
+    /* Remplacé outline-ring/50 par une syntaxe plus standard */
+    @apply border-border;
+    outline-color: var(--ring);
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
