@@ -23,7 +23,7 @@ interface Props {
 
 
 export const MessageListView = ({ courrier, messages, loading, error, currentUserId, onSelect, onBack, isRecherche = false }: Props) => {
-  const { isMessageVisible, isLastRecipient } = useMessagePermissions(messages, currentUserId)
+  const { isMessageVisible, isLastRecipient} = useMessagePermissions(messages, currentUserId)
 
   return (
     <div className="flex flex-col h-full">
@@ -39,18 +39,26 @@ export const MessageListView = ({ courrier, messages, loading, error, currentUse
             <ArrowLeft className="w-4 h-4" />
           </Button>
         )}
+        
         <div className="flex-1 min-w-0">
           <p className="text-xs font-mono text-primary/70 mb-0.5">{courrier.reference}</p>
+          {/* Affichage du statut Finalisé */}
+            {courrier.cloturePar && (
+              <Badge variant="secondary" className="h-5 px-1.5 text-[10px] font-medium gap-1 bg-green-100 text-green-700 hover:bg-green-100 dark:bg-green-900/30 dark:text-green-400">
+                <CheckCircle2 className="w-3 h-3" />
+                Finalisé
+              </Badge>
+            )}
           <h2 className="text-sm font-bold text-foreground leading-tight">{courrier.object}</h2>
           <p className="text-xs text-muted-foreground mt-1">
             Demandeur : {courrier.nom} {courrier.prenom} · {courrier.email}
           </p>
         </div>
-        {isLastRecipient && (
+        {isLastRecipient &&  !courrier.cloturePar && (
           <Link href={`/message/compose?courrierId=${courrier.id}&reference=${encodeURIComponent(courrier.reference || '')}&objet=${encodeURIComponent(courrier.object || '')}`}>
             <Button size="sm" className="shrink-0 gap-1.5 text-xs font-bold">
               <Plus className="w-3.5 h-3.5" />
-              Nouveau message
+              Transferer message
             </Button>
           </Link>
         )}

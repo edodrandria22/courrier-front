@@ -84,6 +84,12 @@ export const MessageDetailView = ({ courrier, message, messages, currentUserId, 
               </Badge>
             )}
           </div>
+           {courrier.cloturePar && (
+              <Badge variant="secondary" className="h-5 px-1.5 text-[10px] font-medium gap-1 bg-green-100 text-green-700 hover:bg-green-100 dark:bg-green-900/30 dark:text-green-400">
+                <CheckCircle2 className="w-3 h-3" />
+                Finalisé
+              </Badge>
+            )}
           <h2 className="text-base font-bold text-foreground mt-0.5 leading-tight">{courrier.object}</h2>
           <p className="text-xs text-muted-foreground mt-0.5">{formatDate(message.createdAt)}</p>
         </div>
@@ -170,7 +176,7 @@ export const MessageDetailView = ({ courrier, message, messages, currentUserId, 
           Retour aux transferts
         </Button>
         <div className="flex flex-wrap items-center gap-2">
-          {message.isReadAt && isDestinataire && isLastMessage(message) && (
+          {message.isReadAt && isDestinataire && isLastMessage(message) && !courrier.cloturePar  && (
             <Button
               variant="outline"
               size="sm"

@@ -133,7 +133,7 @@ export const CourrierTemplate = ({ initialCourrier, isRecherche }: CourrierTempl
     // console.log(incomingData);
 
     // Vérifier si l'utilisateur actuel est le destinataire du message
-    const estPourMoi = incomingData.destinataire?.id=== currentUserId;
+    const estPourMoi = incomingData.destinataire?.id=== currentUserId || incomingData.expediteur?.id=== currentUserId;
 
     // NOTIFICATION : Nouveau message reçu
     if (estPourMoi) {
