@@ -257,7 +257,7 @@ export const CourrierTemplate = ({ initialCourrier, isRecherche }: CourrierTempl
           messages={messages}
           loading={loading && messages.length === 0}
           error={error}
-          currentUserId={currentUserId}
+          currentUserId={String(currentUserId)}
           onSelect={(m) => setStep({ level: 'detail', courrier: step.courrier, message: m })}
           onBack={() => setStep({ level: 'courriers' })}
           isRecherche={isRecherche}
@@ -304,7 +304,7 @@ export const CourrierTemplate = ({ initialCourrier, isRecherche }: CourrierTempl
           courrier={step.courrier}
           message={step.message}
           messages={messages}
-          currentUserId={currentUserId}
+          currentUserId={String(currentUserId)}
           onBack={() => setStep({ level: 'messages', courrier: step.courrier })}
           onMessageRead={handleMessageRead}
         />

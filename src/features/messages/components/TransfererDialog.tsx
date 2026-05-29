@@ -5,10 +5,11 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { Button } from '@/components/ui/button'
 import { Textarea } from '@/components/ui/textarea'
 import { Forward, FileText, X, Paperclip } from 'lucide-react'
-import { useUtilisateurs } from '@/features/utilisateurs/hooks/useUtilisateurs'
+// import { useUtilisateurs } from '@/features/utilisateurs/hooks/useUtilisateurs'
 import { useTransferer } from '../hooks/useTransferer'
 import { cn } from '@/lib/utils'
-import { useEffect } from 'react'
+// import { useEffect } from 'react'
+import { useUtilisateursContext } from '@/features/utilisateurs/context/UtilisateursContext'
 
 interface Attachment {
   file: File
@@ -27,14 +28,10 @@ export const TransfererDialog = ({ messageId, onSuccess }: Props) => {
   const [attachments, setAttachments] = useState<Attachment[]>([])
   const fileInputRef = useRef<HTMLInputElement>(null)
 
-  const { utilisateurs, loading: loadingUsers, fetchUtilisateurs } = useUtilisateurs()
-  const { transferer, loading: transferring, error: transferError } = useTransferer()
-
-  useEffect(() => {
-    if (open) {
-      fetchUtilisateurs()
-    }
-  }, [open, fetchUtilisateurs])
+  // const { utilisateurs, loading: loadingUsers, fetchUtilisateurs } = useUtilisateurs()
+  const { utilisateurs, loading } = useUtilisateursContext();
+  
+  const { transferer, loading: transferring, error: transferError } = useTransferer();
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = Array.from(e.target.files || [])
@@ -87,7 +84,7 @@ export const TransfererDialog = ({ messageId, onSuccess }: Props) => {
             <label className="text-sm font-semibold text-foreground">
               Sélectionner le destinataire
             </label>
-            {loadingUsers ? (
+            {loading ? (
               <div className="text-sm text-muted-foreground">Chargement...</div>
             ) : (
               <select
@@ -195,7 +192,7 @@ export const TransfererDialog = ({ messageId, onSuccess }: Props) => {
           <Button
             type="button"
             onClick={handleTransferer}
-            disabled={transferring || !selectedUserId || loadingUsers}
+            disabled={transferring || !selectedUserId || loading}
             className="bg-primary hover:opacity-90 text-primary-foreground min-w-[140px]"
           >
             {transferring ? 'Envoi...' : 'Transférer'}
