@@ -12,8 +12,8 @@ export const useCloturer = () => {
     setError(null)
 
     try {
-      await courrierService.cloturerCourrier(courrierId)
-      return { success: true }
+      const courrier =  await courrierService.cloturerCourrier(courrierId)
+      return { success: true, courrier: courrier }
     } catch (err) {
       const errorMsg = err instanceof Error ? err.message : 'Erreur lors de la clôture'
       setError(errorMsg)

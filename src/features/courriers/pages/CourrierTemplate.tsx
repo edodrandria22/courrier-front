@@ -12,6 +12,7 @@ import { MessageListView } from '../components/list/MessageListView'
 import { MessageDetailView } from '../components/MessageDetailView'
 import { useMercureSubscription } from '@/hooks/useMercureSubscription'
 import { useNotifications } from '@/hooks/useNotifications'
+import { useCloturer } from '../hooks/useCloturer'
 
 type Step =
   | { level: 'courriers' }
@@ -205,6 +206,29 @@ export const CourrierTemplate = ({ initialCourrier, isRecherche }: CourrierTempl
     });
   }, [setMessages]);
 
+  // 1. Appeler le hook au niveau supérieur de votre composant
+const { cloturer } =  useCloturer();
+
+// 2. Ajouter "async" devant les paramètres de la fonction
+const handleCloturer = useCallback(async (idCourrier: number) => {
+    try {
+      // 3. Exécuter la fonction asynchrone
+      const { success, courrier } = await cloturer(idCourrier);
+  
+      // 4. (Optionnel mais recommandé) Vérifier le succès avant de mettre à jour l'état
+      if (success && courrier) {
+        setCourriers(prev => 
+          prev.map(m => m.id === idCourrier ? { ...m, cloturePar: courrier.cloturePar } : m)
+        );
+      }
+     setStep({ level: 'courriers' });
+    } catch (err) {
+      console.error("Erreur lors de la clôture :", err);
+    }
+    
+  // 5. Ne pas oublier d'ajouter 'cloturer' dans le tableau des dépendances
+}, [cloturer, setCourriers]);
+
   useMercureSubscription<MessageCourrier>('message', handleTransfert);
   useMercureSubscription<{ id: number; isReadAt: string | null }>('lectureMessage', handleLecture);
 
@@ -307,6 +331,7 @@ export const CourrierTemplate = ({ initialCourrier, isRecherche }: CourrierTempl
           currentUserId={String(currentUserId)}
           onBack={() => setStep({ level: 'messages', courrier: step.courrier })}
           onMessageRead={handleMessageRead}
+          onCloture={() => handleCloturer(step.courrier.id||0)}
         />
       </div>
     </div>

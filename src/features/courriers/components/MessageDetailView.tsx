@@ -11,15 +11,19 @@ import { TransfererDialog } from '@/features/messages/components/TransfererDialo
 import { useMessagePermissions } from '@/hooks/useMessagePermissions'
 import { PieceJointeCard } from './PieceJointeCard'
 import { useMessages } from '@/features/messages/hooks/useMessages'
-import { useEffect, useRef } from 'react'
-
+import { useEffect, useRef, useState } from 'react'
+import { Lock, Loader2 } from 'lucide-react' // Ajoutez Loader2 ici
+import { toast } from 'sonner'
 interface Props {
   courrier: Courrier
   message: MessageCourrier
   messages: MessageCourrier[]
   currentUserId: string | null
   onBack: () => void,
-  onMessageRead?: (id: number) => void
+  onMessageRead?: (id: number) => void,
+  onCloture: (id: number) => Promise<void>,
+  
+
 }
 
 const formatDate = (iso: string) =>
@@ -33,7 +37,7 @@ const initials = (nom: string, prenom?: string) => {
 };
 
 
-export const MessageDetailView = ({ courrier, message, messages, currentUserId, onBack, onMessageRead }: Props) => {
+export const MessageDetailView = ({ courrier, message, messages, currentUserId, onBack, onMessageRead , onCloture}: Props) => {
   const { canTransfer, isLastMessage, isDestinataireOf } = useMessagePermissions(messages, currentUserId);
   const isDestinataire = isDestinataireOf(message);
   const { marquerLu, marquerNonLu, loading } = useMessages();
@@ -46,6 +50,23 @@ export const MessageDetailView = ({ courrier, message, messages, currentUserId, 
       onBack();
     }
   };
+  const [loadingCloturer, setLoadingCloturer] = useState(false);
+ 
+  const cloturer = async () => {
+    setLoadingCloturer(true);
+    
+    try {
+      // On attend (await) que la fonction de clôture se termine
+      await onCloture(courrier.id || 0);
+    } catch (error) {
+      toast.error("Erreur lors de la clôture");
+    } finally {
+      // Qu'il y ait une erreur ou que ça réussisse, on arrête le loading à la fin
+      setLoadingCloturer(false);
+    }
+  };
+
+
 
   useEffect(() => {
     if (isDestinataire && !message.isReadAt && !hasMarkedRef.current) {
@@ -187,9 +208,31 @@ export const MessageDetailView = ({ courrier, message, messages, currentUserId, 
               Marquer comme non lu
             </Button>
           )}
-          {canTransfer && isLastMessage(message) && !courrier.cloturePar && (
+        {canTransfer && isLastMessage(message) && !courrier.cloturePar && (
+          <>
             <TransfererDialog messageId={message.id} onSuccess={onBack} />
-          )}
+           <Button
+              variant="outline"
+              size="sm"
+              onClick={cloturer}
+              disabled={loadingCloturer}
+              className="text-xs border-amber-500/30 text-amber-600 hover:bg-amber-500/10 gap-1.5"
+            >
+              {loadingCloturer ? (
+                <>
+                  <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                  Clôture en cours...
+                </>
+              ) : (
+                <>
+                  <Lock className="w-3.5 h-3.5" />
+                  Clôturer
+                </>
+              )}
+            </Button>
+          </>
+        )}
+        
         </div>
       </div>
 
