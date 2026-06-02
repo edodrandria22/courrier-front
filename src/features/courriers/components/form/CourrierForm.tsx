@@ -38,7 +38,7 @@ export const CourrierForm = () => {
     const result = await createCourrier(courrierData)
 
     if (result.success) {
-      router.push('/message/courrier/receive')
+      router.push('/message/courrier/select')
     }
   }
 

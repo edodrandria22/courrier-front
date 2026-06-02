@@ -71,7 +71,7 @@ export interface Courrier {
   dateFin?: string;
   createdAt?: string;
   createur?: User;
-  cloturePar?: User;
+  cloturePar?: User | null;
   statut?: string;
   telephone?: string;
 }

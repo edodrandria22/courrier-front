@@ -13,6 +13,7 @@ import { MessageDetailView } from '../components/MessageDetailView'
 import { useMercureSubscription } from '@/hooks/useMercureSubscription'
 import { useNotifications } from '@/hooks/useNotifications'
 import { useCloturer } from '../hooks/useCloturer'
+import { User } from '@/features/auth/types/login'
 
 type Step =
   | { level: 'courriers' }
@@ -206,22 +207,31 @@ export const CourrierTemplate = ({ initialCourrier, isRecherche }: CourrierTempl
     });
   }, [setMessages]);
 
+ const handleCloturer = useCallback((data: { id: number; cloturePar: User | null }) => {
+  setCourriers(prev => prev.map(m => m.id === data.id ? { ...m, cloturePar: data.cloturePar } : m));
+  setStep(prev => prev.level !== 'courriers'
+    ? { ...prev, courrier: { ...prev.courrier, cloturePar: data.cloturePar } }
+    : prev
+  );
+}, [setCourriers, setStep]);
+  
   // 1. Appeler le hook au niveau supérieur de votre composant
 const { cloturer } =  useCloturer();
 
-// 2. Ajouter "async" devant les paramètres de la fonction
-const handleCloturer = useCallback(async (idCourrier: number) => {
+const handleLocalCloturation = useCallback(async (id: number) => {
     try {
       // 3. Exécuter la fonction asynchrone
-      const { success, courrier } = await cloturer(idCourrier);
+      const { success, courrier } = await cloturer(id);
   
       // 4. (Optionnel mais recommandé) Vérifier le succès avant de mettre à jour l'état
       if (success && courrier) {
         setCourriers(prev => 
-          prev.map(m => m.id === idCourrier ? { ...m, cloturePar: courrier.cloturePar } : m)
+          prev.map(m => m.id === id ? { ...m, cloturePar: courrier.cloturePar } : m)
         );
+        setStep({ level: 'courriers' });
+        
       }
-     setStep({ level: 'courriers' });
+     
     } catch (err) {
       console.error("Erreur lors de la clôture :", err);
     }
@@ -229,8 +239,32 @@ const handleCloturer = useCallback(async (idCourrier: number) => {
   // 5. Ne pas oublier d'ajouter 'cloturer' dans le tableau des dépendances
 }, [cloturer, setCourriers]);
 
+// 2. Ajouter "async" devant les paramètres de la fonction
+// const handleCloturer = useCallback(async (id: number) => {
+//     try {
+//       // 3. Exécuter la fonction asynchrone
+//       const { success, courrier } = await cloturer(id);
+  
+//       // 4. (Optionnel mais recommandé) Vérifier le succès avant de mettre à jour l'état
+//       if (success && courrier) {
+//         setCourriers(prev => 
+//           prev.map(m => m.id === id ? { ...m, cloturePar: courrier.cloturePar } : m)
+//         );
+//         setStep({ level: 'courriers' });
+        
+//       }
+     
+//     } catch (err) {
+//       console.error("Erreur lors de la clôture :", err);
+//     }
+    
+//   // 5. Ne pas oublier d'ajouter 'cloturer' dans le tableau des dépendances
+// }, [cloturer, setCourriers]);
+
+
   useMercureSubscription<MessageCourrier>('message', handleTransfert);
   useMercureSubscription<{ id: number; isReadAt: string | null }>('lectureMessage', handleLecture);
+  useMercureSubscription<{ id: number; cloturePar: User | null }>('clotureCourrier', handleCloturer);
 
   // --- RENDU ---
 
@@ -331,7 +365,7 @@ const handleCloturer = useCallback(async (idCourrier: number) => {
           currentUserId={String(currentUserId)}
           onBack={() => setStep({ level: 'messages', courrier: step.courrier })}
           onMessageRead={handleMessageRead}
-          onCloture={() => handleCloturer(step.courrier.id||0)}
+          onCloture={handleLocalCloturation}
         />
       </div>
     </div>
