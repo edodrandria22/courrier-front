@@ -2,7 +2,8 @@
     transferer message tsy mipoitra ao amze nandefa rehefa avy nalefa -- ok -- 20 mn
     finaliser courrier -- a faire -- 120 mn
         --affichage -- ok -- 60 mn
-        --utiliser mercure pour la synchronisation -- a faire -- 60 mn
+        --utiliser mercure pour la synchronisation -- ok -- 60 mn
+    voir detail finalisation undefined finalisation -- a faire -- 30 mn
     pagination -- a faire -- 60 mn
     modification courrier -- a faire -- 60 mn
     refactorisation code -- a faire -- 60 mn
