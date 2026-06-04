@@ -55,6 +55,9 @@
         dateFin: '',
         statut: undefined
       })
+      if (reinitialiser) {
+        reinitialiser()
+      }
     }
 
     return (
@@ -170,16 +173,19 @@
 
           {/* Statut */}
           <div>
-            <label className="block text-sm font-medium mb-1">Statut</label>
+            <label className="block text-sm font-medium mb-1 text-gray-700 dark:text-slate-300">
+              Statut
+            </label>
             <select
               value={criteria.statut || ''}
               onChange={(e) => handleInputChange('statut', e.target.value || undefined)}
-              className="w-full px-3 py-2 bg-slate-900/50 text-white border border-slate-700 rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
+              // {/* Style par défaut (blanc) + Style dark: (sombre) */}
+              className="w-full px-3 py-2 bg-white text-gray-900 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary dark:bg-slate-900/50 dark:text-white dark:border-slate-700"
             >
-              {/* On force le fond des options pour qu'elles restent lisibles à l'ouverture */}
-              <option value="" className="bg-slate-900 text-white">Tous</option>
-              <option value="en_cours" className="bg-slate-900 text-white">En cours</option>
-              <option value="finalise" className="bg-slate-900 text-white">Finalisé</option>
+              {/* Les options s'adaptent aussi au thème */}
+              <option value="" className="bg-white text-gray-900 dark:bg-slate-900 dark:text-white">Tous</option>
+              <option value="en_cours" className="bg-white text-gray-900 dark:bg-slate-900 dark:text-white">En cours</option>
+              <option value="finalise" className="bg-white text-gray-900 dark:bg-slate-900 dark:text-white">Finalisé</option>
             </select>
           </div>
 
