@@ -117,11 +117,11 @@ export default function TrackingPage() {
                 fontSize: '11px',
                 transition: 'all 0.5s',
                 transform: isSuccess ? 'scale(1.02)' : 'scale(1)',
-                backgroundColor: isSuccess ? '#059669' : '#1e40af',
+                backgroundColor: isSuccess ? '#059669' : 'var(--primary)',
                 color: '#ffffff',
                 borderWidth: '2px',
                 borderStyle: 'solid',
-                borderColor: isSuccess ? '#059669' : '#1e40af',
+                borderColor: isSuccess ? '#059669' : 'var(--primary)',
                 cursor: (loading || !reference.trim() || isSuccess) ? 'not-allowed' : 'pointer',
                 opacity: (loading || !reference.trim() || isSuccess) ? '0.6' : '1',
                 boxShadow: isSuccess 
@@ -134,17 +134,17 @@ export default function TrackingPage() {
               }}
               onMouseEnter={(e) => {
                 if (!loading && reference.trim() && !isSuccess) {
-                  e.currentTarget.style.backgroundColor = '#1e3a8a'
+                  e.currentTarget.style.backgroundColor = 'var(--secondary)'
                   e.currentTarget.style.transform = 'translateY(-4px) scale(1.02)'
-                  e.currentTarget.style.borderColor = '#1e3a8a'
+                  e.currentTarget.style.borderColor = 'var(--secondary)'
                   e.currentTarget.style.boxShadow = '0 25px 30px -5px rgba(30, 58, 138, 0.4), 0 10px 10px -5px rgba(30, 58, 138, 0.3)'
                 }
               }}
               onMouseLeave={(e) => {
                 if (!loading && reference.trim() && !isSuccess) {
-                  e.currentTarget.style.backgroundColor = '#1e40af'
+                  e.currentTarget.style.backgroundColor = 'var(--primary)'
                   e.currentTarget.style.transform = 'scale(1)'
-                  e.currentTarget.style.borderColor = '#1e40af'
+                  e.currentTarget.style.borderColor = 'var(--primary)'
                   e.currentTarget.style.boxShadow = '0 10px 15px -3px rgba(30, 64, 175, 0.4), 0 4px 6px -2px rgba(30, 64, 175, 0.2)'
                 }
               }}

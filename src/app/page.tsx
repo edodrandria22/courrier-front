@@ -34,11 +34,11 @@ export default function Home() {
           <Link href="/login">
             <button
               style={{
-                backgroundColor: '#1e40af',
+                backgroundColor: 'var(--primary)',
                 color: '#ffffff',
                 borderWidth: '2px',
                 borderStyle: 'solid',
-                borderColor: '#1e40af',
+                borderColor: 'var(--primary)',
                 padding: '12px 24px',
                 borderRadius: '9999px',
                 fontSize: '14px',
@@ -48,12 +48,14 @@ export default function Home() {
                 transition: 'all 0.2s'
               }}
               onMouseEnter={(e) => {
-                e.currentTarget.style.backgroundColor = '#1e3a8a'
-                e.currentTarget.style.borderColor = '#1e3a8a'
+                e.currentTarget.style.backgroundColor = 'var(--primary)'
+                e.currentTarget.style.borderColor = 'var(--primary)'
+                e.currentTarget.style.transform = 'scale(1.05)'
               }}
               onMouseLeave={(e) => {
-                e.currentTarget.style.backgroundColor = '#1e40af'
-                e.currentTarget.style.borderColor = '#1e40af'
+                e.currentTarget.style.backgroundColor = 'var(--primary)'
+                e.currentTarget.style.borderColor = 'var(--primary)'
+                e.currentTarget.style.transform = 'scale(1)'
               }}
             >
               Se connecter
@@ -86,11 +88,11 @@ export default function Home() {
           <Link href="/login">
             <button
               style={{
-                backgroundColor: '#1e40af',
+                backgroundColor: 'var(--primary)',
                 color: '#ffffff',
                 borderWidth: '2px',
                 borderStyle: 'solid',
-                borderColor: '#1e40af',
+                borderColor: 'var(--primary)',
                 padding: '16px 32px',
                 borderRadius: '9999px',
                 fontSize: '18px',
@@ -103,14 +105,14 @@ export default function Home() {
                 gap: '8px'
               }}
               onMouseEnter={(e) => {
-                e.currentTarget.style.backgroundColor = '#1e3a8a'
-                e.currentTarget.style.borderColor = '#1e3a8a'
+                e.currentTarget.style.backgroundColor = 'var(--primary)'
+                e.currentTarget.style.borderColor = 'var(--primary)'
                 e.currentTarget.style.transform = 'scale(1.05)'
                 e.currentTarget.style.boxShadow = '0 20px 25px -5px rgba(30, 58, 138, 0.4), 0 10px 10px -5px rgba(30, 58, 138, 0.3)'
               }}
               onMouseLeave={(e) => {
-                e.currentTarget.style.backgroundColor = '#1e40af'
-                e.currentTarget.style.borderColor = '#1e40af'
+                e.currentTarget.style.backgroundColor = 'var(--primary)'
+                e.currentTarget.style.borderColor = 'var(--primary)'
                 e.currentTarget.style.transform = 'scale(1)'
                 e.currentTarget.style.boxShadow = '0 10px 15px -3px rgba(30, 64, 175, 0.4), 0 4px 6px -2px rgba(30, 64, 175, 0.2)'
               }}
@@ -126,8 +128,8 @@ export default function Home() {
             <button
               style={{
                 backgroundColor: 'transparent',
-                color: '#1f2937',
-                borderColor: '#6b7280',
+                color: 'var(--secondary)',
+                borderColor: 'var(--secondary)',
                 borderWidth: '2px',
                 borderStyle: 'solid',
                 padding: '16px 32px',
@@ -138,16 +140,19 @@ export default function Home() {
                 transition: 'all 0.2s',
                 display: 'flex',
                 alignItems: 'center',
+                boxShadow: '0 10px 15px -3px rgba(243, 244, 250, 0.4), 0 4px 6px -2px rgba(30, 64, 175, 0.2)',
                 gap: '8px',
                 width: '100%'
               }}
               onMouseEnter={(e) => {
                 e.currentTarget.style.backgroundColor = '#f3f4f6'
                 e.currentTarget.style.borderColor = '#4b5563'
+                e.currentTarget.style.transform = 'scale(1.05)'
               }}
               onMouseLeave={(e) => {
                 e.currentTarget.style.backgroundColor = 'transparent'
                 e.currentTarget.style.borderColor = '#6b7280'
+                e.currentTarget.style.transform = 'scale(1)'
               }}
             >
               <Search className="w-5 h-5" style={{ color: '#4b5563' }} />

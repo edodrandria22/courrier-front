@@ -144,40 +144,45 @@ export const CourrierForm = () => {
 
         <div className="flex items-center justify-end gap-3 pt-6 border-t border-border">
           <Link href="/message/courrier/receive">
-            <button
-              type="button"
-              disabled={loading}
-              style={{
-                backgroundColor: 'transparent',
-                color: '#374151',
-                borderColor: '#d1d5db',
-                borderWidth: '1px',
-                borderStyle: 'solid',
-                padding: '8px 16px',
-                borderRadius: '6px',
-                fontWeight: '500',
-                fontSize: '14px',
-                cursor: loading ? 'not-allowed' : 'pointer',
-                opacity: loading ? '0.5' : '1',
-                transition: 'all 0.2s'
-              }}
-              onMouseEnter={(e) => {
-                if (!loading) e.currentTarget.style.backgroundColor = '#f9fafb'
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.backgroundColor = 'transparent'
-              }}
-            >
-              Annuler
-            </button>
+          <button
+            type="button"
+            disabled={loading}
+            style={{
+              backgroundColor: 'transparent',
+              color: 'var(--secondary)', // Aligné sur le thème secondaire
+              borderColor: 'var(--secondary)', // Aligné sur le thème secondaire
+              borderWidth: '1px',
+              borderStyle: 'solid',
+              padding: '8px 16px',
+              borderRadius: '6px',
+              fontWeight: '500',
+              fontSize: '14px',
+              cursor: loading ? 'not-allowed' : 'pointer',
+              opacity: loading ? '0.5' : '1',
+              transition: 'all 0.2s'
+            }}
+            onMouseEnter={(e) => {
+              // Un léger fond basé sur ta couleur secondaire (10% d'opacité) au survol
+              if (!loading) {
+                e.currentTarget.style.backgroundColor = 'var(--secondary-light, rgba(0, 0, 0, 0.05))'
+                e.currentTarget.style.scale = '1.05'
+              }
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.backgroundColor = 'transparent'
+              e.currentTarget.style.scale = '1'
+            }}
+          >
+            Annuler
+          </button>
           </Link>
           <button
             type="submit"
             disabled={loading}
             style={{
-              backgroundColor: '#2563eb',
+              backgroundColor: 'var(--primary)',
               color: '#ffffff',
-              borderColor: '#2563eb',
+              borderColor: 'var(--primary)',
               borderWidth: '1px',
               borderStyle: 'solid',
               padding: '8px 16px',
@@ -190,10 +195,12 @@ export const CourrierForm = () => {
               transition: 'all 0.2s'
             }}
             onMouseEnter={(e) => {
-              if (!loading) e.currentTarget.style.backgroundColor = '#1d4ed8'
+              if (!loading) e.currentTarget.style.backgroundColor = 'var(--primary)'
+              e.currentTarget.style.scale = '1.05'
             }}
             onMouseLeave={(e) => {
-              e.currentTarget.style.backgroundColor = '#2563eb'
+              e.currentTarget.style.backgroundColor = 'var(--primary)'
+              e.currentTarget.style.scale = '1'
             }}
           >
             {loading ? 'Traitement...' : <span className="flex items-center gap-2"><Send className="w-4 h-4" /> Créer le courrier</span>}

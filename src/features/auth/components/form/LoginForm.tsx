@@ -89,11 +89,11 @@ export const LoginForm = () => {
             style={{
               width: '100%',
               height: '48px',
-              backgroundColor: '#1e40af',
+              backgroundColor: 'var(--primary)',
               color: '#ffffff',
               borderWidth: '2px',
               borderStyle: 'solid',
-              borderColor: '#1e40af',
+              borderColor: 'var(--primary)',
               borderRadius: '12px',
               fontSize: '16px',
               fontWeight: '700',
@@ -108,15 +108,15 @@ export const LoginForm = () => {
             }}
             onMouseEnter={(e) => {
               if (!loading) {
-                e.currentTarget.style.backgroundColor = '#1e3a8a'
-                e.currentTarget.style.borderColor = '#1e3a8a'
+                e.currentTarget.style.backgroundColor = 'var(--secondary)'
+                e.currentTarget.style.borderColor = 'var(--secondary)'
                 e.currentTarget.style.transform = 'scale(0.98)'
               }
             }}
             onMouseLeave={(e) => {
               if (!loading) {
-                e.currentTarget.style.backgroundColor = '#1e40af'
-                e.currentTarget.style.borderColor = '#1e40af'
+                e.currentTarget.style.backgroundColor = 'var(--primary)'
+                e.currentTarget.style.borderColor = 'var(--primary)'
                 e.currentTarget.style.transform = 'scale(1)'
               }
             }}

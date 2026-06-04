@@ -222,8 +222,8 @@ export const ComposeForm = ({ courrierId, courrierReference, courrierObjet }: Co
               disabled={loading}
               style={{
                 backgroundColor: 'transparent',
-                color: '#374151',
-                borderColor: '#d1d5db',
+                color: 'var(--secondary)',
+                borderColor: 'var(--secondary)',
                 borderWidth: '1px',
                 borderStyle: 'solid',
                 padding: '8px 16px',
@@ -235,10 +235,12 @@ export const ComposeForm = ({ courrierId, courrierReference, courrierObjet }: Co
                 transition: 'all 0.2s'
               }}
               onMouseEnter={(e) => {
-                if (!loading) e.currentTarget.style.backgroundColor = '#f9fafb'
+                if (!loading) {
+                  e.currentTarget.style.transform = 'scale(1.05)'
+                }
               }}
               onMouseLeave={(e) => {
-                e.currentTarget.style.backgroundColor = 'transparent'
+                e.currentTarget.style.transform = 'scale(1)'
               }}
             >
               Annuler
@@ -248,9 +250,9 @@ export const ComposeForm = ({ courrierId, courrierReference, courrierObjet }: Co
             type="submit"
             disabled={loading || !destId}
             style={{
-              backgroundColor: (loading || !destId) ? '#9ca3af' : '#2563eb',
+              backgroundColor: (loading || !destId) ? 'var(--muted)' : 'var(--primary)',
               color: '#ffffff',
-              borderColor: (loading || !destId) ? '#9ca3af' : '#2563eb',
+              borderColor: (loading || !destId) ? 'var(--muted)' : 'var(--primary)',
               borderWidth: '1px',
               borderStyle: 'solid',
               padding: '8px 16px',
@@ -266,10 +268,12 @@ export const ComposeForm = ({ courrierId, courrierReference, courrierObjet }: Co
               gap: '8px'
             }}
             onMouseEnter={(e) => {
-              if (!loading && destId) e.currentTarget.style.backgroundColor = '#1d4ed8'
+              if (!loading && destId) e.currentTarget.style.backgroundColor = 'var(--primary)'
+              e.currentTarget.style.transform = 'scale(1.05)'
             }}
             onMouseLeave={(e) => {
-              e.currentTarget.style.backgroundColor = (loading || !destId) ? '#9ca3af' : '#2563eb'
+              e.currentTarget.style.backgroundColor = (loading || !destId) ? 'var(--muted)' : 'var(--primary)'
+              e.currentTarget.style.transform = 'scale(1)'
             }}
           >
             {loading ? (

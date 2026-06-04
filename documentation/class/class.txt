@@ -1,0 +1,3 @@
+<button className="bg-secondary text-white px-4 py-2 rounded">
+  Mon Bouton Secondaire
+</button>

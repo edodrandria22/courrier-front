@@ -79,7 +79,14 @@ export const CourrierSearchTemplate = ({ onCourrierSelect }: CourrierSearchTempl
       setSelectedCourrier(courrier)
     }
   }
-
+  
+  const handleReset = () => {
+    setSearchResults([])
+    setHasSearched(false)
+    setSearchCriteria(null)
+    setHasMore(true)
+  }
+  
   // Si un courrier est sélectionné, afficher la template avec les messages
   if (selectedCourrier) {
     return (
@@ -101,7 +108,7 @@ export const CourrierSearchTemplate = ({ onCourrierSelect }: CourrierSearchTempl
   return (
     <div className="space-y-6">
       {/* Formulaire de recherche */}
-      <CourrierSearchForm onSearch={handleSearch} loading={loading} />
+      <CourrierSearchForm onSearch={handleSearch} loading={loading} reinitialiser={handleReset} />
 
       {/* Résultats de recherche */}
       {hasSearched && (
