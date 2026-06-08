@@ -145,13 +145,9 @@ export default function Home() {
                 width: '100%'
               }}
               onMouseEnter={(e) => {
-                e.currentTarget.style.backgroundColor = '#f3f4f6'
-                e.currentTarget.style.borderColor = '#4b5563'
                 e.currentTarget.style.transform = 'scale(1.05)'
               }}
               onMouseLeave={(e) => {
-                e.currentTarget.style.backgroundColor = 'transparent'
-                e.currentTarget.style.borderColor = '#6b7280'
                 e.currentTarget.style.transform = 'scale(1)'
               }}
             >

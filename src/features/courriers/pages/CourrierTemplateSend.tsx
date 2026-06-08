@@ -25,7 +25,7 @@ interface CourrierTemplateProps {
   isRecherche?: boolean
 }
 
-export const CourrierTemplate = ({ initialCourrier, isRecherche }: CourrierTemplateProps = {}) => {
+export const CourrierTemplateSend = ({ initialCourrier, isRecherche }: CourrierTemplateProps = {}) => {
   const { user } = useCurrentUser();
   const currentUserId = user?.id ?? null;
   const nbLimit = process.env.NEXT_PUBLIC_NB_LIMIT ? parseInt(process.env.NEXT_PUBLIC_NB_LIMIT) : 2;
@@ -36,10 +36,10 @@ export const CourrierTemplate = ({ initialCourrier, isRecherche }: CourrierTempl
     messages,
     loading,
     error,
-    fetchCourriersByUser,
     fetchMessages,
     setCourriers,
-    setMessages
+    setMessages,
+    fetchCourriersByUserSend
   } = useCourrier()
   
   const [step, setStep] = useState<Step>(
@@ -59,17 +59,17 @@ export const CourrierTemplate = ({ initialCourrier, isRecherche }: CourrierTempl
 
   useEffect(() => {
     const initCourriers = async () => {
-      const data = await fetchCourriersByUser();
+      const data = await fetchCourriersByUserSend();
       if (data && data.length < nbLimit) setHasMoreCourriers(false);
     };
     initCourriers();
-  }, [fetchCourriersByUser]);
+  }, [fetchCourriersByUserSend]);
 
   const loadMoreCourriers = async () => {
     if (loading || !hasMoreCourriers) return;
     const lastDate = courriers[courriers.length - 1]?.createdAt;
     if (lastDate) {
-      const newItems = await fetchCourriersByUser(lastDate);
+      const newItems = await fetchCourriersByUserSend(lastDate);
       if (!newItems || newItems.length < nbLimit) setHasMoreCourriers(false);
     }
   };
@@ -201,7 +201,7 @@ export const CourrierTemplate = ({ initialCourrier, isRecherche }: CourrierTempl
     setCourriers(prev => prev.map(m => m.id === data.courrier.id ? { ...m, isReadAt: data.isReadAt } : m));
     setMessages(prev => prev.map(m => m.id === data.id ? { ...m, isReadAt: data.isReadAt } : m));
     setStep(prev => {
-       if (prev.level === 'messages' && prev.courrier.id === data.courrier.id) {
+      if (prev.level === 'messages' && prev.courrier.id === data.courrier.id) {
         return { ...prev, courrier: { ...prev.courrier, isReadAt: data.isReadAt } };
       }
       if (prev.level === 'detail' && prev.message.id === data.id) {

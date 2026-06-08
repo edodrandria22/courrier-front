@@ -105,6 +105,29 @@ export const courrierService = {
       throw error;
     }
   },
+  getCourriersByUserSend: async (dateCursor?: string): Promise<Courrier[]> => {
+    try {
+      const fetchWithAuth = useFetchAuth();
+      // 1. Construire l'URL avec le paramètre de recherche si la date est fournie
+      const url = dateCursor 
+          ? `/api/courriers/getAllbyUserSend?date=${encodeURIComponent(dateCursor)}` 
+          : '/api/courriers/getAllbyUserSend';
+
+      const res = await fetchWithAuth(url);
+
+      if (!res.ok) {
+          // Optionnel : passer plus de détails au logger pour le débogage
+          await logger.error(`courrierService.getCourriersByUser (date: ${dateCursor})`, res);
+          throw new Error('Impossible de charger vos courriers');
+      }
+      const json = await res.json();
+      // console.log('📋 API getAllbyUser - premier courrier:', JSON.stringify(json.data?.[0], null, 2));
+      return json.data as Courrier[];
+    } catch (error) {
+      logger.exception('courrierService.getCourriersByUser - Exception', error);
+      throw error;
+    }
+  },
 
   getCourrierById: async (id: number): Promise<Courrier | null> => {
     try {
@@ -135,6 +158,7 @@ export const courrierService = {
           nom: data.nom,
           prenom: data.prenom,
           telephone: data.telephone,
+          isConfidentiel: data.isConfidentiel ?? false,
         }),
       });
       if (!res.ok) {

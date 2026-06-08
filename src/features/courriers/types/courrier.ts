@@ -74,5 +74,12 @@ export interface Courrier {
   cloturePar?: User | null;
   statut?: string;
   telephone?: string;
+  isReadAt?: string | null;
+  expediteur?: User | null;
+  destinataire?: User | null;
+  isSend?: boolean;
+  dateMessage?: string;
+  isConfidentiel?: boolean;
+
 }
 

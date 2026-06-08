@@ -51,6 +51,34 @@ export const useCourrier = () => {
       setLoading(false);
     }
   }, [setCourriers]);
+  const fetchCourriersByUserSend = useCallback(async (dateCursor?: string) => {
+    setLoading(true);
+    setError(null);
+    try {
+      const data = await courrierService.getCourriersByUserSend(dateCursor);
+      
+      setCourriers((prev) => {
+        // Si on n'a pas de curseur, c'est le chargement initial : on remplace tout.
+        if (!dateCursor) {
+          return data;
+        }
+        
+        // Si on a un curseur, on filtre pour éviter les doublons et on ajoute à la suite.
+        const existingIds = new Set(prev.map(c => c.id));
+        const uniqueNewData = data.filter(c => !existingIds.has(c.id));
+        
+        return [...prev, ...uniqueNewData];
+      });
+
+      return data; // Important : retourner les données pour que le composant sache combien ont été reçues
+    } catch (err: unknown) {
+      logger.exception('useCourrier.fetchCourriersByUserUser', err);
+      setError(err instanceof Error ? err.message : 'Impossible de charger vos courriers send');
+      return [];
+    } finally {
+      setLoading(false);
+    }
+  }, [setCourriers]);
 
   const fetchMessages = useCallback(async (idCourrier: number, dateCursor?: string) => {
     setLoading(true);
@@ -110,5 +138,6 @@ export const useCourrier = () => {
     createCourrier,
     setCourriers,
     setMessages,
+    fetchCourriersByUserSend
   };
 };

@@ -1,6 +1,9 @@
 'use client'
 
-import { ArrowLeft, ArrowRight, Paperclip, CheckCircle2, MapPin, MessageSquare, User, Scissors, Printer } from 'lucide-react'
+import { 
+  ArrowLeft, ArrowRight, Paperclip, CheckCircle2, MapPin, 
+  MessageSquare, User, Lock, Loader2 
+} from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { Card } from '@/components/ui/card'
@@ -12,18 +15,16 @@ import { useMessagePermissions } from '@/hooks/useMessagePermissions'
 import { PieceJointeCard } from './PieceJointeCard'
 import { useMessages } from '@/features/messages/hooks/useMessages'
 import { useEffect, useRef, useState } from 'react'
-import { Lock, Loader2 } from 'lucide-react' // Ajoutez Loader2 ici
 import { toast } from 'sonner'
+
 interface Props {
   courrier: Courrier
   message: MessageCourrier
   messages: MessageCourrier[]
   currentUserId: string | null
-  onBack: () => void,
-  onMessageRead?: (id: number) => void,
-  onCloture: (id: number) => Promise<void>,
-  
-
+  onBack: () => void
+  onMessageRead?: (id: number) => void
+  onCloture: (id: number) => Promise<void>
 }
 
 const formatDate = (iso: string) =>
@@ -36,12 +37,12 @@ const initials = (nom: string, prenom?: string) => {
   return res || '?';
 };
 
-
-export const MessageDetailView = ({ courrier, message, messages, currentUserId, onBack, onMessageRead , onCloture}: Props) => {
+export const MessageDetailView = ({ courrier, message, messages, currentUserId, onBack, onMessageRead, onCloture }: Props) => {
   const { canTransfer, isLastMessage, isDestinataireOf } = useMessagePermissions(messages, currentUserId);
   const isDestinataire = isDestinataireOf(message);
   const { marquerLu, marquerNonLu, loading } = useMessages();
   const hasMarkedRef = useRef(false);
+  const isConfidentiel = courrier.isConfidentiel; // Vérification de la confidentialité
 
   const handleMarkAsUnread = async () => {
     const result = await marquerNonLu(message.id);
@@ -50,23 +51,20 @@ export const MessageDetailView = ({ courrier, message, messages, currentUserId, 
       onBack();
     }
   };
+
   const [loadingCloturer, setLoadingCloturer] = useState(false);
- 
+  
   const cloturer = async () => {
     setLoadingCloturer(true);
     
     try {
-      // On attend (await) que la fonction de clôture se termine
       await onCloture(courrier.id || 0);
     } catch (error) {
       toast.error("Erreur lors de la clôture");
     } finally {
-      // Qu'il y ait une erreur ou que ça réussisse, on arrête le loading à la fin
       setLoadingCloturer(false);
     }
   };
-
-
 
   useEffect(() => {
     if (isDestinataire && !message.isReadAt && !hasMarkedRef.current) {
@@ -97,21 +95,39 @@ export const MessageDetailView = ({ courrier, message, messages, currentUserId, 
           <ArrowLeft className="w-4 h-4" />
         </Button>
         <div className="flex-1 min-w-0">
-          <div className="flex items-center gap-2 flex-wrap">
+          <div className="flex items-center gap-2 flex-wrap mb-1">
             <p className="text-xs font-mono text-primary/70">{courrier.reference}</p>
+            
+            {/* Badge de confidentialité */}
+            {isConfidentiel && (
+              <Badge variant="outline" className="text-[10px] px-2 py-0 h-5 bg-amber-50 text-amber-700 border-amber-200 dark:bg-amber-900/30 dark:text-amber-400 dark:border-amber-800 flex items-center gap-1">
+                <Lock className="w-2.5 h-2.5" /> Confidentiel
+              </Badge>
+            )}
+
             {message.isReadAt && (
-              <Badge variant="outline" className="text-[10px] px-2 py-0 h-5 bg-emerald-500/10 text-emerald-400 border-emerald-500/20">
+              <Badge variant="outline" className="text-[10px] px-2 py-0 h-5 bg-emerald-500/10 text-emerald-400 border-emerald-500/20 flex items-center">
                 <CheckCircle2 className="w-3 h-3 mr-1" /> Lu
               </Badge>
             )}
-          </div>
-           {courrier.cloturePar && (
+
+            {courrier.cloturePar && (
               <Badge variant="secondary" className="h-5 px-1.5 text-[10px] font-medium gap-1 bg-green-100 text-green-700 hover:bg-green-100 dark:bg-green-900/30 dark:text-green-400">
                 <CheckCircle2 className="w-3 h-3" />
                 Finalisé
               </Badge>
             )}
-          <h2 className="text-base font-bold text-foreground mt-0.5 leading-tight">{courrier.object}</h2>
+          </div>
+          
+          {/* Titre stylisé en fonction de la confidentialité */}
+          <h2 className={cn(
+            "text-base font-bold mt-0.5 leading-tight flex items-center gap-1.5",
+            isConfidentiel ? "text-amber-700 dark:text-amber-500" : "text-foreground"
+          )}>
+            {isConfidentiel && <Lock className="w-4 h-4 shrink-0 text-amber-600 dark:text-amber-500" />}
+            {courrier.object}
+          </h2>
+          
           <p className="text-xs text-muted-foreground mt-0.5">{formatDate(message.createdAt)}</p>
         </div>
       </div>
@@ -187,17 +203,15 @@ export const MessageDetailView = ({ courrier, message, messages, currentUserId, 
             </div>
           </div>
         )}
-        </div>
-
-      
+      </div>
 
       {/* Actions */}
-      <div className="px-6 py-4 border-t border-border flex flex-wrap items-center justify-between gap-3">
+      <div className="px-6 py-4 border-t border-border flex flex-wrap items-center justify-between gap-3 bg-muted/10 rounded-b-xl">
         <Button onClick={onBack} variant="outline" className="border-border hover:bg-accent text-xs shrink-0">
           Retour aux transferts
         </Button>
         <div className="flex flex-wrap items-center gap-2">
-          {message.isReadAt && isDestinataire && isLastMessage(message) && !courrier.cloturePar  && (
+          {message.isReadAt && isDestinataire && isLastMessage(message) && !courrier.cloturePar && (
             <Button
               variant="outline"
               size="sm"
@@ -208,31 +222,31 @@ export const MessageDetailView = ({ courrier, message, messages, currentUserId, 
               Marquer comme non lu
             </Button>
           )}
-        {canTransfer && isLastMessage(message) && !courrier.cloturePar && (
-          <>
-            <TransfererDialog messageId={message.id} onSuccess={onBack} />
-           <Button
-              variant="outline"
-              size="sm"
-              onClick={cloturer}
-              disabled={loadingCloturer}
-              className="text-xs border-amber-500/30 text-amber-600 hover:bg-amber-500/10 gap-1.5"
-            >
-              {loadingCloturer ? (
-                <>
-                  <Loader2 className="w-3.5 h-3.5 animate-spin" />
-                  Clôture en cours...
-                </>
-              ) : (
-                <>
-                  <Lock className="w-3.5 h-3.5" />
-                  Clôturer
-                </>
-              )}
-            </Button>
-          </>
-        )}
-        
+          
+          {canTransfer && isLastMessage(message) && !courrier.cloturePar && (
+            <>
+              <TransfererDialog messageId={message.id} onSuccess={onBack} />
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={cloturer}
+                disabled={loadingCloturer}
+                className="text-xs border-amber-500/30 text-amber-600 hover:bg-amber-500/10 gap-1.5"
+              >
+                {loadingCloturer ? (
+                  <>
+                    <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                    Clôture en cours...
+                  </>
+                ) : (
+                  <>
+                    <Lock className="w-3.5 h-3.5" />
+                    Clôturer
+                  </>
+                )}
+              </Button>
+            </>
+          )}
         </div>
       </div>
 

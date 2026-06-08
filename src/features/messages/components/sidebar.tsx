@@ -47,6 +47,12 @@ export default function Sidebar({ onNavigate }: SidebarProps) {
       path: '/message/courrier/receive',
     },
     {
+      id: 'send',
+      name: 'Boîte d envoie',
+      icon: Mail,
+      path: '/message/courrier/send',
+    },
+    {
       id: 'recherche',
       name: 'Recherche',
       icon: ClipboardEdit,

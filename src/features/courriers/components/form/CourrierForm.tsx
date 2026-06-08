@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 import { Card } from '@/components/ui/card'
-import { Send, X, User } from 'lucide-react'
+import { Send, X, User, Lock } from 'lucide-react'
 import Link from 'next/link'
 import { useCourrier } from '../../hooks/useCourrier'
 import { Courrier } from '../../types/courrier'
@@ -21,20 +21,36 @@ export const CourrierForm = () => {
     description: '',
     nom: '',
     prenom: '',
-    telephone: ''
+    telephone: '',
+    isConfidentiel: false // 1. Ajout du champ booléen
   })
 
+  // Gestionnaire classique pour les champs texte
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target
     setFormData((prev) => ({ ...prev, [name]: value }))
   }
 
+  // 2. Gestionnaire spécifique pour la case "Confidentiel"
+  const handleConfidentialToggle = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const isChecked = e.target.checked
+    setFormData((prev) => ({
+      ...prev,
+      isConfidentiel: isChecked,
+      // Force l'objet à "Pli fermé" si coché, sinon vide (ou garde l'ancien)
+      object: isChecked ? 'Pli fermé' : (prev.object === 'Pli fermé' ? '' : prev.object),
+      // On vide les autres champs pour éviter d'envoyer des données cachées
+      nom: isChecked ? '' : prev.nom,
+      prenom: isChecked ? '' : prev.prenom,
+      telephone: isChecked ? '' : prev.telephone,
+      description: isChecked ? '' : prev.description,
+    }))
+  }
 
   const handleFormSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
 
     const courrierData: Courrier = formData
-
     const result = await createCourrier(courrierData)
 
     if (result.success) {
@@ -42,13 +58,35 @@ export const CourrierForm = () => {
     }
   }
 
+  // Helper pour savoir si on doit bloquer un champ
+  const isFieldDisabled = loading || formData.isConfidentiel;
+
   return (
     <Card className="max-w-3xl mx-auto border-border bg-card shadow-none md:border md:shadow-sm">
       <form onSubmit={handleFormSubmit} className="p-6 space-y-6">
 
-        <div className="border-b border-border pb-4">
-          <h2 className="text-lg font-bold text-foreground">Nouveau Courrier</h2>
-          <p className="text-sm text-muted-foreground">Enregistrement d'un nouveau courrier entrant.</p>
+        {/* En-tête avec Switch Confidentiel */}
+        <div className="border-b border-border pb-4 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div>
+            <h2 className="text-lg font-bold text-foreground">Nouveau Courrier</h2>
+            <p className="text-sm text-muted-foreground">Enregistrement d'un nouveau courrier entrant.</p>
+          </div>
+          
+          {/* 3. Checkbox Confidentiel */}
+          <label className="flex items-center gap-2 cursor-pointer p-2 rounded-lg hover:bg-muted/50 border border-transparent hover:border-border transition-colors">
+            <input 
+              type="checkbox" 
+              name="isConfidentiel"
+              checked={formData.isConfidentiel}
+              onChange={handleConfidentialToggle}
+              disabled={loading}
+              className="w-4 h-4 text-primary rounded border-border focus:ring-primary"
+            />
+            <span className="text-sm font-semibold flex items-center gap-1.5 text-foreground">
+              <Lock className="w-4 h-4 text-amber-600" />
+              Courrier Confidentiel
+            </span>
+          </label>
         </div>
 
         {error && (
@@ -67,10 +105,9 @@ export const CourrierForm = () => {
               name="nom"
               value={formData.nom}
               onChange={handleInputChange}
-              // required
               placeholder="Nom du correspondant"
-              className="bg-background/50 border-border"
-              disabled={loading}
+              className="bg-background/50 border-border disabled:opacity-50"
+              disabled={isFieldDisabled}
             />
           </div>
           <div className="space-y-2">
@@ -80,8 +117,8 @@ export const CourrierForm = () => {
               value={formData.prenom}
               onChange={handleInputChange}
               placeholder="Prénom (optionnel)"
-              className="bg-background/50 border-border"
-              disabled={loading}
+              className="bg-background/50 border-border disabled:opacity-50"
+              disabled={isFieldDisabled}
             />
           </div>
           <div className="space-y-2">
@@ -91,8 +128,8 @@ export const CourrierForm = () => {
               value={formData.telephone}
               onChange={handleInputChange}
               placeholder="Téléphone (optionnel)"
-              className="bg-background/50 border-border"
-              disabled={loading}
+              className="bg-background/50 border-border disabled:opacity-50"
+              disabled={isFieldDisabled}
             />
           </div>
         </div>
@@ -106,23 +143,22 @@ export const CourrierForm = () => {
               type="email"
               value={formData.email}
               onChange={handleInputChange}
-              // required
               placeholder="adresse@mail.com"
               className="bg-background/50 border-border"
-              disabled={loading}
+              disabled={loading} // L'email reste toujours accessible (seul le loading le bloque)
             />
           </div>
 
           <div className="space-y-2">
-            <label className="text-sm font-semibold text-foreground">Object</label>
+            <label className="text-sm font-semibold text-foreground">Objet</label>
             <Input
               name="object"
               value={formData.object}
               onChange={handleInputChange}
               required
               placeholder="Objet du courrier"
-              className="bg-background/50 border-border"
-              disabled={loading}
+              className="bg-background/50 border-border disabled:opacity-50 disabled:font-semibold disabled:text-amber-600"
+              disabled={isFieldDisabled} // Désactivé si confidentiel
             />
           </div>
         </div>
@@ -134,47 +170,46 @@ export const CourrierForm = () => {
             name="description"
             value={formData.description}
             onChange={handleInputChange}
-            // required
             rows={5}
             placeholder="Détails du courrier..."
-            className="resize-none bg-background/50 border-border"
-            disabled={loading}
+            className="resize-none bg-background/50 border-border disabled:opacity-50"
+            disabled={isFieldDisabled}
           />
         </div>
 
+        {/* Boutons d'actions */}
         <div className="flex items-center justify-end gap-3 pt-6 border-t border-border">
           <Link href="/message/courrier/receive">
-          <button
-            type="button"
-            disabled={loading}
-            style={{
-              backgroundColor: 'transparent',
-              color: 'var(--secondary)', // Aligné sur le thème secondaire
-              borderColor: 'var(--secondary)', // Aligné sur le thème secondaire
-              borderWidth: '1px',
-              borderStyle: 'solid',
-              padding: '8px 16px',
-              borderRadius: '6px',
-              fontWeight: '500',
-              fontSize: '14px',
-              cursor: loading ? 'not-allowed' : 'pointer',
-              opacity: loading ? '0.5' : '1',
-              transition: 'all 0.2s'
-            }}
-            onMouseEnter={(e) => {
-              // Un léger fond basé sur ta couleur secondaire (10% d'opacité) au survol
-              if (!loading) {
-                e.currentTarget.style.backgroundColor = 'var(--secondary-light, rgba(0, 0, 0, 0.05))'
-                e.currentTarget.style.scale = '1.05'
-              }
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.backgroundColor = 'transparent'
-              e.currentTarget.style.scale = '1'
-            }}
-          >
-            Annuler
-          </button>
+            <button
+              type="button"
+              disabled={loading}
+              style={{
+                backgroundColor: 'transparent',
+                color: 'var(--secondary)',
+                borderColor: 'var(--secondary)',
+                borderWidth: '1px',
+                borderStyle: 'solid',
+                padding: '8px 16px',
+                borderRadius: '6px',
+                fontWeight: '500',
+                fontSize: '14px',
+                cursor: loading ? 'not-allowed' : 'pointer',
+                opacity: loading ? '0.5' : '1',
+                transition: 'all 0.2s'
+              }}
+              onMouseEnter={(e) => {
+                if (!loading) {
+                  e.currentTarget.style.backgroundColor = 'var(--secondary-light, rgba(0, 0, 0, 0.05))'
+                  e.currentTarget.style.scale = '1.05'
+                }
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.backgroundColor = 'transparent'
+                e.currentTarget.style.scale = '1'
+              }}
+            >
+              Annuler
+            </button>
           </Link>
           <button
             type="submit"

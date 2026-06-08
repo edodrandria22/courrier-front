@@ -5,7 +5,41 @@
         --utiliser mercure pour la synchronisation -- ok -- 60 mn
     pagination -- ok -- 60 mn
     voir detail finalisation undefined finalisation -- ok -- 30 mn
-    css boutton lasa misy tsy hita -- a faire -- 60 mn
-    modification courrier -- a faire -- 60 mn
+    css boutton lasa misy tsy hita -- ok -- 60 mn
+    css gestion des utilisateurs -- a faire -- 60 mn
     refactorisation code -- a faire -- 60 mn
+    modification courrier -- a faire -- 60 mn
     
+    
+
+05/06/2026
+    voir message et liste courrier sur le boite de reception avec expediteur -- ok -60 mn
+    boite d'envoie -- a faire -- 30mn
+        --api -- a faire -- 5mn
+        --service --a faire -- 5mn
+        --page --a faire -- 20mn 
+06/06/2026
+    -- desing courrier et message : gmail -- ok 30 mn  
+    -- object obligatoire dans le formulaire de creation de courrier -- ok 15 mn
+    -- boutton transferer message css -- ok 15 mn
+    -- description courrier zone de texte -- ok
+
+    -- destination courrier -- ok -- 60 mn
+    -- date destination -- ok -- 30 mn
+    -- courrier confidentiel -- ok -- 30 mn
+    -- courrier lu et non lu -- ok -- 30 mn
+    -- message envoyer -- ok -- 60 mn
+    -- synchronisation mercure liste courrier par de destinataire -- ok -- 60 mn
+    -- affichage pour la confidentialite du courrier -- ok -- 30 mn
+    --recherche courrier avec type de confidentialite -- ok -- 30 mn
+    -- par compte, par type send ou receive numerotation numerotation courrier -- a faire -- 60 mn
+
+
+    envoyer nouvelle message -- a faire destinataire tsy mipoitra--30 mn 
+
+compte admin -- a faire -- 60 mn 
+   boite de reception tous les utilisateurs
+   trie par date
+
+apres creation courrier affichage reference courrier
+

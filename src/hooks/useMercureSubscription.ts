@@ -33,6 +33,7 @@ export function useMercureSubscription<T>(
     es.onmessage = (event) => {
       try {
         const data: T = JSON.parse(event.data);
+        // console.log(data)
         onMessageRef.current(data);
       } catch (err) {
         // console.error("Erreur parsing Mercure", err);

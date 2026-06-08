@@ -1,8 +1,11 @@
 'use client'
 
 import { useState } from 'react'
-// Ajout de l'icône 'Eye' à la place ou en plus de 'Download'
-import { Inbox, AlertCircle, ArrowRight, Clock, CheckCircle2, Archive, Search, X, User, Hash, FileText, Eye } from 'lucide-react'
+import { 
+  Inbox, AlertCircle, Clock, CheckCircle2, Archive, Search, X, 
+  User, Hash, FileText, Eye, MoreVertical, Lock, 
+  ArrowUpRight, ArrowDownLeft // <-- Nouvelles icônes ajoutées
+} from 'lucide-react'
 import { Badge } from '@/components/ui/badge'
 import { Skeleton } from '@/components/ui/skeleton'
 import { Input } from '@/components/ui/input'
@@ -22,18 +25,18 @@ interface Props {
 type SearchField = 'nom' | 'reference' | 'description'
 
 const SEARCH_FIELDS: { value: SearchField; label: string; icon: React.ElementType; placeholder: string }[] = [
-  { value: 'nom',         label: 'Nom',       icon: User,     placeholder: 'Rechercher par nom ou prenom...' },
-  { value: 'reference',   label: 'Reference', icon: Hash,     placeholder: 'Ex: ESPA-2026-001' },
-  { value: 'description', label: 'Description', icon: FileText, placeholder: 'Rechercher dans la description...' },
+  { value: 'nom',         label: 'Nom',       icon: User,     placeholder: 'Rechercher par nom ou prénom...' },
+  { value: 'reference',   label: 'Référence', icon: Hash,     placeholder: 'Ex: ESPA-2026-001' },
+  { value: 'description', label: 'Contenu',   icon: FileText, placeholder: 'Rechercher dans l\'objet ou description...' },
 ]
 
-const STATUT_CONFIG: Record<any, { label: string; icon: React.ElementType; className: string }> = {
-  en_cours:  { label: 'En cours',  icon: Clock,        className: 'bg-amber-500/10 text-amber-400 border-amber-500/20' },
-  finalise:  { label: 'Finalise',  icon: CheckCircle2, className: 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20' },
-  archive:   { label: 'Archive',   icon: Archive,      className: 'bg-muted/30 text-muted-foreground border-border' },
+const STATUT_CONFIG: Record<string, { label: string; icon: React.ElementType; className: string }> = {
+  en_cours:  { label: 'En cours',  icon: Clock,        className: 'bg-amber-100 text-amber-800 dark:bg-amber-500/10 dark:text-amber-400 border-transparent' },
+  finalise:  { label: 'Finalisé',  icon: CheckCircle2, className: 'bg-emerald-100 text-emerald-800 dark:bg-emerald-500/10 dark:text-emerald-400 border-transparent' },
+  archive:   { label: 'Archivé',   icon: Archive,      className: 'bg-gray-100 text-gray-800 dark:bg-muted/30 dark:text-muted-foreground border-transparent' },
 }
 
-export const CourrierListView = ({ courriers, loading, error, onSelect }: Props) => {
+export const CourrierListView = ({ courriers, loading, error, onSelect}: Props) => {
   const [query, setQuery] = useState('')
   const [searchField, setSearchField] = useState<SearchField>('nom')
 
@@ -53,81 +56,73 @@ export const CourrierListView = ({ courriers, loading, error, onSelect }: Props)
     : courriers
 
   return (
-    <div className="flex flex-col h-full">
-      {/* Header titre + compteur */}
-      <div className="px-4 md:px-6 py-3 border-b border-border flex items-center justify-between bg-muted/10">
-        <span className="text-[11px] font-black uppercase tracking-[0.18em] text-muted-foreground">
-          Courriers
-        </span>
-        {!loading && !error && (
-          <span className="text-[11px] font-mono text-muted-foreground/60 tabular-nums">
-            {filtered.length > 0 ? `${filtered.length} résultat${filtered.length > 1 ? 's' : ''}` : ''}
-          </span>
-        )}
-      </div>
+    <div className="flex flex-col h-full bg-background border-r border-border">
+      
+      {/* HEADER TYPE GMAIL (Barre de recherche intégrée en haut) */}
+      <div className="p-2 md:p-4 border-b border-border bg-background flex flex-col gap-3">
+        <div className="relative max-w-3xl">
+          <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+            <Search className="h-5 w-5 text-muted-foreground" />
+          </div>
+          <Input
+            placeholder={activeField.placeholder}
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+            className="pl-10 pr-10 py-6 w-full bg-muted/40 border-transparent hover:bg-muted/60 focus-visible:bg-background focus-visible:border-primary focus-visible:ring-1 focus-visible:ring-primary shadow-sm rounded-full text-base transition-all"
+          />
+          {query && (
+            <button
+              onClick={() => setQuery('')}
+              className="absolute inset-y-0 right-0 pr-4 flex items-center text-muted-foreground hover:text-foreground"
+            >
+              <X className="h-5 w-5" />
+            </button>
+          )}
+        </div>
 
-      {/* Barre de recherche + selecteur de champ */}
-      <div className="px-3 md:px-4 py-3 border-b border-border space-y-2">
-        {/* Boutons de selection du champ */}
-        <div className="flex flex-wrap gap-1">
+        {/* Puces de filtrage (Chips) type Gmail */}
+        <div className="flex flex-wrap gap-2 px-1">
           {SEARCH_FIELDS.map((field) => {
             const Icon = field.icon
+            const isActive = searchField === field.value
             return (
               <button
                 key={field.value}
                 onClick={() => { setSearchField(field.value); setQuery('') }}
                 className={cn(
-                  'flex items-center gap-1.5 px-3 py-1 rounded-lg text-[11px] font-bold uppercase tracking-wide transition-colors',
-                  searchField === field.value
-                    ? 'bg-primary/15 text-primary border border-primary/30'
-                    : 'text-muted-foreground/60 hover:text-muted-foreground hover:bg-accent/10 border border-transparent'
+                  'flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition-colors border',
+                  isActive
+                    ? 'bg-primary/10 text-primary border-primary/20'
+                    : 'bg-background text-muted-foreground border-border hover:bg-muted/50'
                 )}
               >
-                <Icon className="w-3 h-3" />
+                <Icon className="w-3.5 h-3.5" />
                 {field.label}
               </button>
             )
           })}
         </div>
-
-        {/* Input */}
-        <div className="relative">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground/50 pointer-events-none" />
-          <Input
-            placeholder={activeField.placeholder}
-            value={query}
-            onChange={(e) => setQuery(e.target.value)}
-            className="pl-9 pr-9 h-9 bg-muted/20 border-border text-foreground/80 placeholder:text-muted-foreground/50 focus-visible:ring-ring/40 rounded-xl text-sm"
-          />
-          {query && (
-            <button
-              onClick={() => setQuery('')}
-              className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground/50 hover:text-muted-foreground"
-            >
-              <X className="w-3.5 h-3.5" />
-            </button>
-          )}
-        </div>
       </div>
 
-      {/* Corps */}
-      <div className="flex-1 overflow-y-auto">
+      {/* Barre d'outils secondaire (Nombre de résultats) */}
+      <div className="px-4 py-2 border-b border-border flex items-center justify-between bg-background">
+        {!loading && !error && (
+          <span className="text-xs text-muted-foreground tabular-nums">
+            {filtered.length > 0 ? `${filtered.length} courrier(s)` : '0 courrier'}
+          </span>
+        )}
+      </div>
+
+      {/* LISTE DES COURRIERS */}
+      <div className="flex-1 overflow-y-auto bg-background">
         {loading && (
-          <div className="p-4 md:p-6 space-y-3">
-            {[...Array(4)].map((_, i) => (
-              <div key={i} className="rounded-xl border border-border bg-card px-4 py-3 flex items-start gap-3">
-                <Skeleton className="h-7 w-7 rounded-full shrink-0" />
-                <div className="flex-1 min-w-0 space-y-2">
-                  <div className="flex items-center justify-between gap-2">
-                    <div className="flex items-center gap-2">
-                      <Skeleton className="h-3 w-24 rounded" />
-                      <Skeleton className="h-4 w-16 rounded-full" />
-                    </div>
-                    <Skeleton className="h-3 w-14 rounded" />
-                  </div>
-                  <Skeleton className="h-3.5 w-3/4 rounded" />
-                  <Skeleton className="h-3 w-1/3 rounded" />
-                </div>
+          <div className="flex flex-col">
+            {[...Array(6)].map((_, i) => (
+              <div key={i} className="flex items-center gap-4 px-4 py-3 border-b border-border">
+                <Skeleton className="h-4 w-4 rounded" />
+                <Skeleton className="h-4 w-32 md:w-48" />
+                <Skeleton className="h-4 flex-1" />
+                <Skeleton className="h-4 w-16" />
               </div>
             ))}
           </div>
@@ -141,95 +136,149 @@ export const CourrierListView = ({ courriers, loading, error, onSelect }: Props)
         )}
 
         {!loading && !error && filtered.length === 0 && (
-          <div className="flex flex-col items-center justify-center py-20 px-6">
-            <div className="bg-primary/5 p-6 rounded-full mb-4 border border-primary/10">
-              <Inbox className="w-12 h-12 text-primary/30" />
-            </div>
-            <h3 className="text-lg font-bold text-muted-foreground uppercase tracking-widest">
-              {query ? 'Aucun resultat' : 'Registre vide'}
+          <div className="flex flex-col items-center justify-center h-full py-20">
+            <Inbox className="w-16 h-16 text-muted-foreground/20 mb-4" />
+            <h3 className="text-base font-medium text-foreground">
+              {query ? 'Aucun courrier trouvé' : 'Votre boîte est vide'}
             </h3>
-            <p className="text-muted-foreground/70 text-xs text-center max-w-[200px] mt-1 font-medium">
-              {query
-                ? `Aucun courrier ne correspond a "${query}"`
-                : 'Aucun courrier ne vous concerne pour le moment.'}
+            <p className="text-sm text-muted-foreground mt-1 text-center max-w-sm">
+              {query 
+                ? `Essayez de modifier vos critères de recherche pour "${query}".` 
+                : 'Les nouveaux courriers apparaîtront ici.'}
             </p>
           </div>
         )}
 
         {!loading && !error && filtered.length > 0 && (
-          <div className="p-4 md:p-6 space-y-3">
+          <div className="flex flex-col">
             {filtered.map((courrier) => {
               const statut = STATUT_CONFIG[courrier.cloturePar ? 'finalise' : 'en_cours']
               const StatutIcon = statut.icon
-              const isFinalise = !!courrier.cloturePar
+              const isLu = !!courrier.isReadAt
+              const isSend = courrier.isSend ?? false
+              const isConfidentiel = courrier.isConfidentiel
 
               return (
                 <div
                   key={courrier.id}
+                  onClick={() => onSelect(courrier)}
                   className={cn(
-                    'w-full text-left rounded-xl border transition-all duration-200 group relative overflow-hidden',
-                    'bg-card border-border hover:border-border/80 hover:shadow-sm'
+                    'group flex items-center px-4 py-2.5 border-b border-border cursor-pointer transition-all',
+                    'hover:shadow-[inset_1px_0_0_#dadce0,inset_-1px_0_0_#dadce0,0_1px_2px_0_rgba(60,64,67,.3),0_1px_3px_1px_rgba(60,64,67,.1)] hover:z-10',
+                    isLu 
+                      ? 'bg-slate-50 text-muted-foreground dark:bg-muted/30 hover:bg-slate-100/80 dark:hover:bg-muted/40' 
+                      : 'bg-white text-foreground font-semibold dark:bg-background hover:bg-slate-50 dark:hover:bg-muted/10'
                   )}
                 >
-                  <span className={cn(
-                    'absolute left-0 top-0 bottom-0 w-[3px] rounded-l-xl',
-                    isFinalise ? 'bg-emerald-500' : 'bg-amber-400'
-                  )} />
+                  {/* Marqueur de statut */}
+                  <div className="flex-none flex items-center justify-center w-8 mr-2">
+                    <StatutIcon 
+                      className={cn("w-4 h-4", courrier.cloturePar ? "text-emerald-500" : "text-muted-foreground/40")} 
+                      title={statut.label}
+                    />
+                  </div>
 
-                  <div className="px-4 py-3 flex items-start gap-3">
-                    <div className={cn(
-                      'shrink-0 w-7 h-7 rounded-full flex items-center justify-center mt-0.5 border',
-                      isFinalise
-                        ? 'bg-emerald-500/15 text-emerald-500 border-emerald-500/25'
-                        : 'bg-amber-400/15 text-amber-500 border-amber-400/25'
+                  {/* Expéditeur / Destinataire AVEC Indicateur Envoyé/Reçu */}
+                  <div className={cn(
+                      "flex-none w-32 md:w-48 pr-4 text-sm flex items-center gap-1.5",
+                      isLu ? "text-foreground/70 font-normal" : "text-foreground font-bold"
                     )}>
-                      <StatutIcon className="w-3.5 h-3.5" />
+                      {isSend ? (
+                          <>
+                            {/* Enveloppe span ajoutée pour le titre "Envoyé" */}
+                            <span title="Envoyé" className="flex shrink-0">
+                              <ArrowUpRight className="w-4 h-4 text-blue-500" />
+                            </span>
+                            <span className="truncate" title={`À: ${courrier.destinataire?.nom} ${courrier.destinataire?.prenom}`}>
+                              <span className="text-muted-foreground font-normal mr-1">À:</span>
+                              {courrier.destinataire?.nom} {courrier.destinataire?.prenom}
+                            </span>
+                          </>
+                        ) : (
+                          <>
+                            {/* Enveloppe span ajoutée pour le titre "Reçu" */}
+                            <span title="Reçu" className="flex shrink-0">
+                              <ArrowDownLeft className="w-4 h-4 text-emerald-500" />
+                            </span>
+                            <span className="truncate" title={`De: ${courrier.expediteur?.nom} ${courrier.expediteur?.prenom}`}>
+                              <span className="text-muted-foreground font-normal mr-1">De:</span>
+                              {courrier.expediteur?.nom} {courrier.expediteur?.prenom}
+                            </span>
+                          </>
+                        )}
                     </div>
 
-                    <button
-                      className="flex-1 min-w-0 text-left cursor-pointer"
-                      onClick={() => onSelect(courrier)}
-                    >
-                      <div className="flex items-center justify-between gap-2 mb-1">
-                        <div className="flex items-center gap-1.5 min-w-0">
-                          <span className="text-xs font-mono text-primary/70 truncate min-w-0"> Ref : {courrier.reference}</span>
-                          {courrier.numero && (
-                            <span className="text-xs font-mono text-primary/70 truncate min-w-0"> Numéro : {courrier.numero}</span>
-                          )}
-                          <Badge variant="outline" className={cn('text-[9px] px-1.5 py-0 h-4 shrink-0', statut.className)}>
-                            <StatutIcon className="w-2.5 h-2.5 mr-0.5" />
-                            {statut.label}
-                          </Badge>
-                        </div>
-                        <span className="text-[10px] text-muted-foreground/60 shrink-0 tabular-nums">
-                          {formatDateTime(courrier.createdAt || new Date().toISOString())}
+                  {/* Objet + Badges + Aperçu */}
+                  <div className="flex-1 min-w-0 flex items-center pr-4">
+                    <div className="truncate text-sm flex items-center gap-2 w-full">
+                      
+                      {/* Icône de cadenas si confidentiel */}
+                      {isConfidentiel && (
+                        <Lock className="w-3.5 h-3.5 text-amber-600 shrink-0" />
+                      )}
+
+                      <span className={cn(
+                        "truncate shrink-0 max-w-[50%]",
+                        isConfidentiel && "text-amber-600 font-semibold"
+                      )}>
+                        {courrier.object}
+                      </span>
+                      
+                      {/* Badge de Référence */}
+                      <Badge variant="secondary" className={cn('text-[10px] px-1.5 py-0 h-4 shrink-0 font-normal', statut.className)}>
+                        {courrier.reference}
+                      </Badge>
+
+                      {/* Gestion de l'aperçu de la description */}
+                      {isConfidentiel ? (
+                        <Badge variant="outline" className="text-[10px] px-1.5 py-0 h-4 shrink-0 font-normal border-amber-200 bg-amber-50 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400 dark:border-amber-800">
+                          Confidentiel
+                        </Badge>
+                      ) : (
+                        <span className="text-muted-foreground font-normal truncate text-sm">
+                          <span className="mx-1">-</span>
+                          {courrier.description || "Aucune description supplémentaire..."}
                         </span>
-                      </div>
+                      )}
+                      
+                    </div>
+                  </div>
 
-                      <p className="text-sm font-semibold text-foreground truncate">{courrier.object}</p>
+                  {/* Date ET Actions au survol */}
+                  <div className="flex-none w-24 flex items-center justify-end relative h-8">
+                    {/* Date */}
+                    <span className={cn(
+                      "text-xs absolute right-0 group-hover:opacity-0 transition-opacity",
+                      isLu ? "font-normal text-muted-foreground" : "font-bold text-foreground"
+                    )}>
+                      {formatDateTime(courrier.dateMessage || new Date().toISOString())}
+                    </span>
 
-                      <p className="text-xs text-muted-foreground/70 mt-0.5 truncate">
-                        {courrier.nom} {courrier.prenom}
-                      </p>
-                    </button>
-
-                    <div className="flex items-center gap-1.5 shrink-0 mt-0.5">
+                    {/* Actions au survol */}
+                    <div className="absolute right-0 opacity-0 group-hover:opacity-100 flex items-center gap-1 transition-opacity">
                       <Button
-                        variant="outline"
+                        variant="ghost"
                         size="icon"
-                        title="Afficher le PDF" // <-- Changé ici
-                        className="h-7 w-7 text-muted-foreground border-border hover:text-primary hover:border-primary/40 hover:bg-primary/10 transition-colors"
+                        title="Afficher le PDF"
+                        className="h-8 w-8 rounded-full text-muted-foreground hover:text-foreground hover:bg-muted"
                         onClick={(e) => { 
-                          e.stopPropagation(); 
-                          // J'ai ajouté le paramètre 'view' pour indiquer à votre utilitaire de l'afficher
+                          e.stopPropagation() 
                           generateCourrierPDF(courrier, 'view') 
                         }}
                       >
-                        <Eye className="w-3.5 h-3.5" /> {/* <-- Changé de Download à Eye */}
+                        <Eye className="w-4 h-4" />
                       </Button>
-                      <ArrowRight className="w-4 h-4 text-muted-foreground/30 group-hover:text-primary/50 group-hover:translate-x-0.5 transition-all" />
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        className="h-8 w-8 rounded-full text-muted-foreground hover:text-foreground hover:bg-muted"
+                        onClick={(e) => { e.stopPropagation() }}
+                      >
+                        <MoreVertical className="w-4 h-4" />
+                      </Button>
                     </div>
                   </div>
+
                 </div>
               )
             })}

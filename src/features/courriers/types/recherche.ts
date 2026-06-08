@@ -12,4 +12,5 @@ export interface CourrierSearchCriteria {
   dateFin?: string;
   statut?: 'en_cours' | 'finalise';
   date?: string; // Pour la pagination (dans le DTO)
+  isConfidentiel?: boolean;
 }
