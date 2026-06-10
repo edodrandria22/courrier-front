@@ -1,45 +1,38 @@
 'use client'
 
-import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { usePathname } from 'next/navigation'
-import { Button } from '@/components/ui/button'
 import {
   Mail,
-  Plus,
-  MoreVertical,
   ShieldCheck,
   ClipboardEdit,
-  Folder,
+  User as UserIcon,
+  Send,
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
+import { User } from '@/features/auth/types/login'
 
 interface SidebarProps {
+  user: User | null,
   onNavigate?: () => void
 }
 
-export default function Sidebar({ onNavigate }: SidebarProps) {
+export default function Sidebar({ user, onNavigate }: SidebarProps) {
   const pathname = usePathname()
 
   // 1. Définition de la variable pour les actions
-  const actionItems = [
-    // {
-    //   id: 'new-message',
-    //   name: 'Nouveau message',
-    //   icon: Plus,
-    //   path: '/message/courrier/select',
-    // },
-    {
+  const isAdmin = user?.role === 'Admin'
+  const actionItems: any[] = [];
+  const systemFolders: any[] = [];
+  if (!isAdmin) {
+    actionItems.push({
       id: 'new-courrier',
       name: 'Nouveau Courrier',
       icon: ClipboardEdit,
       path: '/message/courrier',
-    }
-  ]
-
-  // 2. Définition de la variable pour le menu principal
-  const systemFolders = [
+    });
+    systemFolders.push(
     {
       id: 'inbox',
       name: 'Boîte de réception',
@@ -48,8 +41,8 @@ export default function Sidebar({ onNavigate }: SidebarProps) {
     },
     {
       id: 'send',
-      name: 'Boîte d envoie',
-      icon: Mail,
+      name: "Boîte d'envoie",
+      icon: Send,
       path: '/message/courrier/send',
     },
     {
@@ -58,7 +51,48 @@ export default function Sidebar({ onNavigate }: SidebarProps) {
       icon: ClipboardEdit,
       path: '/message/courrier/recherche',
     }
-  ]
+  )
+    
+  }
+  else {
+    actionItems.push({
+      id: 'utilisateurs',
+      name: 'Utilisateurs',
+      icon: UserIcon,
+      path: '/message/utilisateurs',
+    })
+    actionItems.push({
+      id: 'new-courrier',
+      name: 'Nouveau Courrier',
+      icon: ClipboardEdit,
+      path: '/message/courrier',
+    })
+    
+    systemFolders.push(
+    {
+      id: 'inbox',
+      name: 'Boîte de réception',
+      icon: Mail,
+      path: '/message/courrier/receive',
+    },
+    {
+      id: 'send',
+      name: "Boîte d'envoie",
+      icon: Send,
+      path: '/message/courrier/send',
+    },
+    {
+      id: 'recherche',
+      name: 'Recherche',
+      icon: ClipboardEdit,
+      path: '/message/courrier/recherche',
+    })
+    
+  }
+
+  // 2. Définition de la variable pour le menu principal
+  
+  
 
   return (
     <aside className="w-64 bg-sidebar border-r border-sidebar-border flex flex-col h-screen">

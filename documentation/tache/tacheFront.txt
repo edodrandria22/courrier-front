@@ -42,6 +42,7 @@
     --transferer message boutton tsy mipoitra -- a faire -- 30 mn
     --modifier courrier si ce n'est pas deja en message -- ok -- 90 mn
     -- compte admin -- a faire -- 60 mn
+        --menu pour les utilisateurs pour gerer tous les utilisateurs
         -- boite de reception tous les utilisateurs -- ok
         -- trie par date et par expediteur -- ok
     -- admin tsy mandray courrier

@@ -15,38 +15,14 @@ import { User } from '@/features/auth/types/login'
 import { ThemePicker } from '@/features/theme/components/ThemePicker'
 
 interface HeaderProps {
+  user: User | null,
+  loading: boolean,
   onMenuToggle?: () => void
   showMenu?: boolean
 }
 
-export default function Header({ onMenuToggle, showMenu }: HeaderProps) {
-  const router = useRouter()
-  const [user, setUser] = useState<User | null>(null)
-  const [loading, setLoading] = useState(true)
-
-  const login = process.env.NEXT_PUBLIC_LOGIN_URL || '/login';
-
-  useEffect(() => {
-    checkAuth()
-  }, [])
-
-  const checkAuth = async () => {
-    try {
-      const response = await fetch(`/api/auth/me`);
-      if (!response.ok) {
-        router.push(login)
-        return;
-      }
-      const data = await response.json();
-      setUser(data.user);
-    } catch (err) {
-      router.push(login)
-    }
-    finally {
-      setLoading(false)
-    }
-  };
-
+export default function Header({user,loading ,onMenuToggle, showMenu }: HeaderProps) {
+  const router = useRouter();
   const handleLogout = async () => {
     try {
       await fetch('/api/auth/logout', { method: 'POST' })
@@ -127,19 +103,6 @@ export default function Header({ onMenuToggle, showMenu }: HeaderProps) {
               <Settings className="w-4 h-4 mr-2" />
               <span>Parametres</span>
             </DropdownMenuItem>
-            <DropdownMenuSeparator />
-            {user?.role === 'Admin' && (
-              <>
-                <DropdownMenuItem
-                  className="cursor-pointer"
-                  onClick={() => router.push('/message/utilisateurs')}
-                >
-                  <UserIcon className="w-4 h-4 mr-2" />
-                  <span>Utilisateurs</span>
-                </DropdownMenuItem>
-                <DropdownMenuSeparator />
-              </>
-            )}
 
             <DropdownMenuItem
               className="cursor-pointer text-destructive focus:text-destructive"
