@@ -267,4 +267,32 @@ export const courrierService = {
       throw error;
     }
   },
+  updateCourrier: async (id: number, data: Courrier): Promise<{ success: boolean; error?: string; courrier?: Courrier }> => {
+   try {
+      const fetchWithAuth = useFetchAuth();
+      const res = await fetchWithAuth(`/api/courriers/${id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          object: data.object,
+          description: data.description,
+          email: data.email,
+          nom: data.nom,
+          prenom: data.prenom,
+          telephone: data.telephone,
+          isConfidentiel: data.isConfidentiel ?? false,
+        }),
+      });
+      if (!res.ok) {
+        await logger.error('courrierService.updateCourrier', res);
+        const json = await res.json();
+        return { success: false, error: json.error ?? json.message ?? 'Erreur lors de la mise à jour' };
+      }
+      
+      return { success: true, courrier: (await res.json()).data };
+    } catch (error) {
+      logger.exception('courrierService.updateCourrier - Exception', error);
+      return { success: false, error: 'Erreur lors de la mise à jour' };
+    }
+  },
 };

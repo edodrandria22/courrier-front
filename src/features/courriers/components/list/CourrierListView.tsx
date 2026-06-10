@@ -4,7 +4,7 @@ import { useState } from 'react'
 import { 
   Inbox, AlertCircle, Clock, CheckCircle2, Archive, Search, X, 
   User, Hash, FileText, Eye, MoreVertical, Lock, 
-  ArrowUpRight, ArrowDownLeft // <-- Nouvelles icônes ajoutées
+  ArrowUpRight, ArrowDownLeft, Pencil 
 } from 'lucide-react'
 import { Badge } from '@/components/ui/badge'
 import { Skeleton } from '@/components/ui/skeleton'
@@ -19,7 +19,9 @@ interface Props {
   courriers: Courrier[]
   loading: boolean
   error: string | null
-  onSelect: (courrier: Courrier) => void
+  onSelect: (courrier: Courrier) => void,
+  onEdit?: (courrier: Courrier) => void
+  isUpdate?: boolean
 }
 
 type SearchField = 'nom' | 'reference' | 'description'
@@ -36,7 +38,7 @@ const STATUT_CONFIG: Record<string, { label: string; icon: React.ElementType; cl
   archive:   { label: 'Archivé',   icon: Archive,      className: 'bg-gray-100 text-gray-800 dark:bg-muted/30 dark:text-muted-foreground border-transparent' },
 }
 
-export const CourrierListView = ({ courriers, loading, error, onSelect}: Props) => {
+export const CourrierListView = ({ courriers, loading, error, onSelect,  onEdit, isUpdate = false}: Props) => {
   const [query, setQuery] = useState('')
   const [searchField, setSearchField] = useState<SearchField>('nom')
 
@@ -268,14 +270,20 @@ export const CourrierListView = ({ courriers, loading, error, onSelect}: Props) 
                       >
                         <Eye className="w-4 h-4" />
                       </Button>
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        className="h-8 w-8 rounded-full text-muted-foreground hover:text-foreground hover:bg-muted"
-                        onClick={(e) => { e.stopPropagation() }}
-                      >
-                        <MoreVertical className="w-4 h-4" />
-                      </Button>
+                      {isUpdate && (
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          title="Modifier"
+                          className="h-8 w-8 rounded-full text-muted-foreground hover:text-foreground hover:bg-muted"
+                          onClick={(e) => {
+                            e.stopPropagation()
+                            onEdit?.(courrier)
+                          }}
+                        >
+                          <Pencil className="w-4 h-4" />
+                        </Button>
+                      )}
                     </div>
                   </div>
 

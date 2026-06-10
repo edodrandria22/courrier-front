@@ -126,6 +126,22 @@ export const useCourrier = () => {
       setLoading(false);
     }
   }, []);
+  const updateCourrier = useCallback(async (id: number, data: Courrier): Promise<{ success: boolean; error?: string , courrier?: Courrier}> => {
+    setLoading(true);
+    setError(null);
+    try {
+      const result = await courrierService.updateCourrier(id, data);
+      if (!result.success) setError(result.error ?? 'Erreur lors de la mise à jour');
+      return result;
+    } catch (err: unknown) {
+      logger.exception('useCourrier.updateCourrier', err);
+      const msg = err instanceof Error ? err.message : 'Erreur lors de la mise à jour';
+      setError(msg);
+      return { success: false, error: msg };
+    } finally {
+      setLoading(false);
+    }
+  }, []);
 
   return {
     courriers,
@@ -138,6 +154,7 @@ export const useCourrier = () => {
     createCourrier,
     setCourriers,
     setMessages,
-    fetchCourriersByUserSend
+    fetchCourriersByUserSend,
+    updateCourrier
   };
 };

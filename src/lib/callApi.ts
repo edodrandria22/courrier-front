@@ -204,10 +204,8 @@ export async function callApiPut(
       headers: { "Content-Type": "application/json" },
     });
 
-    return NextResponse.json(
-      { message: "Créé avec succès", data: response.data },
-      { status: 201 }
-    );
+    return NextResponse.json(response.data, { status: 201 });
+    
   } catch (err: unknown) {
     if (axios.isAxiosError(err)) {
       const msg =

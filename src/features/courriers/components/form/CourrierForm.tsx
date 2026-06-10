@@ -1,7 +1,6 @@
 'use client'
 
 import { useState } from 'react'
-import { useRouter } from 'next/navigation'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 import { Card } from '@/components/ui/card'
@@ -11,25 +10,26 @@ import { useCourrier } from '../../hooks/useCourrier'
 import { Courrier } from '../../types/courrier'
 
 interface Props {
-  onSuccess: () => void
+  onSuccess: () => void,
+  courrier?: Courrier,
+  onClose?: () => void
 }
 
-export const CourrierForm = ({ onSuccess }: Props) => {
-  const router = useRouter()
-  const { createCourrier, loading, error } = useCourrier()
-
+export const CourrierForm = ({ onSuccess, courrier, onClose }: Props) => {
+  const { createCourrier, updateCourrier,loading, error } = useCourrier()
+  const [backupData, setBackupData] = useState<Partial<Courrier> | null>(null)
   // 1. État pour stocker la référence après création réussie
   const [createdReference, setCreatedReference] = useState<string | null>(null)
   const [isCopied, setIsCopied] = useState(false)
 
   const [formData, setFormData] = useState({
-    email: '',
-    object: '',
-    description: '',
-    nom: '',
-    prenom: '',
-    telephone: '',
-    isConfidentiel: false 
+    email: courrier?.email || '',
+    object: courrier?.object || '',
+    description: courrier?.description || '',
+    nom: courrier?.nom || '',
+    prenom: courrier?.prenom || '',
+    telephone: courrier?.telephone || '',
+    isConfidentiel: courrier?.isConfidentiel || false 
   })
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -39,27 +39,54 @@ export const CourrierForm = ({ onSuccess }: Props) => {
 
   const handleConfidentialToggle = (e: React.ChangeEvent<HTMLInputElement>) => {
     const isChecked = e.target.checked
-    setFormData((prev) => ({
-      ...prev,
-      isConfidentiel: isChecked,
-      object: isChecked ? 'Pli fermé' : (prev.object === 'Pli fermé' ? '' : prev.object),
-      nom: isChecked ? '' : prev.nom,
-      prenom: isChecked ? '' : prev.prenom,
-      telephone: isChecked ? '' : prev.telephone,
-      description: isChecked ? '' : prev.description,
-    }))
+
+    if (isChecked) {
+      setBackupData({
+        object: formData.object,
+        nom: formData.nom,
+        prenom: formData.prenom,
+        telephone: formData.telephone,
+        description: formData.description,
+      })
+
+      setFormData((prev) => ({
+        ...prev,
+        isConfidentiel: true,
+        object: 'Pli fermé',
+        nom: '',
+        prenom: '',
+        telephone: '',
+        description: '',
+      }))
+    } else {
+      setFormData((prev) => ({
+        ...prev,
+        isConfidentiel: false,
+        object: backupData?.object || '',
+        nom: backupData?.nom || '',
+        prenom: backupData?.prenom || '',
+        telephone: backupData?.telephone || '',
+        description: backupData?.description || '',
+      }))
+    }
   }
 
   const handleFormSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
 
-    const courrierData: Courrier = formData
-    const result = await createCourrier(courrierData)
-
+    const courrierData: Courrier = formData;
+    var result;
+    if (courrier) {
+      result = await updateCourrier(courrier.id||0,courrierData);
+    }
+    else{
+      result = await createCourrier(courrierData);
+    }
+    // console.log(result)
     if (result.success) {
       // 2. On récupère la référence générée par votre API (ex: result.reference ou result.data.reference)
       // Ajustez "result.reference" selon la structure exacte renvoyée par votre hook useCourrier
-      console.log(result)
+      // console.log(result)
       setCreatedReference(result.courrier?.reference || "REF-" + Math.floor(100000 + Math.random() * 900000))
     }
   }
@@ -127,8 +154,23 @@ export const CourrierForm = ({ onSuccess }: Props) => {
         {/* En-tête avec Switch Confidentiel */}
         <div className="border-b border-border pb-4 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div>
-            <h2 className="text-lg font-bold text-foreground">Nouveau Courrier</h2>
-            <p className="text-sm text-muted-foreground">Enregistrement d'un nouveau courrier entrant.</p>
+            {courrier ? (
+              <>
+                <h2 className="text-lg font-bold text-foreground">
+                  Modifier le Courrier {courrier?.reference}
+                </h2>
+              </>
+            ) : (
+              <>
+                <h2 className="text-lg font-bold text-foreground">
+                  Nouveau Courrier
+                </h2>
+                <p className="text-sm text-muted-foreground">
+                  Enregistrement d'un nouveau courrier entrant.
+                </p>
+              </>
+            )}
+            
           </div>
           
           <label className="flex items-center gap-2 cursor-pointer p-2 rounded-lg hover:bg-muted/50 border border-transparent hover:border-border transition-colors">
@@ -236,7 +278,32 @@ export const CourrierForm = ({ onSuccess }: Props) => {
         </div>
 
         {/* Boutons d'actions */}
+        
         <div className="flex items-center justify-end gap-3 pt-6 border-t border-border">
+          {onClose && (
+            <button
+              type="button"
+              onClick={onClose}
+              disabled={loading}
+              style={{
+                backgroundColor: 'var(--secondary)',
+                color: '#ffffff',
+                borderColor: 'var(--secondary)',
+                borderWidth: '1px',
+                borderStyle: 'solid',
+                padding: '8px 16px',
+                borderRadius: '6px',
+                fontWeight: '600',
+                fontSize: '14px',
+                cursor: loading ? 'not-allowed' : 'pointer',
+                opacity: loading ? '0.5' : '1',
+                boxShadow: '0 1px 2px 0 rgba(0, 0, 0, 0.05)',
+                transition: 'all 0.2s'
+              }}
+            >
+              Annuler
+            </button>
+          )}
           <button
             type="submit"
             disabled={loading}
@@ -256,7 +323,7 @@ export const CourrierForm = ({ onSuccess }: Props) => {
               transition: 'all 0.2s'
             }}
           >
-            {loading ? 'Traitement...' : <span className="flex items-center gap-2"><Send className="w-4 h-4" /> Créer le courrier</span>}
+            {loading ? 'Traitement...' : <span className="flex items-center gap-2"><Send className="w-4 h-4" /> {courrier ? 'Modifier le courrier' : 'Créer le courrier'}</span>}
           </button>
         </div>
       </form>

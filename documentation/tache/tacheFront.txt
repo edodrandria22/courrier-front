@@ -40,9 +40,13 @@
     -- apres creation courrier affichage reference courrier -- ok -- 30 mn
     -- changer desing de liste message en tableau -- ok -- 30 mn
     --transferer message boutton tsy mipoitra -- a faire -- 30 mn
-    -- compte admin -- a faire -- 60 mn 
+    -- compte admin -- a faire -- 60 mn
         -- boite de reception tous les utilisateurs -- ok
         -- trie par date et par expediteur -- ok
+    -- admin tsy mandray courrier
+    --modifier courrier si ce n'est pas deja en message -- a faire -- 30 mn
+    --modifier message si ce non lu -- a faire -- 60 mn
+    --quand le souris passe sur l'utilisateur on affiche le detail de l'utilisateur -- a faire -- 60 mn
 
     
 GET http://localhost:3000/api/notifications/subscribe 404 (Not Found)
