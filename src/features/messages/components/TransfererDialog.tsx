@@ -67,7 +67,7 @@ export const TransfererDialog = ({ messageId, onSuccess }: Props) => {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button variant="outline" size="sm" className="gap-2">
+        <Button variant="outline" size="sm" className="gap-2" >
           <Forward className="w-4 h-4" />
           Transférer
         </Button>
@@ -191,6 +191,7 @@ export const TransfererDialog = ({ messageId, onSuccess }: Props) => {
           </Button>
           <Button
             type="button"
+            style={{ color: '#ffffff' }}
             onClick={handleTransferer}
             disabled={transferring || !selectedUserId || loading}
             className="bg-primary hover:opacity-90 text-primary-foreground min-w-[140px]"

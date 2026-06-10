@@ -134,14 +134,15 @@ export const CourrierForm = ({ onSuccess, courrier, onClose }: Props) => {
         </div>
 
         {/* Bouton de validation finale qui déclenche le onSuccess externe */}
-        <button
+        <Button
           onClick={onSuccess}
           type="button"
-          className="w-full h-11 px-4 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-xl shadow-md hover:shadow-lg transition-all duration-200 flex items-center justify-center gap-2 group"
+          style={{ color: '#ffffff' }}
+          className="w-full h-11 rounded-xl shadow-md hover:shadow-lg transition-all duration-200"
         >
-          Continuer 
+          Continuer
           <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
-        </button>
+        </Button>
       </Card>
     )
   }

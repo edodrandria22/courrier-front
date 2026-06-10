@@ -78,7 +78,7 @@ export const MessageListView = ({ courrier, messages, loading, error, currentUse
 
         {isLastRecipient && !courrier.cloturePar && (
           <Link href={`/message/compose?courrierId=${courrier.id}&reference=${encodeURIComponent(courrier.reference || '')}&objet=${encodeURIComponent(courrier.object || '')}`}>
-            <Button size="sm" className="shrink-0 gap-1.5 text-xs font-bold">
+            <Button size="sm" className="shrink-0 gap-1.5 text-xs font-bold" style={{ color: '#ffffff' }}>
               <Plus className="w-3.5 h-3.5" />
               Transférer
             </Button>
