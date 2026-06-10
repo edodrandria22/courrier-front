@@ -145,7 +145,7 @@ export const courrierService = {
     }
   },
 
-  createCourrier: async (data: Courrier): Promise<{ success: boolean; error?: string }> => {
+  createCourrier: async (data: Courrier): Promise<{ success: boolean; error?: string; courrier?: Courrier }> => {
     try {
       const fetchWithAuth = useFetchAuth();
       const res = await fetchWithAuth('/api/courriers', {
@@ -166,7 +166,8 @@ export const courrierService = {
         const json = await res.json();
         return { success: false, error: json.error ?? json.message ?? 'Erreur lors de la création' };
       }
-      return { success: true };
+      
+      return { success: true, courrier: (await res.json()).data };
     } catch (error) {
       logger.exception('courrierService.createCourrier - Exception', error);
       return { success: false, error: 'Erreur lors de la création' };

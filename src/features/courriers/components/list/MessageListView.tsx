@@ -159,7 +159,7 @@ export const MessageListView = ({ courrier, messages, loading, error, currentUse
                 <div className="flex items-center gap-2">
                   <div className="h-7 w-7 rounded-full bg-primary/10 flex items-center justify-center text-xs font-bold text-primary">EX</div>
                   <div>
-                    <p className="font-medium text-xs">{courrier.expediteur?.nom || "Non spécifié"}</p>
+                    <p className="font-medium text-xs">{courrier.expediteur?.nom} {courrier.expediteur?.prenom}</p>
                     <p className="text-[11px] text-muted-foreground">{courrier.expediteur?.email}</p>
                   </div>
                 </div>
@@ -170,7 +170,7 @@ export const MessageListView = ({ courrier, messages, loading, error, currentUse
                 <div className="flex items-center gap-2">
                   <div className="h-7 w-7 rounded-full bg-secondary/20 flex items-center justify-center text-xs font-bold text-secondary-foreground">DE</div>
                   <div>
-                    <p className="font-medium text-xs">{courrier.destinataire?.nom || "Non spécifié"}</p>
+                    <p className="font-medium text-xs">{courrier.destinataire?.nom} {courrier.destinataire?.prenom}</p>
                     <p className="text-[11px] text-muted-foreground">{courrier.destinataire?.email}</p>
                   </div>
                 </div>
@@ -215,14 +215,11 @@ export const MessageListView = ({ courrier, messages, loading, error, currentUse
                   <span className="text-foreground">{courrier.createdAt ? formatDateTime(courrier.createdAt) : "—"}</span>
                 </div>
               </div>
-
               <div className="flex items-center gap-1.5">
                 <Calendar className="w-3.5 h-3.5 text-muted-foreground" />
                 <div>
-                  <span className="block font-medium text-[10px] text-muted-foreground/80">Échéance</span>
-                  <span className={`text-foreground ${courrier.dateFin ? "font-medium text-destructive" : ""}`}>
-                    {courrier.dateFin ? formatDateTime(courrier.dateFin) : "Aucune"}
-                  </span>
+                  <span className="block font-medium text-[10px] text-muted-foreground/80">Date du message</span>
+                  <span className="text-foreground">{courrier.dateMessage ? formatDateTime(courrier.dateMessage) : "—"}</span>
                 </div>
               </div>
 
@@ -232,6 +229,15 @@ export const MessageListView = ({ courrier, messages, loading, error, currentUse
                   <span className="block font-medium text-[10px] text-muted-foreground/80">Lu le</span>
                   <span className="text-foreground">
                     {courrier.isReadAt ? formatDateTime(courrier.isReadAt) : "Non lu"}
+                  </span>
+                </div>
+              </div>
+              <div className="flex items-center gap-1.5">
+                <Calendar className="w-3.5 h-3.5 text-muted-foreground" />
+                <div>
+                  <span className="block font-medium text-[10px] text-muted-foreground/80">Échéance</span>
+                  <span className={`text-foreground ${courrier.dateFin ? "font-medium text-destructive" : ""}`}>
+                    {courrier.dateFin ? formatDateTime(courrier.dateFin) : "Aucune"}
                   </span>
                 </div>
               </div>
@@ -286,80 +292,112 @@ export const MessageListView = ({ courrier, messages, loading, error, currentUse
           )}
 
           {!loading && !error && messages.length > 0 && (
-            <div className="space-y-3">
-              {messages.map((message, index) => {
-                const accessible = isMessageVisible(message)
-                const isRead = !!message.isReadAt
-                return (
-                  <button
-                    key={message.id}
-                    onClick={() => accessible && onSelect(message)}
-                    disabled={!accessible}
-                    className={cn(
-                      'w-full text-left rounded-xl border transition-all duration-200 group relative overflow-hidden',
-                      accessible ? 'cursor-pointer' : 'opacity-50 cursor-not-allowed grayscale-[0.5]',
-                      isRead
-                        ? 'bg-card border-border hover:border-border/80 hover:shadow-sm'
-                        : 'bg-primary/5 border-primary/20 hover:border-primary/40 hover:shadow-sm hover:shadow-primary/5'
-                    )}
-                  >
-                    {!isRead && (
-                      <span className="absolute left-0 top-0 bottom-0 w-[3px] bg-primary rounded-l-xl" />
-                    )}
+            <div className="w-full overflow-hidden rounded-xl border border-border bg-card shadow-sm">
+              <div className="overflow-x-auto">
+                <table className="w-full text-left text-sm">
+                    
+                    {/* En-tête du tableau */}
+                    <thead className="bg-muted/50 text-muted-foreground border-b border-border">
+                      <tr>
+                        <th className="px-4 py-3 font-medium w-12 text-center">#</th>
+                        <th className="px-4 py-3 font-medium">Expéditeur</th>
+                        <th className="px-4 py-3 font-medium">Destinataire</th>
+                        <th className="px-4 py-3 font-medium">Statut</th>
+                        <th className="px-4 py-3 font-medium max-w-[250px]">Observation</th>
+                        <th className="px-4 py-3 font-medium">Date</th>
+                        <th className="px-4 py-3 font-medium w-10"></th>
+                      </tr>
+                    </thead>
 
-                    <div className="px-4 py-3 flex items-start gap-3">
-                      <div className={cn(
-                        'shrink-0 w-7 h-7 rounded-full flex items-center justify-center text-[11px] font-black mt-0.5',
-                        isRead ? 'bg-emerald-500/15 text-emerald-500 border border-emerald-500/25' : 'bg-primary/15 text-primary border border-primary/25'
-                      )}>
-                        {index + 1}
-                      </div>
+                    {/* Corps du tableau */}
+                    <tbody className="divide-y divide-border">
+                      {messages.map((message, index) => {
+                        const accessible = isMessageVisible(message)
+                        const isRead = !!message.isReadAt
 
-                      <div className="flex-1 min-w-0">
-                        <div className="flex items-center justify-between gap-2 mb-1">
-                          <div className="flex items-center gap-1.5 flex-wrap min-w-0">
-                            <span className={cn('text-xs truncate max-w-[90px] sm:max-w-[130px]', !isRead ? 'font-bold text-foreground' : 'font-semibold text-foreground/70')}>
-                              {message.expediteur.nom}
-                            </span>
-                            <ArrowRight className="w-3 h-3 text-muted-foreground/40 shrink-0" />
-                            <span className={cn('text-xs truncate max-w-[90px] sm:max-w-[130px]', !isRead ? 'font-bold text-primary' : 'font-semibold text-primary/70')}>
-                              {message.destinataire.nom}
-                            </span>
-                            {isRead ? (
-                              <Badge variant="outline" className="text-[9px] px-1.5 py-0 h-4 bg-emerald-500/10 text-emerald-500 border-emerald-500/20 shrink-0">
-                                <CheckCircle2 className="w-2.5 h-2.5 mr-0.5" /> Lu
-                              </Badge>
-                            ) : (
-                              <Badge variant="outline" className="text-[9px] px-1.5 py-0 h-4 bg-primary/10 text-primary border-primary/20 shrink-0">
-                                Non lu
-                              </Badge>
+                        return (
+                          <tr
+                            key={message.id}
+                            onClick={() => accessible && onSelect(message)}
+                            className={cn(
+                              'group transition-colors relative',
+                              accessible ? 'cursor-pointer hover:bg-muted/50' : 'opacity-50 cursor-not-allowed grayscale-[0.5]',
+                              !isRead ? 'bg-primary/[0.03]' : 'bg-transparent'
                             )}
-                          </div>
-                          <span className="text-[10px] text-muted-foreground/60 shrink-0 tabular-nums">
-                            {formatDateTime(message.createdAt)}
-                          </span>
-                        </div>
+                          >
+                            {/* 1. Index & Indicateur Non Lu */}
+                            <td className="px-4 py-3 relative text-center">
+                              {!isRead && (
+                                <span className="absolute left-0 top-0 bottom-0 w-[3px] bg-primary" />
+                              )}
+                              <div className={cn(
+                                'inline-flex w-6 h-6 rounded-full items-center justify-center text-[10px] font-bold',
+                                isRead ? 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400' : 'bg-primary/15 text-primary'
+                              )}>
+                                {index + 1}
+                              </div>
+                            </td>
 
-                        {accessible ? (
-                          <p className={cn('text-xs truncate leading-relaxed', !isRead ? 'text-foreground/90 font-medium' : 'text-muted-foreground/70')}>
-                            {message.observation || <span className="italic">Aucun commentaire</span>}
-                          </p>
-                        ) : (
-                          <div className="flex items-center gap-1.5 text-muted-foreground/50">
-                            <Lock className="w-3 h-3" />
-                            <span className="text-xs font-medium">Contenu confidentiel</span>
-                          </div>
-                        )}
-                      </div>
+                            {/* 2. Expéditeur */}
+                            <td className="px-4 py-3 whitespace-nowrap">
+                              <span className={cn('text-sm', !isRead ? 'font-bold text-foreground' : 'font-medium text-foreground/80')}>
+                                {message.expediteur.nom} {message.expediteur.prenom}
+                              </span>
+                            </td>
 
-                      {accessible && (
-                        <ArrowRight className="w-4 h-4 text-muted-foreground/30 group-hover:text-primary/50 group-hover:translate-x-0.5 transition-all shrink-0 mt-1" />
-                      )}
-                    </div>
-                  </button>
-                )
-              })}
-            </div>
+                            {/* 3. Destinataire */}
+                            <td className="px-4 py-3 whitespace-nowrap">
+                              <span className={cn('text-sm', !isRead ? 'font-bold text-primary' : 'font-medium text-primary/80')}>
+                                {message.destinataire.nom} {message.destinataire.prenom}
+                              </span>
+                            </td>
+
+                            {/* 4. Statut */}
+                            <td className="px-4 py-3 whitespace-nowrap">
+                              {isRead ? (
+                                <Badge variant="outline" className="text-[10px] px-2 py-0.5 bg-emerald-500/10 text-emerald-600 border-emerald-500/20 font-medium">
+                                  <CheckCircle2 className="w-3 h-3 mr-1" /> Lu
+                                </Badge>
+                              ) : (
+                                <Badge variant="outline" className="text-[10px] px-2 py-0.5 bg-primary/10 text-primary border-primary/20 font-medium">
+                                  Non lu
+                                </Badge>
+                              )}
+                            </td>
+
+                            {/* 5. Observation / Commentaire */}
+                            <td className="px-4 py-3 max-w-[200px] sm:max-w-[250px] truncate">
+                              {accessible ? (
+                                <span className={cn('text-sm truncate block', !isRead ? 'text-foreground/90 font-medium' : 'text-muted-foreground')}>
+                                  {message.observation || <span className="italic opacity-70">Aucun commentaire</span>}
+                                </span>
+                              ) : (
+                                <div className="flex items-center gap-1.5 text-muted-foreground/60">
+                                  <Lock className="w-3 h-3" />
+                                  <span className="text-xs font-medium italic">Confidentiel</span>
+                                </div>
+                              )}
+                            </td>
+
+                            {/* 6. Date */}
+                            <td className="px-4 py-3 whitespace-nowrap text-xs text-muted-foreground tabular-nums">
+                              {formatDateTime(message.createdAt)}
+                            </td>
+
+                            {/* 7. Action */}
+                            <td className="px-4 py-3 whitespace-nowrap text-right">
+                              {accessible && (
+                                <ArrowRight className="w-4 h-4 text-muted-foreground/40 group-hover:text-primary group-hover:translate-x-0.5 transition-all inline-block" />
+                              )}
+                            </td>
+                          </tr>
+                        )
+                      })}
+                    </tbody>
+                    
+                  </table>
+                </div>
+              </div>
           )}
         </div>
       </div>

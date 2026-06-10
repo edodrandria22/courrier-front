@@ -24,12 +24,12 @@ export default function Sidebar({ onNavigate }: SidebarProps) {
 
   // 1. Définition de la variable pour les actions
   const actionItems = [
-    {
-      id: 'new-message',
-      name: 'Nouveau message',
-      icon: Plus,
-      path: '/message/courrier/select',
-    },
+    // {
+    //   id: 'new-message',
+    //   name: 'Nouveau message',
+    //   icon: Plus,
+    //   path: '/message/courrier/select',
+    // },
     {
       id: 'new-courrier',
       name: 'Nouveau Courrier',

@@ -157,14 +157,11 @@ export const CourrierTemplate = ({ initialCourrier, isRecherche }: CourrierTempl
         return [merged, ...otherCourriers]; 
       }
 
-      courrierService.getCourrierById(Number(courrierConcerne.id)).then((full) => {
-        if (full) {
-          setCourriers?.((currentPrev) => {
-            const filtered = currentPrev.filter(c => Number(c.id) !== Number(full.id));
-            return [full, ...filtered]; 
-          });
-        }
+      setCourriers?.((currentPrev) => {
+        const filtered = currentPrev.filter(c => Number(c.id) !== Number(courrierConcerne.id));
+        return [courrierConcerne, ...filtered]; 
       });
+      
 
       return prev;
     });

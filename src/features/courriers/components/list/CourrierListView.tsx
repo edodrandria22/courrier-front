@@ -251,7 +251,7 @@ export const CourrierListView = ({ courriers, loading, error, onSelect}: Props) 
                       "text-xs absolute right-0 group-hover:opacity-0 transition-opacity",
                       isLu ? "font-normal text-muted-foreground" : "font-bold text-foreground"
                     )}>
-                      {formatDateTime(courrier.dateMessage || new Date().toISOString())}
+                      {formatDateTime(courrier.dateMessage ||courrier.createdAt || new Date().toISOString())}
                     </span>
 
                     {/* Actions au survol */}

@@ -32,14 +32,17 @@
     -- synchronisation mercure liste courrier par de destinataire -- ok -- 60 mn
     -- affichage pour la confidentialite du courrier -- ok -- 30 mn
     --recherche courrier avec type de confidentialite -- ok -- 30 mn
-    -- par compte, par type send ou receive numerotation numerotation courrier -- a faire -- 60 mn
+    -- par compte, par type send ou receive numerotation numerotation courrier -- ok -- 60 mn
 
+10/06/2026
+    -- envoyer nouvelle message -- a faire destinataire tsy mipoitra -- ok -- 30 mn 
+    -- menu nouvelle courrier -- ok -- 60 mn
+    -- apres creation courrier affichage reference courrier -- ok -- 30 mn
+    -- changer desing de liste message en tableau -- ok -- 30 mn
+    --transferer message boutton tsy mipoitra -- a faire -- 30 mn
+    -- compte admin -- a faire -- 60 mn 
+        -- boite de reception tous les utilisateurs -- ok
+        -- trie par date et par expediteur -- ok
 
-    envoyer nouvelle message -- a faire destinataire tsy mipoitra--30 mn 
-
-compte admin -- a faire -- 60 mn 
-   boite de reception tous les utilisateurs
-   trie par date
-
-apres creation courrier affichage reference courrier
-
+    
+GET http://localhost:3000/api/notifications/subscribe 404 (Not Found)

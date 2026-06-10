@@ -110,7 +110,7 @@ export const useCourrier = () => {
       setLoading(false);
     }
   }, [setMessages]);
-  const createCourrier = useCallback(async (data: Courrier): Promise<{ success: boolean; error?: string }> => {
+  const createCourrier = useCallback(async (data: Courrier): Promise<{ success: boolean; error?: string , courrier?: Courrier}> => {
     setLoading(true);
     setError(null);
     try {
