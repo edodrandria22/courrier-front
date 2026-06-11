@@ -14,6 +14,12 @@ import { cn } from '@/lib/utils'
 import { Courrier } from '../../types/courrier'
 import { formatDateTime } from '@/hooks/utils'
 import { generateCourrierPDF } from '../../utils/generateCourrierPDF'
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 interface Props {
   courriers: Courrier[]
@@ -43,7 +49,7 @@ export const CourrierListView = ({ courriers, loading, error, onSelect,  onEdit,
   const [searchField, setSearchField] = useState<SearchField>('nom')
 
   const activeField = SEARCH_FIELDS.find(f => f.value === searchField)!
-
+  
   const filtered = query.trim()
     ? courriers.filter((c) => {
         const q = query.toLowerCase()
@@ -56,6 +62,7 @@ export const CourrierListView = ({ courriers, loading, error, onSelect,  onEdit,
         return false
       })
     : courriers
+  
 
   return (
     <div className="flex flex-col h-full bg-background border-r border-border">
@@ -159,6 +166,9 @@ export const CourrierListView = ({ courriers, loading, error, onSelect,  onEdit,
               const isLu = !!courrier.isReadAt
               const isSend = courrier.isSend ?? false
               const isConfidentiel = courrier.isConfidentiel
+              const cible = isSend ? courrier.destinataire : courrier.expediteur;
+              // On génère le nom complet proprement sans risquer d'afficher "undefined"
+              const nomComplet = cible ? `${cible.nom || ''} ${cible.prenom || ''}`.trim() : "";
 
               return (
                 <div
@@ -173,77 +183,115 @@ export const CourrierListView = ({ courriers, loading, error, onSelect,  onEdit,
                   )}
                 >
                   {/* Marqueur de statut */}
-                  <div className="flex-none flex items-center justify-center w-8 mr-2">
-                    <StatutIcon 
-                      className={cn("w-4 h-4", courrier.cloturePar ? "text-emerald-500" : "text-muted-foreground/40")} 
-                      title={statut.label}
-                    />
-                  </div>
+              {/* Le parent passe en colonne sur mobile (items-start) et en ligne sur grand écran (sm:flex-row sm:items-center) */}
+                  <div className="flex flex-col items-start sm:flex-row sm:items-center w-full min-w-0 gap-3 sm:gap-4">
 
-                  {/* Expéditeur / Destinataire AVEC Indicateur Envoyé/Reçu */}
-                  <div className={cn(
-                      "flex-none w-32 md:w-48 pr-4 text-sm flex items-center gap-1.5",
-                      isLu ? "text-foreground/70 font-normal" : "text-foreground font-bold"
-                    )}>
-                      {isSend ? (
-                          <>
-                            {/* Enveloppe span ajoutée pour le titre "Envoyé" */}
-                            <span title="Envoyé" className="flex shrink-0">
-                              <ArrowUpRight className="w-4 h-4 text-blue-500" />
-                            </span>
-                            <span className="truncate" title={`À: ${courrier.destinataire?.nom} ${courrier.destinataire?.prenom}`}>
-                              <span className="text-muted-foreground font-normal mr-1">À:</span>
-                              {courrier.destinataire?.nom} {courrier.destinataire?.prenom}
-                            </span>
-                          </>
-                        ) : (
-                          <>
-                            {/* Enveloppe span ajoutée pour le titre "Reçu" */}
-                            <span title="Reçu" className="flex shrink-0">
-                              <ArrowDownLeft className="w-4 h-4 text-emerald-500" />
-                            </span>
-                            <span className="truncate" title={`De: ${courrier.expediteur?.nom} ${courrier.expediteur?.prenom}`}>
-                              <span className="text-muted-foreground font-normal mr-1">De:</span>
-                              {courrier.expediteur?.nom} {courrier.expediteur?.prenom}
-                            </span>
-                          </>
+                      {/* Statut */}
+                      <div className="flex-none flex items-center justify-start sm:justify-center w-8">
+                        <StatutIcon
+                          className={cn(
+                            "w-4 h-4",
+                            courrier.cloturePar
+                              ? "text-emerald-500"
+                              : "text-muted-foreground/40"
+                          )}
+                          title={statut.label}
+                        />
+                      </div>
+
+                      {/* Expéditeur / Destinataire (w-full sur mobile, w-52 sur grand écran) */}
+                      {cible && nomComplet && (
+                        <div className="flex-none w-full sm:w-52 min-w-0">
+                          <TooltipProvider>
+                            <Tooltip>
+                              <TooltipTrigger asChild>
+                                <div className="truncate cursor-pointer">
+                                  <span className="text-muted-foreground mr-1">
+                                    {isSend ? "À :" : "De :"}
+                                  </span>
+
+                                  <span
+                                    className={cn(
+                                      isLu
+                                        ? "font-normal text-foreground/80"
+                                        : "font-semibold text-foreground"
+                                    )}
+                                  >
+                                    {nomComplet}
+                                  </span>
+                                </div>
+                              </TooltipTrigger>
+
+                              <TooltipContent className="max-w-xs">
+                                <div className="space-y-1">
+                                  <p className="font-semibold">
+                                    {isSend ? "Destinataire" : "Expéditeur"}
+                                  </p>
+
+                                  <p>{nomComplet}</p>
+
+                                  {/* L'email ne s'affiche QUE s'il existe et n'est pas undefined */}
+                                  {cible.email && (
+                                    <p className="text-muted-foreground">
+                                      {cible.email}
+                                    </p>
+                                  )}
+                                </div>
+                              </TooltipContent>
+                            </Tooltip>
+                          </TooltipProvider>
+                        </div>
+                      )}
+
+                      {/* Objet + Aperçu (w-full sur mobile pour occuper tout l'espace textuel disponible, et flex-wrap pour éviter que le texte disparaisse) */}
+                      <div className="flex-1 w-full min-w-0 flex flex-wrap items-center gap-2">
+
+                        {isConfidentiel && (
+                          <Lock className="w-3.5 h-3.5 text-amber-500 shrink-0" />
                         )}
-                    </div>
 
-                  {/* Objet + Badges + Aperçu */}
-                  <div className="flex-1 min-w-0 flex items-center pr-4">
-                    <div className="truncate text-sm flex items-center gap-2 w-full">
-                      
-                      {/* Icône de cadenas si confidentiel */}
-                      {isConfidentiel && (
-                        <Lock className="w-3.5 h-3.5 text-amber-600 shrink-0" />
-                      )}
-
-                      <span className={cn(
-                        "truncate shrink-0 max-w-[50%]",
-                        isConfidentiel && "text-amber-600 font-semibold"
-                      )}>
-                        {courrier.object}
-                      </span>
-                      
-                      {/* Badge de Référence */}
-                      <Badge variant="secondary" className={cn('text-[10px] px-1.5 py-0 h-4 shrink-0 font-normal', statut.className)}>
-                        {courrier.reference}
-                      </Badge>
-
-                      {/* Gestion de l'aperçu de la description */}
-                      {isConfidentiel ? (
-                        <Badge variant="outline" className="text-[10px] px-1.5 py-0 h-4 shrink-0 font-normal border-amber-200 bg-amber-50 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400 dark:border-amber-800">
-                          Confidentiel
-                        </Badge>
-                      ) : (
-                        <span className="text-muted-foreground font-normal truncate text-sm">
-                          <span className="mx-1">-</span>
-                          {courrier.description || "Aucune description supplémentaire..."}
+                        <span
+                          className={cn(
+                            "truncate shrink-0",
+                            isConfidentiel
+                              ? "text-amber-600 font-semibold"
+                              : isLu
+                              ? "font-normal"
+                              : "font-semibold"
+                          )}
+                        >
+                          {courrier.object}
                         </span>
-                      )}
-                      
-                    </div>
+
+                        <span className="text-muted-foreground shrink-0">
+                          —
+                        </span>
+
+                        {isConfidentiel ? (
+                          <Badge
+                            variant="outline"
+                            className="shrink-0 border-amber-200 text-amber-700"
+                          >
+                            Confidentiel
+                          </Badge>
+                        ) : (
+                          <span className="truncate text-muted-foreground">
+                            {courrier.description ||
+                              "Aucune description supplémentaire"}
+                          </span>
+                        )}
+                      </div>
+
+                      {/* Référence (S'aligne sagement à la fin ou en dessous) */}
+                      <div className="flex-none">
+                        <Badge
+                          variant="secondary"
+                          className="text-[10px]"
+                        >
+                          {courrier.reference}
+                        </Badge>
+                      </div>
+
                   </div>
 
                   {/* Date ET Actions au survol */}

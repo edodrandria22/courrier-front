@@ -43,20 +43,24 @@ export default function SecurityPage() {
     return (
         <div className="max-w-2xl mx-auto py-12 px-6">
             <div className="mb-10 text-center">
-                <h1 className="text-2xl font-black text-slate-900 uppercase tracking-tight">Sécurité du Compte</h1>
-                <p className="text-slate-500 mt-2 text-sm">Gérez l'accès à votre compte en changeant votre mot de passe</p>
+                <h1 className="text-2xl font-black text-foreground uppercase tracking-tight">
+                    Sécurité du Compte
+                </h1>
+
+                <p className="text-muted-foreground mt-2 text-sm">
+                    Gérez l'accès à votre compte en changeant votre mot de passe
+                </p>
                 <div className="h-1 w-12 bg-blue-600 mx-auto mt-6 rounded-full" />
             </div>
-
-            <div className="bg-white border border-slate-100 rounded-3xl shadow-xl shadow-slate-200/50 p-8 md:p-12 overflow-hidden relative">
+            <div className="bg-card border border-border rounded-3xl shadow-xl p-8 md:p-12 overflow-hidden relative">
                 {/* Decorative background element */}
-                <div className="absolute top-0 right-0 -mt-8 -mr-8 h-32 w-32 bg-blue-50 rounded-full blur-3xl opacity-50" />
+                <div className="absolute top-0 right-0 -mt-8 -mr-8 h-32 w-32 bg-primary/10 rounded-full blur-3xl opacity-50" />
 
                 <form onSubmit={handleSubmit} className="space-y-8 relative z-10">
                     <div className="space-y-6">
                         {/* Nouveau mot de passe */}
                         <div className="space-y-2">
-                            <label className="text-[11px] font-black text-slate-400 uppercase tracking-widest ml-1">
+                            <label className="text-[11px] font-black text-muted-foreground uppercase tracking-widest ml-1">
                                 Nouveau mot de passe
                             </label>
                             <div className="relative group">
@@ -65,13 +69,13 @@ export default function SecurityPage() {
                                     value={password}
                                     onChange={(e) => setPassword(e.target.value)}
                                     placeholder="••••••••"
-                                    className="w-full bg-slate-50 border-2 border-transparent focus:border-blue-500/20 focus:bg-white rounded-2xl px-5 py-4 text-sm transition-all duration-300 outline-none"
+                                    className="w-full bg-muted/50 border-2 border-transparent focus:border-primary/20 focus:bg-background rounded-2xl px-5 py-4 text-sm transition-all duration-300 outline-none"
                                     required
                                 />
                                 <button
                                     type="button"
                                     onClick={() => setShowPassword(!showPassword)}
-                                    className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 hover:text-blue-600 transition-colors p-2"
+                                    className="absolute right-4 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-primary transition-colors p-2"
                                 >
                                     {showPassword ? (
                                         <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -89,7 +93,7 @@ export default function SecurityPage() {
 
                         {/* Confirmer mot de passe */}
                         <div className="space-y-2">
-                            <label className="text-[11px] font-black text-slate-400 uppercase tracking-widest ml-1">
+                            <label className="text-[11px] font-black text-muted-foreground uppercase tracking-widest ml-1">
                                 Confirmer le mot de passe
                             </label>
                             <div className="relative group">
@@ -98,14 +102,17 @@ export default function SecurityPage() {
                                     value={confirmPassword}
                                     onChange={(e) => setConfirmPassword(e.target.value)}
                                     placeholder="••••••••"
-                                    className={`w-full bg-slate-50 border-2 rounded-2xl px-5 py-4 text-sm transition-all duration-300 outline-none ${confirmPassword && !isMatch ? "border-red-200 focus:border-red-500/20" : "border-transparent focus:border-blue-500/20 focus:bg-white"
-                                        }`}
+                                   className={`w-full bg-muted/50 border-2 rounded-2xl px-5 py-4 text-sm transition-all duration-300 outline-none ${
+                                    confirmPassword && !isMatch
+                                        ? "border-destructive/30"
+                                        : "border-transparent focus:border-primary/20 focus:bg-background"
+                                    }`}
                                     required
                                 />
                                 <button
                                     type="button"
                                     onClick={() => setShowPassword(!showPassword)}
-                                    className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 hover:text-blue-600 transition-colors p-2"
+                                    className="absolute right-4 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-primary transition-colors p-2"
                                 >
                                     {showPassword ? (
                                         <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -137,9 +144,10 @@ export default function SecurityPage() {
                     <button
                         type="submit"
                         disabled={!canSubmit}
-                        className={`w-full py-5 rounded-2xl text-xs font-black uppercase tracking-[0.2em] transition-all duration-300 shadow-lg ${canSubmit
-                            ? "bg-slate-900 text-white shadow-slate-900/20 hover:bg-black hover:-translate-y-1 active:scale-95"
-                            : "bg-slate-100 text-slate-300 cursor-not-allowed shadow-none"
+                        className={`w-full py-5 rounded-2xl text-xs font-black uppercase tracking-[0.2em] transition-all duration-300 shadow-lg ${
+                            canSubmit
+                                ? "bg-primary text-primary-foreground hover:bg-primary/90 hover:-translate-y-1 active:scale-95 text-white"
+                                : "bg-muted text-secondary-foreground cursor-not-allowed shadow-none"
                             }`}
                     >
                         {isLoading ? (

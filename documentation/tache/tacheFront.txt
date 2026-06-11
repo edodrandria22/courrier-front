@@ -46,9 +46,9 @@
 11/06/2026        
         -- boite de recherche tous les utilisateurs -- ok -- 30 mn
         -- trie par date et par expediteur -- ok -- 30 mn
-    -- admin tsy mandray courrier sy tsy mandefa-- a faire -- 10 mn
-    --modifier message si ce non lu -- a faire -- 60 mn
-    --quand le souris passe sur l'utilisateur on affiche le detail de l'utilisateur -- a faire -- 60 mn
+    -- admin tsy mandray courrier sy tsy mandefa-- ok -- 10 mn
+    --modifier message si c'est non lu -- a faire -- 60 mn
+    --quand le souris passe sur l'utilisateur on affiche le detail de l'utilisateur -- ok -- 60 mn
 
     
 GET http://localhost:3000/api/notifications/subscribe 404 (Not Found)
