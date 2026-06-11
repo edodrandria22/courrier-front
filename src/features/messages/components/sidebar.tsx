@@ -61,26 +61,26 @@ export default function Sidebar({ user, onNavigate }: SidebarProps) {
       icon: UserIcon,
       path: '/message/utilisateurs',
     })
-    actionItems.push({
-      id: 'new-courrier',
-      name: 'Nouveau Courrier',
-      icon: ClipboardEdit,
-      path: '/message/courrier',
-    })
+    // actionItems.push({
+    //   id: 'new-courrier',
+    //   name: 'Nouveau Courrier',
+    //   icon: ClipboardEdit,
+    //   path: '/message/courrier',
+    // })
     
     systemFolders.push(
-    {
-      id: 'inbox',
-      name: 'Boîte de réception',
-      icon: Mail,
-      path: '/message/courrier/receive',
-    },
-    {
-      id: 'send',
-      name: "Boîte d'envoie",
-      icon: Send,
-      path: '/message/courrier/send',
-    },
+    // {
+    //   id: 'inbox',
+    //   name: 'Boîte de réception',
+    //   icon: Mail,
+    //   path: '/message/courrier/receive',
+    // },
+    // {
+    //   id: 'send',
+    //   name: "Boîte d'envoie",
+    //   icon: Send,
+    //   path: '/message/courrier/send',
+    // },
     {
       id: 'recherche',
       name: 'Recherche',

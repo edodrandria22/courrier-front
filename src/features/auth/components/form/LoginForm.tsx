@@ -12,7 +12,7 @@ export const LoginForm = () => {
   const { performLogin, loading, error } = useLogin()
   const [credentials, setCredentials] = useState({
     email: 'admin@gmail.com',
-    mdp: 'adminadmin',
+    mdp: 'admin',
     rememberMe: false
   })
 

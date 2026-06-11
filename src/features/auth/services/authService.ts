@@ -23,7 +23,7 @@ export const authService = {
         localStorage.setItem('user_info', JSON.stringify(data.membre));
       }
 
-      return data;
+      return data.membre as User;
     } catch (error) {
       // console.error('Login error:', error);
       throw error;

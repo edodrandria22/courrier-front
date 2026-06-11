@@ -42,10 +42,11 @@
     --transferer message boutton tsy mipoitra -- a faire -- 30 mn
     --modifier courrier si ce n'est pas deja en message -- ok -- 90 mn
     -- compte admin -- a faire -- 60 mn
-        --menu pour les utilisateurs pour gerer tous les utilisateurs
-        -- boite de reception tous les utilisateurs -- ok
-        -- trie par date et par expediteur -- ok
-    -- admin tsy mandray courrier
+        --menu pour les utilisateurs pour gerer tous les utilisateurs -- a faire -- 60 mn
+11/06/2026        
+        -- boite de recherche tous les utilisateurs -- ok -- 30 mn
+        -- trie par date et par expediteur -- ok -- 30 mn
+    -- admin tsy mandray courrier sy tsy mandefa-- a faire -- 10 mn
     --modifier message si ce non lu -- a faire -- 60 mn
     --quand le souris passe sur l'utilisateur on affiche le detail de l'utilisateur -- a faire -- 60 mn
 

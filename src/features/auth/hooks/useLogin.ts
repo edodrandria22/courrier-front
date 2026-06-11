@@ -1,8 +1,10 @@
 import { useState } from 'react'
 import { LoginCredentials } from '../types/login'
 import { authService } from '../services/authService'
-
+import { useRouter } from 'next/navigation'
 export const useLogin = () => {
+
+  const router = useRouter()
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
 
@@ -12,7 +14,7 @@ export const useLogin = () => {
 
     try {
       // 1. Se connecter
-      await authService.login(credentials)
+      const user = await authService.login(credentials)
       
       // 2. Attendre un peu pour que le cookie soit bien défini
       await new Promise(resolve => setTimeout(resolve, 200))
@@ -26,7 +28,11 @@ export const useLogin = () => {
       
       // 4. Rediriger avec window.location.href pour forcer le rechargement complet
       // Cela garantit que le middleware voit les cookies correctement
-      window.location.href = '/message/courrier/receive'
+      if (user.role === 'Admin') {
+        router.push('/message/courrier/recherche')
+      } else {
+        router.push('/message/courrier/receive')
+      }
       
       // Empêcher toute exécution ultérieure
       return
