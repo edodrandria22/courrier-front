@@ -80,6 +80,8 @@ export interface Courrier {
   isSend?: boolean;
   dateMessage?: string;
   isConfidentiel?: boolean;
+  historiqueId?: number;
+  numRef?: number;
 
 }
 

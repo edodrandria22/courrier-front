@@ -172,7 +172,7 @@ export const CourrierListView = ({ courriers, loading, error, onSelect,  onEdit,
 
               return (
                 <div
-                  key={courrier.id}
+                  key={courrier.historiqueId||courrier.id}
                   onClick={() => onSelect(courrier)}
                   className={cn(
                     'group flex items-center px-4 py-2.5 border-b border-border cursor-pointer transition-all',
@@ -263,11 +263,11 @@ export const CourrierListView = ({ courriers, loading, error, onSelect,  onEdit,
                           {courrier.object}
                         </span>
 
-                        <span className="text-muted-foreground shrink-0">
+                        {/* <span className="text-muted-foreground shrink-0">
                           —
-                        </span>
+                        </span> */}
 
-                        {isConfidentiel ? (
+                        {/* {isConfidentiel ? (
                           <Badge
                             variant="outline"
                             className="shrink-0 border-amber-200 text-amber-700"
@@ -279,7 +279,7 @@ export const CourrierListView = ({ courriers, loading, error, onSelect,  onEdit,
                             {courrier.description ||
                               "Aucune description supplémentaire"}
                           </span>
-                        )}
+                        )} */}
                       </div>
 
                       {/* Référence (S'aligne sagement à la fin ou en dessous) */}

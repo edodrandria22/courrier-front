@@ -11,4 +11,13 @@ export const utilisateurService = {
     const data = await res.json();
     return Array.isArray(data.data) ? data.data : [];
   },
+  getUtilisateursUtilisateur: async (): Promise<Utilisateur[]> => {
+    const res = await fetch('/api/utilisateurs/utilisateur');
+    if (!res.ok) {
+      await logger.error('utilisateurService.getUtilisateursUtilisateur', res);
+      throw new Error('Impossible de charger les utilisateurs');
+    }
+    const data = await res.json();
+    return Array.isArray(data.data) ? data.data : [];
+  },
 };

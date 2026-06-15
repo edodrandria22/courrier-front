@@ -29,7 +29,7 @@ export const MessageListView = ({ courrier, messages, loading, error, currentUse
   const statusLu = courrier.isReadAt ? 'lu' : 'non-lu'
   const status = courrier.cloturePar ? 'finalise' : statusLu;
   const isConfidentiel = courrier.isConfidentiel // Vérification de la confidentialité du courrier
-
+  console.log(courrier);
   const getStatusConfig = (status?: string) => {
     switch (status) {
       case 'non-lu':
@@ -189,6 +189,12 @@ export const MessageListView = ({ courrier, messages, loading, error, currentUse
                   <p className="flex items-center gap-2 text-foreground">
                     <span className="font-semibold text-muted-foreground w-3.5 text-center">N°</span>
                     <span className="font-medium">Numéro :</span> {courrier.numero}
+                  </p>
+                )}
+                {courrier.numRef !== undefined && (
+                  <p className="flex items-center gap-2 text-foreground">
+                    <span className="font-semibold text-muted-foreground w-3.5 text-center">N°</span>
+                    <span className="font-medium">Numéro de référence :</span> {courrier.numRef}
                   </p>
                 )}
                 <p className="flex items-center gap-2 text-foreground sm:col-span-2 border-t pt-2 mt-1">

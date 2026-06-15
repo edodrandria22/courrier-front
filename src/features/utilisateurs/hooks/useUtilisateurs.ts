@@ -12,7 +12,7 @@ export const useUtilisateurs = () => {
     setLoading(true);
     setError(null);
     try {
-      const data = await utilisateurService.getUtilisateurs();
+      const data = await utilisateurService.getUtilisateursUtilisateur();
       setUtilisateurs(data);
     } catch (err: unknown) {
       logger.exception('useUtilisateurs.fetchUtilisateurs', err);

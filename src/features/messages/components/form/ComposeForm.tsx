@@ -124,7 +124,7 @@ export const ComposeForm = ({ courrierId, courrierReference, courrierObjet }: Co
                   {utilisateurs.map((u) => (
                     <SelectItem key={u.id} value={String(u.id)}>
                       <div className="flex flex-col">
-                        <span className="font-semibold">{u.prenom} {u.nom}</span>
+                        <span className="font-semibold">{u.nom} {u.prenom}</span>
                         <span className="text-xs text-muted-foreground">{u.adresse} · {u.role}</span>
                       </div>
                     </SelectItem>
