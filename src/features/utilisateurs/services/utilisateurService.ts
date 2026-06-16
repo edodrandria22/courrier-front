@@ -20,4 +20,26 @@ export const utilisateurService = {
     const data = await res.json();
     return Array.isArray(data.data) ? data.data : [];
   },
+  rechercheUtilisateurs: async (nomComplet: string, date?: string): Promise<Utilisateur[]> => {
+    try {
+      const response = await fetch("/api/utilisateurs/recherche", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ nomComplet, date })
+      });
+    
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(errorData.message || errorData.error || `Erreur serveur: ${response.status}`);
+      }
+    
+      const responseData = await response.json();
+      return responseData.data || responseData;
+    } catch (error) {
+      throw error;
+    }
+  },
+      
 };

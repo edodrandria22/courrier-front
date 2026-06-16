@@ -21,6 +21,19 @@ export const useUtilisateurs = () => {
       setLoading(false);
     }
   }, []);
-
-  return { utilisateurs, loading, error, fetchUtilisateurs };
+  const rechercheUtilisateurs = useCallback(async (nomComplet: string, date?: string): Promise<Utilisateur[]> => {
+    setLoading(true);
+    setError(null);
+    try {
+      const data = await utilisateurService.rechercheUtilisateurs(nomComplet, date);
+      return data;
+    } catch (err: unknown) {
+      logger.exception('useUtilisateurs.rechercheUtilisateurs', err);
+      setError(err instanceof Error ? err.message : 'Impossible de charger les utilisateurs');
+      return [];
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+  return { utilisateurs, loading, error, fetchUtilisateurs, rechercheUtilisateurs };
 };

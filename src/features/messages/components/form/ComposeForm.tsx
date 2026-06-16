@@ -2,15 +2,20 @@
 
 import { useState, useRef, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
-import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Textarea } from '@/components/ui/textarea'
-import { Paperclip, Send, X, FileText, Loader2, FolderOpen, User, Hash, MessageSquare } from 'lucide-react'
+import { Paperclip, Send, X, FileText, FolderOpen, Hash, MessageSquare, Check, ChevronsUpDown, Loader2, User } from 'lucide-react'
 import Link from 'next/link'
+
+import { Button } from "@/components/ui/button";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from "@/components/ui/command";
+import { cn } from "@/lib/utils";
 import { useComposeMessage } from '../../hooks/useCompose'
 import { useUtilisateurs } from '@/features/utilisateurs/hooks/useUtilisateurs'
 import type { Attachment } from '../../types/compose'
+import { format } from 'date-fns';
+import type { Utilisateur } from '@/features/utilisateurs/types/utilisateur';
 
 interface ComposeFormProps {
   courrierId: number;
@@ -27,22 +32,66 @@ const formatFileSize = (bytes: number) => {
 export const ComposeForm = ({ courrierId, courrierReference, courrierObjet }: ComposeFormProps) => {
   const router = useRouter()
   const { sendMessage, loading, error } = useComposeMessage()
-  const { utilisateurs, loading: loadingUsers, fetchUtilisateurs } = useUtilisateurs()
   const fileInputRef = useRef<HTMLInputElement>(null)
 
   const [destId, setDestId] = useState<number | null>(null)
   const [observation, setObservation] = useState('')
   const [attachments, setAttachments] = useState<Attachment[]>([])
 
+  const [open, setOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
+  const dateActuelle = new Date();
+  const dateString = format(dateActuelle, 'yyyy-MM-dd HH:mm:ss');
+
+  const [dateFin, setDateFin] = useState(dateString);
+  const [isPaginating, setIsPaginating] = useState(false); // Nouvel état pour le loader du bouton Voir Plus
+
+  const { loading: loadingUsers, rechercheUtilisateurs } = useUtilisateurs();
+  
+  const [utilisateurs, setUtilisateurs] = useState<Utilisateur[]>([]);
+  const utilisateurSelectionne = utilisateurs.find((u) => u.id === destId);
+
+  // 1. Effet pour la recherche initiale ou quand on tape un nom (Remplacer la liste)
   useEffect(() => {
-    fetchUtilisateurs()
-  }, [fetchUtilisateurs])
+    const delayDebounce = setTimeout(async () => {
+      // Lors d'une nouvelle recherche, on repart de la date actuelle
+      const currentDate = format(new Date(), 'yyyy-MM-dd HH:mm:ss');
+      const data = await rechercheUtilisateurs(searchQuery, currentDate);
+      
+      setUtilisateurs(data);
+      
+      if (data.length > 0) {
+        // On prépare le curseur pour la prochaine pagination
+        setDateFin(data[data.length - 1].createdAt || currentDate);
+      }
+    }, 300);
+
+    return () => clearTimeout(delayDebounce);
+  }, [searchQuery, rechercheUtilisateurs]); // On n'inclut pas dateFin ici intentionnellement
+
+  // 2. Fonction pour charger plus d'agents (Ajouter à la liste)
+  const handleLoadMore = async () => {
+    if (isPaginating) return;
+    setIsPaginating(true);
+    try {
+      const data = await rechercheUtilisateurs(searchQuery, dateFin);
+      if (data.length > 0) {
+        setUtilisateurs((prev) => {
+          // On filtre pour éviter les doublons éventuels
+          const newUsers = data.filter(d => !prev.some(p => p.id === d.id));
+          return [...prev, ...newUsers];
+        });
+        setDateFin(data[data.length - 1].createdAt || dateFin);
+      }
+    } finally {
+      setIsPaginating(false);
+    }
+  };
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = Array.from(e.target.files || [])
     const newAttachments = files.map((file) => ({
       file,
-      // Remplace crypto.randomUUID() par cette ligne :
       id: `${Date.now()}-${Math.random().toString(36).substring(2, 9)}`,
     }))
     
@@ -108,30 +157,96 @@ export const ComposeForm = ({ courrierId, courrierReference, courrierObjet }: Co
               <User className="w-3.5 h-3.5 text-muted-foreground" />
               Destinataire <span className="text-destructive">*</span>
             </label>
-            {loadingUsers ? (
-              <div className="flex items-center gap-2 text-sm text-muted-foreground py-2">
-                <Loader2 className="w-4 h-4 animate-spin" />
-                Chargement des agents...
-              </div>
-            ) : utilisateurs.length === 0 ? (
-              <p className="text-sm text-muted-foreground py-2">Aucun agent disponible.</p>
-            ) : (
-              <Select disabled={loading} onValueChange={(val) => setDestId(Number(val))}>
-                <SelectTrigger className="bg-background/50 border-border focus:ring-0 focus:border-muted-foreground">
-                  <SelectValue placeholder="Choisir un agent destinataire..." />
-                </SelectTrigger>
-                <SelectContent>
-                  {utilisateurs.map((u) => (
-                    <SelectItem key={u.id} value={String(u.id)}>
-                      <div className="flex flex-col">
-                        <span className="font-semibold">{u.nom} {u.prenom}</span>
-                        <span className="text-xs text-muted-foreground">{u.adresse} · {u.role}</span>
+
+            <Popover open={open} onOpenChange={setOpen}>
+              <PopoverTrigger asChild>
+                <Button
+                  variant="outline"
+                  role="combobox"
+                  aria-expanded={open}
+                  // On désactive seulement s'il n'y a pas d'utilisateurs et que ça charge
+                  disabled={(loadingUsers && utilisateurs.length === 0) || loading} 
+                  className="w-full justify-between bg-background/50 border-border font-normal text-left"
+                >
+                  {loadingUsers && utilisateurs.length === 0 ? (
+                    <span className="flex items-center gap-2 text-muted-foreground text-sm">
+                      <Loader2 className="w-4 h-4 animate-spin" />
+                      Chargement des agents...
+                    </span>
+                  ) : utilisateurSelectionne ? (
+                    <span className="font-semibold">
+                      {utilisateurSelectionne.nom} {utilisateurSelectionne.prenom}
+                    </span>
+                  ) : (
+                    <span className="text-muted-foreground">Choisir un agent destinataire...</span>
+                  )}
+                  
+                  {!(loadingUsers && utilisateurs.length === 0) && <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />}
+                </Button>
+              </PopoverTrigger>
+              
+              <PopoverContent className="w-full p-0 popover-content-width-same-as-trigger">
+                <Command shouldFilter={false}>
+                  <CommandInput 
+                    placeholder="Tapez le nom complet..." 
+                    value={searchQuery}
+                    onValueChange={setSearchQuery}
+                  />
+                  <CommandList>
+                    {loadingUsers && utilisateurs.length === 0 ? (
+                      <div className="flex items-center justify-center gap-2 py-4 text-sm text-muted-foreground">
+                        <Loader2 className="w-4 h-4 animate-spin" />
+                        Recherche en cours...
                       </div>
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            )}
+                    ) : utilisateurs.length === 0 ? (
+                      <CommandEmpty>Aucun agent disponible.</CommandEmpty>
+                    ) : (
+                      <CommandGroup>
+                        {utilisateurs.map((u) => (
+                          <CommandItem
+                            key={u.id}
+                            value={String(u.id)}
+                            onSelect={(currentValue) => {
+                              setDestId(Number(currentValue));
+                              setOpen(false);
+                            }}
+                          >
+                            <Check
+                              className={cn(
+                                "mr-2 h-4 w-4",
+                                destId === u.id ? "opacity-100" : "opacity-0"
+                              )}
+                            />
+                            <div className="flex flex-col">
+                              <span className="font-semibold">{u.nom} {u.prenom}</span>
+                              <span className="text-xs text-muted-foreground">{u.adresse} · {u.role}</span>
+                            </div>
+                          </CommandItem>
+                        ))}
+
+                        {/* --- BOUTON VOIR PLUS --- */}
+                        <CommandItem
+                          key="load-more"
+                          value="load-more"
+                          onSelect={() => handleLoadMore()}
+                          className="flex justify-center items-center py-3 text-sm text-primary font-medium cursor-pointer aria-selected:bg-primary/10 hover:bg-primary/10 mt-1 border-t border-border/50"
+                        >
+                          {isPaginating ? (
+                            <>
+                              <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                              Chargement...
+                            </>
+                          ) : (
+                            "Voir plus d'agents"
+                          )}
+                        </CommandItem>
+
+                      </CommandGroup>
+                    )}
+                  </CommandList>
+                </Command>
+              </PopoverContent>
+            </Popover>
           </div>
 
           {/* Observation */}

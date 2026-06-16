@@ -57,7 +57,7 @@ GET http://localhost:3000/api/notifications/subscribe 404 (Not Found)
 
 
 15/05/2026
-    -- asorina email pour message courrier -- a faire -- 20 mn  
+    -- asorina email pour message courrier -- ok -- 20 mn  
     -- recherche pour choisir utilisateur pour le transfere -- a faire -- 60 mn
     -- numero depart et arrive dans la liste des messages -- a faire -- 30 mn
 

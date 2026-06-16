@@ -12,7 +12,14 @@ import { cn } from '@/lib/utils'
 import Link from 'next/link'
 import { formatDateTime } from '@/hooks/utils'
 import { useMessagePermissions } from '@/hooks/useMessagePermissions'
+           import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip" // Ajustez le chemin selon votre structure de projet
 
+// ... (dans votre composant)
 interface Props {
   courrier: Courrier
   messages: MessageCourrier[]
@@ -153,29 +160,70 @@ export const MessageListView = ({ courrier, messages, loading, error, currentUse
             )}
 
             {/* Flux du Courrier (Expéditeur -> Destinataire initial) */}
+ 
+
+          <TooltipProvider>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 bg-muted/20 p-3 rounded-md text-sm border">
+              
+              {/* Section Expéditeur */}
               <div>
                 <span className="text-xs font-medium text-muted-foreground block mb-1">Expéditeur :</span>
-                <div className="flex items-center gap-2">
-                  <div className="h-7 w-7 rounded-full bg-primary/10 flex items-center justify-center text-xs font-bold text-primary">EX</div>
-                  <div>
-                    <p className="font-medium text-xs">{courrier.expediteur?.nom} {courrier.expediteur?.prenom}</p>
-                    <p className="text-[11px] text-muted-foreground">{courrier.expediteur?.email}</p>
-                  </div>
-                </div>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <div className="flex items-center gap-2 cursor-pointer hover:bg-muted/40 p-1 rounded transition-colors">
+                      <div className="h-7 w-7 rounded-full bg-primary/10 flex items-center justify-center text-xs font-bold text-primary shrink-0">
+                        EX
+                      </div>
+                      <div className="min-w-0">
+                        <p className="font-medium text-xs truncate">
+                          {courrier.expediteur?.nom} {courrier.expediteur?.prenom}
+                        </p>
+                        <p className="text-[11px] text-muted-foreground truncate">
+                          {courrier.expediteur?.adresse}
+                        </p>
+                      </div>
+                    </div>
+                  </TooltipTrigger>
+                  <TooltipContent side="top" className="p-3 max-w-xs space-y-1">
+                    <p className="font-semibold text-xs text-primary">Détails de l'expéditeur</p>
+                    <p className="text-xs"><strong>Nom :</strong> {courrier.expediteur?.nom} {courrier.expediteur?.prenom}</p>
+                    {courrier.expediteur?.email && <p className="text-xs"><strong>Email :</strong> {courrier.expediteur?.email}</p>}
+                    <p className="text-xs"><strong>Adresse :</strong> {courrier.expediteur?.adresse}</p>
+                  </TooltipContent>
+                </Tooltip>
               </div>
 
+              {/* Section Destinataire */}
               <div className="border-t sm:border-t-0 sm:border-l pt-2 sm:pt-0 sm:pl-3 flex flex-col justify-center">
                 <span className="text-xs font-medium text-muted-foreground block mb-1">Destinataire initial :</span>
-                <div className="flex items-center gap-2">
-                  <div className="h-7 w-7 rounded-full bg-secondary/20 flex items-center justify-center text-xs font-bold text-secondary-foreground">DE</div>
-                  <div>
-                    <p className="font-medium text-xs">{courrier.destinataire?.nom} {courrier.destinataire?.prenom}</p>
-                    <p className="text-[11px] text-muted-foreground">{courrier.destinataire?.email}</p>
-                  </div>
-                </div>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <div className="flex items-center gap-2 cursor-pointer hover:bg-muted/40 p-1 rounded transition-colors">
+                      <div className="h-7 w-7 rounded-full bg-secondary/20 flex items-center justify-center text-xs font-bold text-secondary-foreground shrink-0">
+                        DE
+                      </div>
+                      <div className="min-w-0">
+                        <p className="font-medium text-xs truncate">
+                          {courrier.destinataire?.nom} {courrier.destinataire?.prenom}
+                        </p>
+                        <p className="text-[11px] text-muted-foreground truncate">
+                          {courrier.destinataire?.adresse}
+                        </p>
+                      </div>
+                    </div>
+                  </TooltipTrigger>
+                  <TooltipContent side="top" className="p-3 max-w-xs space-y-1">
+                    <p className="font-semibold text-xs text-secondary-foreground">Détails du destinataire</p>
+                    <p className="text-xs"><strong>Nom :</strong> {courrier.destinataire?.nom} {courrier.destinataire?.prenom}</p>
+                    {courrier.destinataire?.email && <p className="text-xs"><strong>Email :</strong> {courrier.destinataire?.email}</p>}
+                    <p className="text-xs"><strong>Adresse :</strong> {courrier.destinataire?.adresse}</p>
+                  </TooltipContent>
+                </Tooltip>
               </div>
+
             </div>
+          </TooltipProvider>
+            
 
             {/* Infos sur le Demandeur */}
             <div className="space-y-2">

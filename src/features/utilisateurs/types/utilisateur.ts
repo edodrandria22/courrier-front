@@ -5,4 +5,5 @@ export interface Utilisateur {
   prenom: string;
   adresse: string;
   role: string;
+  createdAt?: string;
 }
