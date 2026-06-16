@@ -9,7 +9,7 @@ import { NotificationProvider } from '@/components/notification-provider'
 import { ThemePresetProvider } from '@/features/theme/components/ThemePresetProvider'
 import { useIsMobile } from '@/hooks/use-mobile'
 // 1. Importation du Provider (Ajustez le chemin si nécessaire)
-import { UtilisateursProvider } from '@/features/utilisateurs/context/UtilisateursContext'
+// import { UtilisateursProvider } from '@/features/utilisateurs/context/UtilisateursContext'
 import { User } from '@/features/auth/types/login'
 
 export default function DashboardLayout({ children }: { children: ReactNode }) {
@@ -45,7 +45,7 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
   return (
     <ThemePresetProvider>
       {/* 2. On enveloppe le tout pour donner accès au contexte à tout le Dashboard */}
-      <UtilisateursProvider>
+      {/* <UtilisateursProvider> */}
         <div className="flex h-screen bg-background">
           <NotificationProvider />
 
@@ -64,7 +64,7 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
             </main>
           </div>
         </div>
-      </UtilisateursProvider>
+      {/* </UtilisateursProvider> */}
     </ThemePresetProvider>
   )
 }
