@@ -84,6 +84,7 @@ export interface Courrier {
   isConfidentiel?: boolean;
   historiqueId?: number;
   numRef?: number;
+  observation?: string;
 
 }
 

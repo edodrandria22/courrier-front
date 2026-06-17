@@ -296,6 +296,16 @@ export const MessageListView = ({ courrier, messages, loading, error, currentUse
                 </div>
               </div>
             </div>
+            {/* Nouveau bloc pour l'Observation */}
+            <div className="flex items-start gap-1.5 col-span-2 sm:col-span-3 border-t border-dashed pt-2 mt-1">
+              <FileText className="w-3.5 h-3.5 text-muted-foreground mt-0.5 shrink-0" />
+              <div>
+                <span className="block font-medium text-[10px] text-muted-foreground/80">Observation</span>
+                <span className="text-foreground block mt-0.5">
+                  {courrier.observation ? courrier.observation : "Aucune observation"}
+                </span>
+              </div>
+            </div>
 
           </div>
         </div>
