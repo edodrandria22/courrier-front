@@ -357,7 +357,9 @@ export const MessageListView = ({ courrier, messages, loading, error, currentUse
                         <th className="px-4 py-3 font-medium">Expéditeur</th>
                         <th className="px-4 py-3 font-medium">Destinataire</th>
                         <th className="px-4 py-3 font-medium">Statut</th>
-                        <th className="px-4 py-3 font-medium max-w-[250px]">Observation</th>
+                        {/* <th className="px-4 py-3 font-medium max-w-[250px]">Observation</th> */}
+                        <th className="px-4 py-3 font-medium">Numero Expediteur</th>
+                        <th className="px-4 py-3 font-medium">Numero Destinataire</th>
                         <th className="px-4 py-3 font-medium">Date</th>
                         <th className="px-4 py-3 font-medium w-10"></th>
                       </tr>
@@ -420,7 +422,7 @@ export const MessageListView = ({ courrier, messages, loading, error, currentUse
                             </td>
 
                             {/* 5. Observation / Commentaire */}
-                            <td className="px-4 py-3 max-w-[200px] sm:max-w-[250px] truncate">
+                            {/* <td className="px-4 py-3 max-w-[200px] sm:max-w-[250px] truncate">
                               {accessible ? (
                                 <span className={cn('text-sm truncate block', !isRead ? 'text-foreground/90 font-medium' : 'text-muted-foreground')}>
                                   {message.observation || <span className="italic opacity-70">Aucun commentaire</span>}
@@ -431,6 +433,12 @@ export const MessageListView = ({ courrier, messages, loading, error, currentUse
                                   <span className="text-xs font-medium italic">Confidentiel</span>
                                 </div>
                               )}
+                            </td> */}
+                            <td className="px-4 py-3 whitespace-nowrap">
+                              {message.numeroExpediteur}
+                            </td>
+                            <td className="px-4 py-3 whitespace-nowrap">
+                              {message.numeroDestinataire}
                             </td>
 
                             {/* 6. Date */}

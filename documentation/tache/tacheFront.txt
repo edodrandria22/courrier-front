@@ -58,10 +58,19 @@ GET http://localhost:3000/api/notifications/subscribe 404 (Not Found)
 
 15/05/2026
     -- asorina email pour message courrier -- ok -- 20 mn  
-    -- recherche pour choisir utilisateur pour le transfere -- a faire -- 60 mn
-    -- numero depart et arrive dans la liste des messages -- a faire -- 30 mn
-
 16/05/2026
+    -- recherche pour choisir utilisateur pour le transfere -- ok -- 60 mn
+        --api -- ok -- 10 mn
+        --service -- ok -- 10 mn
+        --page -- ok -- 40 mn
+
+
+17/06/2026
+    -- numero depart et arrive dans la liste des messages -- a faire -- 60 mn
+
+
 externe
 traite et non traite
 filtre non traite et traite pour les courriers recus
+liste nom , prenom et mail pour le courrier
+mercure pour envoyer message

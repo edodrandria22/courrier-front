@@ -56,6 +56,8 @@ export interface MessageCourrier {
   destinataire: User;
 
   fichiers: PieceJointe[];
+  numeroExpediteur?: number;
+  numeroDestinataire?: number;
 }
 
 // Kept for backward compatibility with CourrierForm
