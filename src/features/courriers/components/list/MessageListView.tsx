@@ -2,7 +2,8 @@
 
 import { 
   ArrowLeft, ArrowRight, CheckCircle2, AlertCircle, Plus, Lock, 
-  UserIcon, Mail, Phone, Calendar, Clock, FileText 
+  UserIcon, Mail, Phone, Calendar, Clock, FileText, 
+  Edit2
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
@@ -18,6 +19,7 @@ import { useMessagePermissions } from '@/hooks/useMessagePermissions'
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip" // Ajustez le chemin selon votre structure de projet
+import { useState } from 'react'
 
 // ... (dans votre composant)
 interface Props {
@@ -28,15 +30,37 @@ interface Props {
   currentUserId: string | null
   onSelect: (message: MessageCourrier) => void
   onBack: () => void
-  isRecherche?: boolean
+  isRecherche?: boolean,
+  updateHistorique: (id: number, observation: string) => Promise<Courrier>
 }
 
-export const MessageListView = ({ courrier, messages, loading, error, currentUserId, onSelect, onBack, isRecherche = false }: Props) => {
+export const MessageListView = ({ courrier, messages, loading, error, currentUserId, onSelect, onBack, isRecherche = false, updateHistorique }: Props) => {
   const { isMessageVisible, isLastRecipient } = useMessagePermissions(messages, currentUserId)
   const statusLu = courrier.isReadAt ? 'lu' : 'non-lu'
   const status = courrier.cloturePar ? 'finalise' : statusLu;
   const isConfidentiel = courrier.isConfidentiel // Vérification de la confidentialité du courrier
-  console.log(courrier);
+  // console.log(courrier);
+  // États pour la gestion du formulaire d'observation
+  
+  const [isEditingObs, setIsEditingObs] = useState(false)
+  const [obsValue, setObsValue] = useState(courrier.observation || '')
+  const [isUpdatingObs, setIsUpdatingObs] = useState(false)
+
+  // Fonction de soumission de la nouvelle observation
+  const handleUpdateObservation = async () => {
+    if (!courrier.historiqueId) return;
+    setIsUpdatingObs(true);
+    try {
+      const courrierVaovao = await updateHistorique(courrier.historiqueId, obsValue);
+      courrier.observation = courrierVaovao.observation;
+      setIsEditingObs(false);
+    } catch (error) {
+      console.error("Erreur lors de la mise à jour de l'observation", error);
+      // Gérer l'affichage de l'erreur si nécessaire (ex: toast)
+    } finally {
+      setIsUpdatingObs(false);
+    }
+  }
   const getStatusConfig = (status?: string) => {
     switch (status) {
       case 'non-lu':
@@ -297,15 +321,66 @@ export const MessageListView = ({ courrier, messages, loading, error, currentUse
               </div>
             </div>
             {/* Nouveau bloc pour l'Observation */}
-            <div className="flex items-start gap-1.5 col-span-2 sm:col-span-3 border-t border-dashed pt-2 mt-1">
-              <FileText className="w-3.5 h-3.5 text-muted-foreground mt-0.5 shrink-0" />
-              <div>
-                <span className="block font-medium text-[10px] text-muted-foreground/80">Observation</span>
-                <span className="text-foreground block mt-0.5">
-                  {courrier.observation ? courrier.observation : "Aucune observation"}
-                </span>
+            <div className="flex items-start gap-2 col-span-2 sm:col-span-3 border-t border-dashed pt-3 mt-2 group relative">
+              <FileText className="w-4 h-4 text-muted-foreground mt-0.5 shrink-0" />
+              <div className="w-full">
+                <div className="flex items-center justify-between">
+                  <span className="block font-medium text-[10px] text-muted-foreground/80 uppercase tracking-wider">
+                    Observation
+                  </span>
+                  {!isEditingObs && (
+                    <Button 
+                      variant="ghost" 
+                      size="icon" 
+                      className="h-6 w-6 opacity-0 group-hover:opacity-100 transition-opacity absolute right-0 top-2"
+                      onClick={() => setIsEditingObs(true)}
+                    >
+                      <Edit2 className="h-3.5 w-3.5 text-muted-foreground hover:text-foreground" />
+                    </Button>
+                  )}
+                </div>
+
+                {isEditingObs ? (
+                  <div className="mt-2 flex flex-col gap-2">
+                    <textarea 
+                      value={obsValue}
+                      onChange={(e) => setObsValue(e.target.value)}
+                      className="flex min-h-[80px] w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                      placeholder="Saisissez une nouvelle observation..."
+                    />
+                    <div className="flex justify-end gap-2">
+                      <Button 
+                        variant="outline" 
+                        size="sm" 
+                        className="h-8 text-xs"
+                        onClick={() => {
+                          setIsEditingObs(false);
+                          setObsValue(courrier.observation || '');
+                        }}
+                        disabled={isUpdatingObs}
+                      >
+                        Annuler
+                      </Button>
+                      <Button 
+                        size="sm" 
+                        style={{ color: '#ffffff' }}
+                        className="h-8 text-xs"
+                        onClick={handleUpdateObservation}
+                        disabled={isUpdatingObs}
+                      >
+                        {isUpdatingObs ? 'Enregistrement...' : 'Enregistrer'}
+                      </Button>
+                    </div>
+                  </div>
+                ) : (
+                  <span className="text-foreground text-sm block mt-1 whitespace-pre-wrap">
+                    {courrier.observation ? courrier.observation : <span className="text-muted-foreground italic text-xs">Aucune observation</span>}
+                  </span>
+                )}
               </div>
             </div>
+            
+            {/* ------------------------------------------- */}
 
           </div>
         </div>

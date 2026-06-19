@@ -68,6 +68,7 @@ GET http://localhost:3000/api/notifications/subscribe 404 (Not Found)
 17/06/2026
     -- numero depart et arrive dans la liste des messages -- ok -- 60 mn
     -- commentaire pour chaque courrier -- ok -- 60 mn
+19/06/2026
     -- modifier commentaire pour chaque courrier -- a faire -- 60 mn
 filtre non traite et traite pour les courriers recus
 liste nom , prenom et mail pour le courrier

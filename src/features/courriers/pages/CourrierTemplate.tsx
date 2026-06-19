@@ -39,7 +39,8 @@ export const CourrierTemplate = ({ initialCourrier, isRecherche }: CourrierTempl
     fetchCourriersByUser,
     fetchMessages,
     setCourriers,
-    setMessages
+    setMessages,
+    updateHistorique
   } = useCourrier()
   
   const [step, setStep] = useState<Step>(
@@ -321,6 +322,7 @@ const handleLocalCloturation = useCallback(async (id: number) => {
           onSelect={(m) => setStep({ level: 'detail', courrier: step.courrier, message: m })}
           onBack={() => setStep({ level: 'courriers' })}
           isRecherche={isRecherche}
+          updateHistorique={updateHistorique}
         />
         {hasMoreMessages && messages.length > 0 && (
             <div className="flex justify-center px-4 pb-4 pt-2">

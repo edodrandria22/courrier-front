@@ -295,4 +295,26 @@ export const courrierService = {
       return { success: false, error: 'Erreur lors de la mise à jour' };
     }
   },
+  updateHistorique: async (id: number, observation: string): Promise<Courrier> => {
+   try {
+      const fetchWithAuth = useFetchAuth();
+      const res = await fetchWithAuth(`/api/courriers/historique/${id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          observation: observation,
+        }),
+      });
+      if (!res.ok) {
+        const json = await res.json();
+        throw new Error(json.error ?? json.message ?? 'Erreur lors de la mise à jour');
+      }
+      
+      const json = await res.json();
+      return json.data as Courrier;
+    } catch (error) {
+      logger.exception('courrierService.updateHistorique - Exception', error);
+      throw error;
+    }
+  },
 };

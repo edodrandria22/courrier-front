@@ -142,6 +142,21 @@ export const useCourrier = () => {
       setLoading(false);
     }
   }, []);
+  const updateHistorique = useCallback(async (id: number, observation: string): Promise<Courrier> => {
+    setLoading(true);
+    setError(null);
+    try {
+      const result = await courrierService.updateHistorique(id, observation);
+      return result;
+    } catch (err: unknown) {
+      logger.exception('useCourrier.updateHistorique', err);
+      const msg = err instanceof Error ? err.message : 'Erreur lors de la mise à jour';
+      setError(msg);
+      throw err;
+    } finally {
+      setLoading(false);
+    }
+  }, []);
 
   return {
     courriers,
@@ -155,6 +170,7 @@ export const useCourrier = () => {
     setCourriers,
     setMessages,
     fetchCourriersByUserSend,
-    updateCourrier
+    updateCourrier,
+    updateHistorique
   };
 };
