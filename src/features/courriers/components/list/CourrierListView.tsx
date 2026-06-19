@@ -4,7 +4,9 @@ import { useState } from 'react'
 import { 
   Inbox, AlertCircle, Clock, CheckCircle2, Archive, Search, X, 
   User, Hash, FileText, Eye, MoreVertical, Lock, 
-  ArrowUpRight, ArrowDownLeft, Pencil 
+  ArrowUpRight, ArrowDownLeft, Pencil, 
+  CheckSquare,
+  Square
 } from 'lucide-react'
 import { Badge } from '@/components/ui/badge'
 import { Skeleton } from '@/components/ui/skeleton'
@@ -27,7 +29,10 @@ interface Props {
   error: string | null
   onSelect: (courrier: Courrier) => void,
   onEdit?: (courrier: Courrier) => void
-  isUpdate?: boolean
+  isUpdate?: boolean,
+  isReadAt?: boolean | null
+  setIsReadAt?: (isReadAt: boolean | null) => void,
+  setHasMoreCourriers?: (hasMore: boolean) => void
 }
 
 type SearchField = 'nom' | 'reference' | 'description'
@@ -44,7 +49,7 @@ const STATUT_CONFIG: Record<string, { label: string; icon: React.ElementType; cl
   archive:   { label: 'Archivé',   icon: Archive,      className: 'bg-gray-100 text-gray-800 dark:bg-muted/30 dark:text-muted-foreground border-transparent' },
 }
 
-export const CourrierListView = ({ courriers, loading, error, onSelect,  onEdit, isUpdate = false}: Props) => {
+export const CourrierListView = ({ courriers, loading, error, onSelect,  onEdit, isUpdate = false, isReadAt, setIsReadAt, setHasMoreCourriers}: Props) => {
   const [query, setQuery] = useState('')
   const [searchField, setSearchField] = useState<SearchField>('nom')
 
@@ -90,26 +95,72 @@ export const CourrierListView = ({ courriers, loading, error, onSelect,  onEdit,
         </div>
 
         {/* Puces de filtrage (Chips) type Gmail */}
-        <div className="flex flex-wrap gap-2 px-1">
-          {SEARCH_FIELDS.map((field) => {
-            const Icon = field.icon
-            const isActive = searchField === field.value
-            return (
+        <div className="flex flex-wrap items-center justify-between gap-3 px-1">
+          <div className="flex flex-wrap gap-2">
+            {SEARCH_FIELDS.map((field) => {
+              const Icon = field.icon
+              const isActive = searchField === field.value
+              return (
+                <button
+                  key={field.value}
+                  onClick={() => { setSearchField(field.value); setQuery('') }}
+                  className={cn(
+                    'flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition-colors border',
+                    isActive
+                      ? 'bg-primary/10 text-primary border-primary/20'
+                      : 'bg-background text-muted-foreground border-border hover:bg-muted/50'
+                  )}
+                >
+                  <Icon className="w-3.5 h-3.5" />
+                  {field.label}
+                </button>
+              )
+            })}
+          </div>
+
+          {/* SÉLECTEUR TRI-STATE POUR ISREADAT (null, true, false) */}
+          {setIsReadAt !== undefined && (
+            <div className="flex items-center gap-1 border border-border rounded-lg p-0.5 bg-muted/20 sm:ml-auto">
               <button
-                key={field.value}
-                onClick={() => { setSearchField(field.value); setQuery('') }}
+                type="button"
+                onClick={() => { setIsReadAt(null); setHasMoreCourriers?.(true); }}
                 className={cn(
-                  'flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition-colors border',
-                  isActive
-                    ? 'bg-primary/10 text-primary border-primary/20'
-                    : 'bg-background text-muted-foreground border-border hover:bg-muted/50'
+                  "px-2.5 py-1 rounded-md text-xs font-medium transition-all",
+                  isReadAt === null
+                    ? "bg-background text-foreground shadow-sm border border-border/50"
+                    : "text-muted-foreground hover:text-foreground"
                 )}
               >
-                <Icon className="w-3.5 h-3.5" />
-                {field.label}
+                Tous
               </button>
-            )
-          })}
+              <button
+                type="button"
+                onClick={() => { setIsReadAt(true); setHasMoreCourriers?.(true); }}
+                className={cn(
+                  "px-2.5 py-1 rounded-md text-xs font-medium transition-all flex items-center gap-1.5",
+                  isReadAt === true
+                    ? "bg-background text-primary shadow-sm border border-border/50"
+                    : "text-muted-foreground hover:text-foreground"
+                )}
+              >
+                <CheckSquare className="w-3.5 h-3.5" />
+                Lus
+              </button>
+              <button
+                type="button"
+                onClick={() => { setIsReadAt(false); setHasMoreCourriers?.(true); }}
+                className={cn(
+                  "px-2.5 py-1 rounded-md text-xs font-medium transition-all flex items-center gap-1.5",
+                  isReadAt === false
+                    ? "bg-background text-foreground font-semibold shadow-sm border border-border/50"
+                    : "text-muted-foreground hover:text-foreground"
+                )}
+              >
+                <Square className="w-3.5 h-3.5" />
+                Non lus
+              </button>
+            </div>
+          )}
         </div>
       </div>
 

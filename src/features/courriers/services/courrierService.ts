@@ -82,14 +82,21 @@ export const courrierService = {
     }
   },
 
-  getCourriersByUser: async (dateCursor?: string): Promise<Courrier[]> => {
+  getCourriersByUser: async (dateCursor?: string,isReadAt?: boolean|null): Promise<Courrier[]> => {
     try {
       const fetchWithAuth = useFetchAuth();
       // 1. Construire l'URL avec le paramètre de recherche si la date est fournie
-      const url = dateCursor 
-          ? `/api/courriers/getAllbyUser?date=${encodeURIComponent(dateCursor)}` 
-          : '/api/courriers/getAllbyUser';
-
+      const url = dateCursor
+        ? `/api/courriers/getAllbyUser?date=${encodeURIComponent(dateCursor)}${
+            isReadAt !== null && isReadAt !== undefined
+              ? `&isReadAt=${isReadAt}`
+              : ''
+          }`
+        : `/api/courriers/getAllbyUser${
+            isReadAt !== null && isReadAt !== undefined
+              ? `?isReadAt=${isReadAt}`
+              : ''
+          }`;
       const res = await fetchWithAuth(url);
 
       if (!res.ok) {

@@ -23,11 +23,11 @@ export const useCourrier = () => {
     }
   }, []);
 
-  const fetchCourriersByUser = useCallback(async (dateCursor?: string) => {
+  const fetchCourriersByUser = useCallback(async (dateCursor?: string,isReadAt?: boolean|null) => {
     setLoading(true);
     setError(null);
     try {
-      const data = await courrierService.getCourriersByUser(dateCursor);
+      const data = await courrierService.getCourriersByUser(dateCursor,isReadAt);
       
       setCourriers((prev) => {
         // Si on n'a pas de curseur, c'est le chargement initial : on remplace tout.
