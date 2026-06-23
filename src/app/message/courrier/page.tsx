@@ -3,8 +3,9 @@
 import { useRouter, useSearchParams } from 'next/navigation';
 import { CourrierForm } from '@/features/courriers/components/form/CourrierForm';
 import { CourrierSelectTemplate } from '@/features/courriers/pages/CourrierSelectTemplate';
+import { Suspense } from 'react';
 
-export default function CourrierPage() {
+function CourrierContent() {
     const router = useRouter();
     const searchParams = useSearchParams();
     
@@ -80,5 +81,13 @@ export default function CourrierPage() {
             </div>
                     
         </main>
+    );
+}
+
+export default function CourrierPage() {
+    return (
+        <Suspense fallback={<div className="p-10 text-center">Chargement...</div>}>
+            <CourrierContent />
+        </Suspense>
     );
 }
