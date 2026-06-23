@@ -40,17 +40,17 @@ const initials = (nom: string, prenom?: string) => {
 export const MessageDetailView = ({ courrier, message, messages, currentUserId, onBack, onMessageRead, onCloture }: Props) => {
   const { canTransfer, isLastMessage, isDestinataireOf } = useMessagePermissions(messages, currentUserId);
   const isDestinataire = isDestinataireOf(message);
-  const { marquerLu, marquerNonLu, loading } = useMessages();
+  // const { marquerLu, marquerNonLu, loading } = useMessages();
   const hasMarkedRef = useRef(false);
   const isConfidentiel = courrier.isConfidentiel; // Vérification de la confidentialité
 
-  const handleMarkAsUnread = async () => {
-    const result = await marquerNonLu(message.id);
-    if (result.success) {
-      if (onMessageRead) onMessageRead(0);
-      onBack();
-    }
-  };
+  // const handleMarkAsUnread = async () => {
+  //   const result = await marquerNonLu(message.id);
+  //   if (result.success) {
+  //     if (onMessageRead) onMessageRead(0);
+  //     onBack();
+  //   }
+  // };
 
   const [loadingCloturer, setLoadingCloturer] = useState(false);
   
@@ -66,20 +66,20 @@ export const MessageDetailView = ({ courrier, message, messages, currentUserId, 
     }
   };
 
-  useEffect(() => {
-    if (isDestinataire && !message.isReadAt && !hasMarkedRef.current) {
-      hasMarkedRef.current = true;
-      marquerLu(message.id)
-        .then((result) => {
-          if (result.success && onMessageRead) {
-            onMessageRead(message.id);
-          }
-        })
-        .catch((err) => {
-          // console.error("Erreur lors du marquage comme lu:", err);
-        });
-    }
-  }, [isDestinataire]);
+  // useEffect(() => {
+  //   if (isDestinataire && !message.isReadAt && !hasMarkedRef.current) {
+  //     hasMarkedRef.current = true;
+  //     marquerLu(message.id)
+  //       .then((result) => {
+  //         if (result.success && onMessageRead) {
+  //           onMessageRead(message.id);
+  //         }
+  //       })
+  //       .catch((err) => {
+  //         // console.error("Erreur lors du marquage comme lu:", err);
+  //       });
+  //   }
+  // }, [isDestinataire]);
 
   return (
     <Card className="border-border bg-card shadow-none md:border md:shadow-sm">
@@ -211,7 +211,7 @@ export const MessageDetailView = ({ courrier, message, messages, currentUserId, 
           Retour aux transferts
         </Button>
         <div className="flex flex-wrap items-center gap-2">
-          {message.isReadAt && isDestinataire && isLastMessage(message) && !courrier.cloturePar && (
+          {/* {message.isReadAt && isDestinataire && isLastMessage(message) && !courrier.cloturePar && (
             <Button
               variant="outline"
               size="sm"
@@ -221,7 +221,7 @@ export const MessageDetailView = ({ courrier, message, messages, currentUserId, 
             >
               Marquer comme non lu
             </Button>
-          )}
+          )} */}
           
           {canTransfer && isLastMessage(message) && !courrier.cloturePar && (
             <>

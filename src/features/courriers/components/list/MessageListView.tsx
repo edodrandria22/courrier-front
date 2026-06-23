@@ -107,14 +107,14 @@ export const MessageListView = ({ courrier, messages, loading, error, currentUse
           <h1 className="text-sm font-semibold hidden sm:block">Détails du courrier</h1>
         </div>
 
-        {isLastRecipient && !courrier.cloturePar && (
+        {/* {isLastRecipient && !courrier.cloturePar && (
           <Link href={`/message/compose?courrierId=${courrier.id}&reference=${encodeURIComponent(courrier.reference || '')}&objet=${encodeURIComponent(courrier.object || '')}`}>
             <Button size="sm" className="shrink-0 gap-1.5 text-xs font-bold" style={{ color: '#ffffff' }}>
               <Plus className="w-3.5 h-3.5" />
               Transférer
             </Button>
           </Link>
-        )}
+        )} */}
       </div>
 
       {/* Zone défilante : Détails + Liste des messages */}
