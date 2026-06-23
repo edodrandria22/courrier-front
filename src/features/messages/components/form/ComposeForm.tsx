@@ -109,9 +109,12 @@ export const ComposeForm = ({ courrierId, courrierReference, courrierObjet }: Co
 
     const result = await sendMessage({ destId, courrierId, observation, attachments })
     if (result.success) {
-      router.push('/message/courrier/receive')
+      router.push('/message/courrier/send')
     }
   }
+  const onReturn = () => {
+    router.push('/message/courrier?tab=template', { scroll: false });
+  };
 
   return (
     <Card className="border-border bg-card shadow-none md:border md:shadow-sm">
@@ -331,10 +334,11 @@ export const ComposeForm = ({ courrierId, courrierReference, courrierObjet }: Co
 
         {/* Actions */}
         <div className="px-6 py-4 border-t border-border flex items-center justify-between gap-3">
-          <Link href="/message/courrier/receive">
+          
             <button
               type="button"
               disabled={loading}
+              onClick={onReturn}
               style={{
                 backgroundColor: 'transparent',
                 color: 'var(--secondary)',
@@ -360,7 +364,7 @@ export const ComposeForm = ({ courrierId, courrierReference, courrierObjet }: Co
             >
               Annuler
             </button>
-          </Link>
+          
           <button
             type="submit"
             disabled={loading || !destId}

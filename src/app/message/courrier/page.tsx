@@ -1,14 +1,23 @@
 'use client';
 
-import { useState } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { CourrierForm } from '@/features/courriers/components/form/CourrierForm';
 import { CourrierSelectTemplate } from '@/features/courriers/pages/CourrierSelectTemplate';
 
 export default function CourrierPage() {
-    const [activeTab, setActiveTab] = useState<'form' | 'template'>('form');
+    const router = useRouter();
+    const searchParams = useSearchParams();
+    
+    // Récupère l'onglet depuis l'URL (?tab=...) ou utilise 'form' par défaut
+    const activeTab = searchParams.get('tab') === 'template' ? 'template' : 'form';
+
+    // Fonction pour changer d'onglet via l'URL
+    const handleTabChange = (tab: 'form' | 'template') => {
+        router.push(`?tab=${tab}`, { scroll: false });
+    };
 
     return (
-        <main className="min-h-screen flex flex-col  antialiased text-slate-900">
+        <main className="min-h-screen flex flex-col antialiased text-slate-900">
             
             {/* EN-TÊTE ET NAVIGATION PREMIUM */}
             <header className="sticky top-0 z-50 w-full bg-white/95 dark:bg-slate-950/95 backdrop-blur-md border-b border-slate-200/80 dark:border-slate-800/80 shadow-sm transition-colors duration-200">
@@ -27,7 +36,7 @@ export default function CourrierPage() {
                     {/* Menu Onglets - Segmented Control Sombre/Clair */}
                     <div className="flex p-1 bg-slate-100 dark:bg-slate-900 rounded-xl gap-1 border border-slate-200/60 dark:border-slate-800/60 w-full sm:w-80 shadow-inner shrink-0">
                         <button
-                            onClick={() => setActiveTab('form')}
+                            onClick={() => handleTabChange('form')}
                             className={`flex-1 py-2 px-3 text-sm font-medium rounded-lg transition-all duration-200 flex items-center justify-center gap-2 ${
                                 activeTab === 'form'
                                     ? 'bg-white text-blue-600 shadow-sm ring-1 ring-slate-200/50 dark:bg-slate-800 dark:text-blue-400 dark:ring-slate-700/50'
@@ -42,7 +51,7 @@ export default function CourrierPage() {
                         </button>
                         
                         <button
-                            onClick={() => setActiveTab('template')}
+                            onClick={() => handleTabChange('template')}
                             className={`flex-1 py-2 px-3 text-sm font-medium rounded-lg transition-all duration-200 flex items-center justify-center gap-2 ${
                                 activeTab === 'template'
                                     ? 'bg-white text-blue-600 shadow-sm ring-1 ring-slate-200/50 dark:bg-slate-800 dark:text-blue-400 dark:ring-slate-700/50'
@@ -61,18 +70,14 @@ export default function CourrierPage() {
             </header>
 
             {/* ZONE DE CONTENU CENTRALISÉE */}
-            {/* CONTENU EN BAS : Remplit désormais 100% de la largeur et de la hauteur restante */}
-           
-                    
-                    {/* Conteneur interne pour l'animation */}
-                    <div className="flex-1 w-full flex flex-col">
-                        {activeTab === 'form' && (
-                                <CourrierForm onSuccess={() => setActiveTab('template')} />
-                        )}
-                        {activeTab === 'template' && (
-                                <CourrierSelectTemplate />
-                        )}
-                    </div>
+            <div className="flex-1 w-full flex flex-col">
+                {activeTab === 'form' && (
+                    <CourrierForm onSuccess={() => handleTabChange('template')} />
+                )}
+                {activeTab === 'template' && (
+                    <CourrierSelectTemplate />
+                )}
+            </div>
                     
         </main>
     );
