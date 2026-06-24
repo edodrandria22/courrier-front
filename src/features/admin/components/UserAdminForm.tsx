@@ -4,7 +4,7 @@ import React from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
-import { adminService } from "@/features/admin/services/adminService";
+import { utilisateurService } from "@/features/utilisateurs/services/utilisateurService";
 import { RoleSelect } from "../../config/components/RoleSelect";
 
 const userAdminSchema = z.object({
@@ -53,7 +53,7 @@ export const UserAdminForm: React.FC<UserAdminFormProps> = ({ onSuccess, onCance
         // console.log("Payload envoyé:", payload);
 
         try {
-            await adminService.createUser(payload);
+            await utilisateurService.createUser(payload);
             onSuccess();
         } catch (err: any) {
             setError(err.message || "Erreur lors de la création");

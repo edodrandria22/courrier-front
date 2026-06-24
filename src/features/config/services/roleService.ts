@@ -2,7 +2,7 @@ import { useFetchAuth } from "@/hooks/useFetchAuth";
 
 export interface Role {
     id: string;
-    nom: string;
+    name: string;
 }
 
 const fetchAuth = useFetchAuth();

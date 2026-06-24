@@ -74,7 +74,10 @@ GET http://localhost:3000/api/notifications/subscribe 404 (Not Found)
 
 23/06/2026
     -- traite et non traite apres envoie du message mais pas vue du message -- ok -- 60mn
-    -- apres insertion nouvelle message redirection vers le boite d'envoie
+    -- apres insertion nouvelle message redirection vers le boite d'envoie -- ok -- 60 mn
+24/06/2026
+    --pagination pour les utilisateurs -- a faire -- 40 mn
+
 liste nom , prenom et mail pour le courrier
 externe
 

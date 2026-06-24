@@ -2,14 +2,8 @@ import { NextRequest, NextResponse } from "next/server";
 import { callApiGet, callApiPost, callApiPut } from "@/lib/callApi";
 
 export async function GET(request: NextRequest) {
-    const { searchParams } = new URL(request.url);
-    const id = searchParams.get("id");
-
-    if (id) {
-        return callApiGet(request, `utilisateurs/${id}`);
-    }
-
-    return callApiGet(request, "utilisateurs");
+    const allwedParams = ["date", "limit"];
+    return callApiGet(request, "utilisateurs", allwedParams);
 }
 
 export async function POST(request: NextRequest) {

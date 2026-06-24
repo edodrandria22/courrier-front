@@ -4,7 +4,7 @@ import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
-import { adminService } from "@/features/admin/services/adminService";
+import { utilisateurService } from "@/features/utilisateurs/services/utilisateurService";
 import { RoleSelect } from "../../config/components/RoleSelect";
 import { User } from "@/features/auth/types/login";
 import toast from "react-hot-toast";
@@ -112,7 +112,7 @@ export const UserEditForm: React.FC<UserEditFormProps> = ({ user, onSuccess, onC
         const mdpFilled = data.mdp && data.mdp.trim() !== "";
 
         try {
-            await adminService.updateUser(user.id, {
+            await utilisateurService.updateUser(user.id, {
                 email: data.email,
                 nom: data.nom,
                 prenom: data.prenom,

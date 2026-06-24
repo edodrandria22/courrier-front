@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import { User } from "@/features/auth/types/login";
-import { adminService } from "@/features/admin/services/adminService";
+import { utilisateurService } from "@/features/utilisateurs/services/utilisateurService";
 import { AppTableSkeleton } from "@/features/common/components/ui/AppTableSkeleton";
 
 interface UserListProps {
@@ -14,12 +14,30 @@ interface UserListProps {
 export const UserList: React.FC<UserListProps> = ({ onAddUser, onEditUser, refreshKey }) => {
     const [users, setUsers] = useState<User[]>([]);
     const [isLoading, setIsLoading] = useState(true);
+    const [hasMore, setHasMore] = useState(true);
+    const [date, setDate] = useState<string>("");
+     const nbLimit = Number(process.env.NEXT_PUBLIC_NB_LIMIT_UTILISATEURS) || 2;
 
     const fetchUsers = async () => {
             setIsLoading(true);
             try {
-                const data = await adminService.getAllUtilisateurs();
+                const data = await utilisateurService.getUtilisateurs();
+                if (data && data.length < nbLimit) setHasMore(false);
                 setUsers(data);
+                setDate(data[data.length - 1]?.createdAt || "");
+            } catch (error) {
+                console.error("Erreur chargement utilisateurs", error);
+            } finally {
+                setIsLoading(false);
+            }
+        }; 
+    const fetchUsersPlus = async () => {
+            setIsLoading(true);
+            try {
+                const data = await utilisateurService.getUtilisateurs(date);
+                if (data && data.length < nbLimit) setHasMore(false);
+                setUsers(prev => [...prev, ...data]);
+                setDate(data[data.length - 1]?.createdAt || "");
             } catch (error) {
                 console.error("Erreur chargement utilisateurs", error);
             } finally {
@@ -116,6 +134,32 @@ export const UserList: React.FC<UserListProps> = ({ onAddUser, onEditUser, refre
                             )}
                         </tbody>
                     </table>
+                    {hasMore && (
+                <div className="flex justify-center px-4 pb-4 pt-2">
+                  <button
+                    onClick={fetchUsersPlus}
+                    disabled={isLoading}
+                    className={[
+                      'group relative w-full sm:w-auto px-5 py-2.5 sm:py-2 rounded-lg text-sm font-medium transition-all flex items-center justify-center gap-2 border',
+                      isLoading
+                        ? 'bg-muted text-muted-foreground border-border cursor-not-allowed'
+                        : 'bg-card text-primary border-primary/30 hover:border-primary hover:bg-primary/5 hover:shadow-sm active:scale-95'
+                    ].join(' ')}
+                  >
+                    {isLoading ? (
+                      <svg className="animate-spin h-4 w-4 text-muted-foreground" viewBox="0 0 24 24">
+                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
+                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
+                      </svg>
+                    ) : (
+                      <svg className="w-4 h-4 text-primary/50 group-hover:text-primary transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
+                      </svg>
+                    )}
+                    <span>{isLoading ? 'Chargement...' : 'Afficher plus de résultats'}</span>
+                  </button>
+                </div>
+              )}
                 </div>
             </div>
         </div>

@@ -49,7 +49,7 @@ export const RoleSelect: React.FC<RoleSelectProps> = ({ value, onChange, error }
                     <option value="">Choisir un rôle...</option>
                     {roles.map((role) => (
                         <option key={role.id} value={role.id}>
-                            {role.nom}
+                            {role.name}
                         </option>
                     ))}
                 </select>

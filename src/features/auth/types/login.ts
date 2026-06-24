@@ -16,4 +16,5 @@ export interface User {
   idRole?: number;
   avatar?: string;
   adresse: string;
+  createdAt?: string;
 }

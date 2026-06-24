@@ -8,11 +8,11 @@ export const useUtilisateurs = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const fetchUtilisateurs = useCallback(async () => {
+  const fetchUtilisateurs = useCallback(async (date?: string) => {
     setLoading(true);
     setError(null);
     try {
-      const data = await utilisateurService.getUtilisateursUtilisateur();
+      const data = await utilisateurService.getUtilisateurs(date);
       setUtilisateurs(data);
     } catch (err: unknown) {
       logger.exception('useUtilisateurs.fetchUtilisateurs', err);
