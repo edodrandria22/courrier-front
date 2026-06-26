@@ -71,6 +71,22 @@ export const useMessages = (folder: MessageFolder = 'inbox') => {
     }
     return result;
   }, []);
+  const recupererExterne = useCallback(async (id: number): Promise<{ success: boolean; error?: string }> => {
+    setLoading(true);
+    setError(null);
+    try {
+      const result = await messageService.recupererExterne(id);
+      if (!result.success) setError(result.error ?? 'Erreur lors du transfert');
+      return result;
+    } catch (err: unknown) {
+      logger.exception('useMessages.transfererMessage', err);
+      const msg = err instanceof Error ? err.message : 'Erreur lors du transfert';
+      setError(msg);
+      return { success: false, error: msg };
+    } finally {
+      setLoading(false);
+    }
+  }, []);
 
   return {
     messages,
@@ -81,5 +97,6 @@ export const useMessages = (folder: MessageFolder = 'inbox') => {
     transfererMessage,
     marquerLu,
     marquerNonLu,
+    recupererExterne,
   };
 };

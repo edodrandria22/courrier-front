@@ -16,7 +16,7 @@ import { PieceJointeCard } from './PieceJointeCard'
 import { useMessages } from '@/features/messages/hooks/useMessages'
 import { useEffect, useRef, useState } from 'react'
 import { toast } from 'sonner'
-
+import { useRouter } from 'next/navigation'
 interface Props {
   courrier: Courrier
   message: MessageCourrier
@@ -41,9 +41,11 @@ export const MessageDetailView = ({ courrier, message, messages, currentUserId, 
   const { canTransfer, isLastMessage, isDestinataireOf } = useMessagePermissions(messages, currentUserId);
   const isDestinataire = isDestinataireOf(message);
   // const { marquerLu, marquerNonLu, loading } = useMessages();
-  const hasMarkedRef = useRef(false);
+  const { loading , recupererExterne} = useMessages();
+  // const hasMarkedRef = useRef(false);
   const isConfidentiel = courrier.isConfidentiel; // Vérification de la confidentialité
-
+  const router = useRouter();
+  const isValidExterne = message.destinataire.id === 2 && currentUserId === message.expediteur.id.toString();
   // const handleMarkAsUnread = async () => {
   //   const result = await marquerNonLu(message.id);
   //   if (result.success) {
@@ -51,6 +53,18 @@ export const MessageDetailView = ({ courrier, message, messages, currentUserId, 
   //     onBack();
   //   }
   // };
+
+  const recupererExterneCourrier = async () => {
+    if (!message.id) return;
+    
+    const result = await recupererExterne(message.id); // Assurez-vous que cette méthode existe dans le service
+    if (!result.success) {
+      toast.error(result.error ?? 'Erreur lors du transfert');
+      return;
+    }
+    router.push(`/message/courrier/receive`);
+    
+  };
 
   const [loadingCloturer, setLoadingCloturer] = useState(false);
   
@@ -210,6 +224,11 @@ export const MessageDetailView = ({ courrier, message, messages, currentUserId, 
         <Button onClick={onBack} variant="outline" className="border-border hover:bg-accent text-xs shrink-0">
           Retour aux transferts
         </Button>
+        {isValidExterne && (
+          <Button onClick={recupererExterneCourrier} disabled={loading} variant="outline" className="border-border hover:bg-accent text-xs shrink-0">
+            Retourner l'externe
+          </Button>
+        )}
         <div className="flex flex-wrap items-center gap-2">
           {/* {message.isReadAt && isDestinataire && isLastMessage(message) && !courrier.cloturePar && (
             <Button

@@ -76,9 +76,14 @@ GET http://localhost:3000/api/notifications/subscribe 404 (Not Found)
     -- traite et non traite apres envoie du message mais pas vue du message -- ok -- 60mn
     -- apres insertion nouvelle message redirection vers le boite d'envoie -- ok -- 60 mn
 24/06/2026
-    --pagination pour les utilisateurs -- a faire -- 40 mn
+    --pagination pour les utilisateurs -- ok -- 40 mn
 
+26/06/2026
+    -- retourner une courrier externe -- a faire -- 60mn    
+modifier liste utilisateur apres insertion ou modification sans chargement
 liste nom , prenom et mail pour le courrier
 externe
+
+message service doit etre factoriser avec type de retour clair
 
 mercure pour envoyer message

@@ -131,7 +131,7 @@ export async function callApiPost(
         { status: err.response?.status || 500 }
       );
     }
-
+        // console.error("Erreur inconnue :", err);
     return NextResponse.json(
       { error: "Erreur interne inconnue du serveur" },
       { status: 500 }

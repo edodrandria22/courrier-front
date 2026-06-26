@@ -14,7 +14,7 @@ export default function AdminUsersPage() {
     const router = useRouter();
     const [showForm, setShowForm] = useState(false);
     const [userToEdit, setUserToEdit] = useState<User | null>(null);
-    const [refreshKey, setRefreshKey] = useState(0);
+    const [refreshKey, setRefreshKey] = useState(1);
     const [user, setUser] = useState<User | null>(null)
     const [loading, setLoading] = useState(true)
     const login = process.env.NEXT_PUBLIC_LOGIN_URL || '/login';
@@ -60,7 +60,7 @@ export default function AdminUsersPage() {
     const handleSuccess = () => {
         setShowForm(false);
         setUserToEdit(null);
-        setRefreshKey(prev => prev + 1);
+        // setRefreshKey(prev => prev + 1);
     };
 
     return (
