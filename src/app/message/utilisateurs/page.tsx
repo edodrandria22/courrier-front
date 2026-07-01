@@ -8,18 +8,70 @@ import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { authService } from "@/features/auth/services/authService";
 import { User } from "@/features/auth/types/login";
-
+import { utilisateurService } from "@/features/utilisateurs/services/utilisateurService";
+import { toast } from "sonner";
 export default function AdminUsersPage() {
 
     const router = useRouter();
     const [showForm, setShowForm] = useState(false);
     const [userToEdit, setUserToEdit] = useState<User | null>(null);
-    const [refreshKey, setRefreshKey] = useState(1);
-    const [user, setUser] = useState<User | null>(null)
-    const [loading, setLoading] = useState(true)
+    const [user, setUser] = useState<User | null>(null);
+    const [loading, setLoading] = useState(true);
+
+    const [users, setUsers] = useState<User[]>([]);
+    const [isLoading, setIsLoading] = useState(true);
+    const [hasMore, setHasMore] = useState(true);
+    const [date, setDate] = useState<string>("");
+     const nbLimit = Number(process.env.NEXT_PUBLIC_NB_LIMIT_UTILISATEURS) || 2;
+
+    const fetchUsers = async () => {
+            setIsLoading(true);
+            try {
+                const data = await utilisateurService.getUtilisateurs();
+                if (data && data.length < nbLimit) setHasMore(false);
+                setUsers(data);
+                setDate(data[data.length - 1]?.createdAt || "");
+            } catch (error) {
+                // Garde la trace dans la console
+                // console.error("Erreur chargement utilisateurs", error);
+
+                // Vérifie si l'erreur est bien un objet Error standard (très utile en TypeScript)
+                if (error instanceof Error) {
+                    toast.error(error.message); // Affiche le vrai message d'erreur
+                } else {
+                    // Message de secours si l'erreur a un format inattendu
+                    toast.error("Une erreur inconnue est survenue.");
+                }
+            } finally {
+                setIsLoading(false);
+            }
+        }; 
+    const fetchUsersPlus = async () => {
+            setIsLoading(true);
+            try {
+                const data = await utilisateurService.getUtilisateurs(date);
+                if (data && data.length < nbLimit) setHasMore(false);
+                setUsers(prev => [...prev, ...data]);
+                setDate(data[data.length - 1]?.createdAt || "");
+            } catch (error) {
+                    // Garde la trace dans la console
+                    // console.error("Erreur chargement utilisateurs", error);
+
+                    // Vérifie si l'erreur est bien un objet Error standard (très utile en TypeScript)
+                    if (error instanceof Error) {
+                        toast.error(error.message); // Affiche le vrai message d'erreur
+                    } else {
+                        // Message de secours si l'erreur a un format inattendu
+                        toast.error("Une erreur inconnue est survenue.");
+                    }
+            } finally {
+                setIsLoading(false);
+            }
+        };
     const login = process.env.NEXT_PUBLIC_LOGIN_URL || '/login';
     useEffect(() => {
-        checkAuth()
+        checkAuth();
+        fetchUsers();
     }, []);
 
     const checkAuth = async () => {
@@ -60,7 +112,7 @@ export default function AdminUsersPage() {
     const handleSuccess = () => {
         setShowForm(false);
         setUserToEdit(null);
-        // setRefreshKey(prev => prev + 1);
+
     };
 
     return (
@@ -81,6 +133,8 @@ export default function AdminUsersPage() {
             {showForm ? (
                 <div className="flex justify-center py-10">
                     <UserAdminForm
+                        users={users}
+                        setUsers={setUsers}
                         onSuccess={handleSuccess}
                         onCancel={() => setShowForm(false)}
                     />
@@ -89,13 +143,18 @@ export default function AdminUsersPage() {
                 <div className="flex justify-center py-10">
                     <UserEditForm
                         user={userToEdit}
+                        users={users}
+                        setUsers={setUsers}
                         onSuccess={handleSuccess}
                         onCancel={() => setUserToEdit(null)}
                     />
                 </div>
             ) : (
                 <UserList
-                    refreshKey={refreshKey}
+                    users={users}
+                    isLoading={isLoading}
+                    fetchUsersPlus={fetchUsersPlus}
+                    hasMore={hasMore}
                     onAddUser={() => setShowForm(true)}
                     onEditUser={(u) => setUserToEdit(u)}
                 />

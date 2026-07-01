@@ -1,52 +1,19 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
 import { User } from "@/features/auth/types/login";
-import { utilisateurService } from "@/features/utilisateurs/services/utilisateurService";
 import { AppTableSkeleton } from "@/features/common/components/ui/AppTableSkeleton";
 
 interface UserListProps {
+    users: User[];
+    isLoading: boolean;
+    fetchUsersPlus: () => void;
+    hasMore: boolean;
     onAddUser: () => void;
     onEditUser: (user: User) => void;
-    refreshKey: number;
 }
 
-export const UserList: React.FC<UserListProps> = ({ onAddUser, onEditUser, refreshKey }) => {
-    const [users, setUsers] = useState<User[]>([]);
-    const [isLoading, setIsLoading] = useState(true);
-    const [hasMore, setHasMore] = useState(true);
-    const [date, setDate] = useState<string>("");
-     const nbLimit = Number(process.env.NEXT_PUBLIC_NB_LIMIT_UTILISATEURS) || 2;
-
-    const fetchUsers = async () => {
-            setIsLoading(true);
-            try {
-                const data = await utilisateurService.getUtilisateurs();
-                if (data && data.length < nbLimit) setHasMore(false);
-                setUsers(data);
-                setDate(data[data.length - 1]?.createdAt || "");
-            } catch (error) {
-                console.error("Erreur chargement utilisateurs", error);
-            } finally {
-                setIsLoading(false);
-            }
-        }; 
-    const fetchUsersPlus = async () => {
-            setIsLoading(true);
-            try {
-                const data = await utilisateurService.getUtilisateurs(date);
-                if (data && data.length < nbLimit) setHasMore(false);
-                setUsers(prev => [...prev, ...data]);
-                setDate(data[data.length - 1]?.createdAt || "");
-            } catch (error) {
-                console.error("Erreur chargement utilisateurs", error);
-            } finally {
-                setIsLoading(false);
-            }
-        };
-    useEffect(() => {
-        fetchUsers();
-    }, [refreshKey]);
+export const UserList: React.FC<UserListProps> = ({ users, isLoading, fetchUsersPlus, hasMore, onAddUser, onEditUser }) => {
+ 
 
     return (
         <div className="space-y-6">

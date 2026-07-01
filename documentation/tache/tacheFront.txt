@@ -79,10 +79,15 @@ GET http://localhost:3000/api/notifications/subscribe 404 (Not Found)
     --pagination pour les utilisateurs -- ok -- 40 mn
 
 26/06/2026
-    -- retourner une courrier externe -- a faire -- 60mn    
-modifier liste utilisateur apres insertion ou modification sans chargement
-liste nom , prenom et mail pour le courrier
-externe
+    -- retourner une courrier externe -- ok -- 60mn    
+
+01/07/2026    
+    -- modifier liste utilisateur apres insertion ou modification sans chargement -- ok -- 30mn
+    -- modifer insertion utilisateur sans chargement apres insertion -- ok -- 30mn
+    -- modifier la modification utilisateur sans chargement apres modification -- ok -- 30mn
+
+
+-- liste nom , prenom et mail pour le courrier externe -- ok -- 30mn
 
 message service doit etre factoriser avec type de retour clair
 

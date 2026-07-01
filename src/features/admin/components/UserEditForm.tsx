@@ -47,15 +47,17 @@ type UserEditFormValues = z.infer<typeof userEditSchema>;
 
 interface UserEditFormProps {
     user: User;
+    users: User[];
+    setUsers: (users: User[]) => void;
     onSuccess: () => void;
     onCancel: () => void;
 }
 
-export const UserEditForm: React.FC<UserEditFormProps> = ({ user, onSuccess, onCancel }) => {
+export const UserEditForm: React.FC<UserEditFormProps> = ({ user, users, setUsers, onSuccess, onCancel }) => {
     const [isLoading, setIsLoading] = useState(false);
     const [isFetching, setIsFetching] = useState(true);
     const [error, setError] = useState<string | null>(null);
-    console.log(user);
+    // console.log(user);
     const {
         register,
         handleSubmit,
@@ -112,7 +114,7 @@ export const UserEditForm: React.FC<UserEditFormProps> = ({ user, onSuccess, onC
         const mdpFilled = data.mdp && data.mdp.trim() !== "";
 
         try {
-            await utilisateurService.updateUser(user.id, {
+            const updatedUser = await utilisateurService.updateUser(user.id, {
                 email: data.email,
                 nom: data.nom,
                 prenom: data.prenom,
@@ -120,6 +122,8 @@ export const UserEditForm: React.FC<UserEditFormProps> = ({ user, onSuccess, onC
                 idRole: Number(data.idRole),
                 mdp: mdpFilled ? data.mdp : undefined,
             });
+            // Mettre à jour la liste des utilisateurs
+            setUsers(users?.map(u => u.id === user.id ? updatedUser : u) || []);
             onSuccess();
         } catch (err: any) {
             setError(err.message || "Erreur lors de la modification");

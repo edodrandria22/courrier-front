@@ -6,6 +6,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { utilisateurService } from "@/features/utilisateurs/services/utilisateurService";
 import { RoleSelect } from "../../config/components/RoleSelect";
+import { User } from "@/features/auth/types/login";
 
 const userAdminSchema = z.object({
     nom: z.string().min(2, "Le nom doit faire au moins 2 caractères"),
@@ -19,11 +20,13 @@ const userAdminSchema = z.object({
 type UserAdminFormValues = z.infer<typeof userAdminSchema>;
 
 interface UserAdminFormProps {
+    setUsers: (users: User[]) => void;
+    users: User[];
     onSuccess: () => void;
     onCancel: () => void;
 }
 
-export const UserAdminForm: React.FC<UserAdminFormProps> = ({ onSuccess, onCancel }) => {
+export const UserAdminForm: React.FC<UserAdminFormProps> = ({ setUsers, users, onSuccess, onCancel }) => {
     const [isLoading, setIsLoading] = React.useState(false);
     const [error, setError] = React.useState<string | null>(null);
 
@@ -53,7 +56,8 @@ export const UserAdminForm: React.FC<UserAdminFormProps> = ({ onSuccess, onCance
         // console.log("Payload envoyé:", payload);
 
         try {
-            await utilisateurService.createUser(payload);
+            const user = await utilisateurService.createUser(payload);
+            setUsers([user, ...users]);
             onSuccess();
         } catch (err: any) {
             setError(err.message || "Erreur lors de la création");
