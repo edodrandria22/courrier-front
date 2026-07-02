@@ -56,17 +56,35 @@ export const CourrierListView = ({ courriers, loading, error, onSelect,  onEdit,
   const activeField = SEARCH_FIELDS.find(f => f.value === searchField)!
   
   const filtered = query.trim()
-    ? courriers.filter((c) => {
-        const q = query.toLowerCase()
-        if (searchField === 'nom')
-          return (c.nom || '').toLowerCase().includes(q) || (c.prenom || '').toLowerCase().includes(q)
-        if (searchField === 'reference')
-          return (c.reference || '').toLowerCase().includes(q)
-        if (searchField === 'description')
-          return (c.description || '').toLowerCase().includes(q) || (c.object || '').toLowerCase().includes(q)
-        return false
-      })
-    : courriers
+  ? courriers.filter((c) => {
+      const q = query.toLowerCase();
+
+      if (searchField === 'nom') {
+        // On vérifie si au moins une personne dans le tableau correspond à la recherche
+        return c.detailPersonnes?.some((personne) => {
+          const nom = personne.name || '';
+          const prenom = personne.prenom || '';
+          // On combine les deux pour permettre une recherche sur le nom complet
+          const nomComplet = `${nom} ${prenom}`.toLowerCase();
+          
+          return nomComplet.includes(q);
+        });
+      }
+
+      if (searchField === 'reference') {
+        return (c.reference || '').toLowerCase().includes(q);
+      }
+
+      if (searchField === 'description') {
+        return (
+          (c.description || '').toLowerCase().includes(q) ||
+          (c.object || '').toLowerCase().includes(q)
+        );
+      }
+
+      return false;
+    })
+  : courriers;
   
 
   return (

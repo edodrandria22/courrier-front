@@ -180,6 +180,18 @@ export const MessageListView = ({ courrier, messages, loading, error, currentUse
                   <FileText className="w-3.5 h-3.5" /> Description
                 </p>
                 <p className="text-sm text-foreground whitespace-pre-line">{courrier.description}</p>
+                {courrier.numero !== undefined && (
+                  <p className="flex items-center gap-2 text-foreground">
+                    {/* <span className="font-semibold text-muted-foreground w-3.5 text-center">N°</span> */}
+                    <span className="font-medium">Numéro :</span> {courrier.numero}
+                  </p>
+                )}
+                {courrier.numRef !== undefined && (
+                  <p className="flex items-center gap-2 text-foreground">
+                    {/* <span className="font-semibold text-muted-foreground w-3.5 text-center">N°</span> */}
+                    <span className="font-medium">Numéro de référence :</span> {courrier.numRef}
+                  </p>
+                )}
               </div>
             )}
 
@@ -251,37 +263,61 @@ export const MessageListView = ({ courrier, messages, loading, error, currentUse
 
             {/* Infos sur le Demandeur */}
             <div className="space-y-2">
-              <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">Informations Demandeur</h3>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs border rounded-md p-3 bg-background">
-                <p className="flex items-center gap-2 text-foreground">
-                  <UserIcon className="w-3.5 h-3.5 text-muted-foreground shrink-0" />
-                  <span className="font-medium">Nom :</span> {courrier.nom || "—"} {courrier.prenom || ""}
-                </p>
-                {courrier.numero !== undefined && (
-                  <p className="flex items-center gap-2 text-foreground">
-                    <span className="font-semibold text-muted-foreground w-3.5 text-center">N°</span>
-                    <span className="font-medium">Numéro :</span> {courrier.numero}
-                  </p>
-                )}
-                {courrier.numRef !== undefined && (
-                  <p className="flex items-center gap-2 text-foreground">
-                    <span className="font-semibold text-muted-foreground w-3.5 text-center">N°</span>
-                    <span className="font-medium">Numéro de référence :</span> {courrier.numRef}
-                  </p>
-                )}
-                <p className="flex items-center gap-2 text-foreground sm:col-span-2 border-t pt-2 mt-1">
-                  <Mail className="w-3.5 h-3.5 text-muted-foreground shrink-0" />
-                  <span className="font-medium">Email :</span> 
-                  {courrier.email ? <a href={`mailto:${courrier.email}`} className="text-primary hover:underline">{courrier.email}</a> : "—"}
-                </p>
-                {courrier.telephone && (
-                  <p className="flex items-center gap-2 text-foreground sm:col-span-2 border-t pt-2">
-                    <Phone className="w-3.5 h-3.5 text-muted-foreground shrink-0" />
-                    <span className="font-medium">Téléphone :</span> 
-                    <a href={`tel:${courrier.telephone}`} className="text-primary hover:underline">{courrier.telephone}</a>
-                  </p>
-                )}
-              </div>
+              <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
+                Informations Demandeur{courrier.detailPersonnes && courrier.detailPersonnes.length > 1 ? 's' : ''}
+              </h3>
+
+              {/* On vérifie si la liste existe et contient des éléments */}
+              {courrier.detailPersonnes && courrier.detailPersonnes.length > 0 ? (
+                <div className="space-y-3"> {/* Conteneur pour espacer chaque bloc personne */}
+                  {courrier.detailPersonnes.map((personne, index) => (
+                    <div 
+                      key={index} 
+                      className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs border rounded-md p-3 bg-background relative"
+                    >
+                      {/* Petit badge optionnel pour numéroter s'il y a plusieurs personnes */}
+                      {courrier.detailPersonnes.length > 1 && (
+                        <span className="absolute top-2 right-2 text-[10px] bg-muted px-1.5 py-0.5 rounded text-muted-foreground font-medium">
+                          #{index + 1}
+                        </span>
+                      )}
+
+                      {/* Nom & Prénom */}
+                      <p className="flex items-center gap-2 text-foreground sm:col-span-2">
+                        <UserIcon className="w-3.5 h-3.5 text-muted-foreground shrink-0" />
+                        <span className="font-medium">Nom :</span> {personne.name || "—"} {personne.prenom || ""}
+                      </p>
+
+                      {/* Email */}
+                      <p className="flex items-center gap-2 text-foreground sm:col-span-2 border-t pt-2 mt-1">
+                        <Mail className="w-3.5 h-3.5 text-muted-foreground shrink-0" />
+                        <span className="font-medium">Email :</span> 
+                        {personne.email ? (
+                          <a href={`mailto:${personne.email}`} className="text-primary hover:underline break-all">
+                            {personne.email}
+                          </a>
+                        ) : "—"}
+                      </p>
+
+                      {/* Téléphone (Affiché uniquement s'il existe) */}
+                      {personne.telephone && (
+                        <p className="flex items-center gap-2 text-foreground sm:col-span-2 border-t pt-2">
+                          <Phone className="w-3.5 h-3.5 text-muted-foreground shrink-0" />
+                          <span className="font-medium">Téléphone :</span> 
+                          <a href={`tel:${personne.telephone}`} className="text-primary hover:underline">
+                            {personne.telephone}
+                          </a>
+                        </p>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                /* Message de repli si aucune personne n'est enregistrée */
+                <div className="text-xs text-muted-foreground italic p-3 border border-dashed rounded-md text-center bg-muted/30">
+                  Aucun demandeur renseigné
+                </div>
+              )}
             </div>
 
             {/* Traçabilité & Dates */}

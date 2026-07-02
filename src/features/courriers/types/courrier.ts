@@ -59,23 +59,24 @@ export interface MessageCourrier {
   numeroExpediteur?: number;
   numeroDestinataire?: number;
 }
-
+export interface DetailPersonne {
+  name: string;
+  prenom: string|null;
+  email: string|null;
+  telephone: string|null;
+}
 // Kept for backward compatibility with CourrierForm
 export interface Courrier {
   id?: number;
   reference?: string;
   object: string;
   description?: string;
-  email?: string;
-  nom?: string;
   numero?:number;
-  prenom?: string;
   dateFin?: string;
   createdAt?: string;
   createur?: User;
   cloturePar?: User | null;
   statut?: string;
-  telephone?: string;
   isReadAt?: string | null;
   expediteur?: User | null;
   destinataire?: User | null;
@@ -85,6 +86,7 @@ export interface Courrier {
   historiqueId?: number;
   numRef?: number;
   observation?: string;
+  detailPersonnes: Array<DetailPersonne>;
 
 }
 

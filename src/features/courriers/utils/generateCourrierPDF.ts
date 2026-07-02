@@ -1,4 +1,5 @@
 import { jsPDF } from 'jspdf'
+import autoTable from 'jspdf-autotable' // <-- Import de l'extension
 import { Courrier } from '../types/courrier'
 
 const formatDate = (iso: string | undefined) => {
@@ -10,12 +11,9 @@ const formatDate = (iso: string | undefined) => {
   })
 }
 
-// N'oubliez pas d'importer jsPDF si ce n'est pas déjà fait en haut du fichier
-// import { jsPDF } from 'jspdf'
-
 export function generateCourrierPDF(
   courrier: Courrier, 
-  action: 'download' | 'view' = 'view' // Par défaut, on affiche maintenant
+  action: 'download' | 'view' = 'view'
 ): void {
   const doc = new jsPDF({ unit: 'mm', format: 'a4' })
 
@@ -53,7 +51,6 @@ export function generateCourrierPDF(
   const isFinalise = !!courrier.cloturePar
   const statutLabel = isFinalise ? 'Finalise' : 'En cours'
   
-  // Couleurs : Vert si finalisé, Orange si en cours
   if (isFinalise) {
     doc.setFillColor(16, 185, 129) // emerald-500
   } else {
@@ -89,7 +86,6 @@ export function generateCourrierPDF(
 
     doc.setFont('helvetica', 'normal')
     doc.setTextColor(30, 41, 59) // slate-800
-    // splitTextToSize pour gérer les retours à la ligne automatiques
     const lines = doc.splitTextToSize(value, contentW - labelW - 2)
     doc.text(lines, marginX + labelW, y)
     y += Math.max(6, lines.length * 5)
@@ -105,7 +101,6 @@ export function generateCourrierPDF(
     drawRow('Description', courrier.description)
   }
   
-  // Utilisation d'une date sécurisée si createdAt est manquant
   const dateCreation = courrier.createdAt ? new Date(courrier.createdAt).toLocaleDateString('fr-FR') : '—'
   drawRow('Date de creation', dateCreation)
   
@@ -114,15 +109,47 @@ export function generateCourrierPDF(
   }
 
   // ── Demandeur ─────────────────────────────────────────────────────────────
-  drawSection('Informations du demandeur')
-  if (courrier.nom || courrier.prenom) {
-    drawRow('Nom & Prenom', `${courrier.nom}${courrier.prenom ? ' ' + courrier.prenom : ''}`)
-  }
-  if (courrier.email) {
-    drawRow('Email', courrier.email)
-  }
-  if (courrier.telephone) {
-    drawRow('Telephone', courrier.telephone)
+  drawSection('Informations du demandeur');
+
+  if (courrier.detailPersonnes && courrier.detailPersonnes.length > 0) {
+    
+    // 1. On prépare les données sous forme de tableau (lignes / colonnes)
+    const tableBody = courrier.detailPersonnes.map((personne) => {
+      const nom = personne.name || '';
+      const prenom = personne.prenom ? ` ${personne.prenom}` : '';
+      const nomComplet = `${nom}${prenom}`.trim() || '-';
+      
+      const email = personne.email || '-';
+      const telephone = personne.telephone || '-';
+
+      // Retourne une ligne de données
+      return [nomComplet, email, telephone];
+    });
+
+    // 2. On dessine le tableau avec autoTable
+    autoTable(doc, {
+      startY: y,
+      head: [['Nom & Prénom', 'Email', 'Téléphone']],
+      body: tableBody,
+      margin: { left: marginX, right: marginX },
+      theme: 'grid', // Style visuel du tableau
+      headStyles: { 
+        fillColor: [248, 249, 250], 
+        textColor: [51, 51, 51], 
+        fontStyle: 'bold' 
+      },
+      styles: { 
+        fontSize: 9, 
+        font: 'helvetica' 
+      },
+      alternateRowStyles: {
+        fillColor: [251, 251, 251] // Effet zébré
+      }
+    });
+
+    // 3. Mise à jour indispensable de la position Y après le tableau
+    // doc.lastAutoTable contient les infos de hauteur du tableau qui vient d'être dessiné
+    y = (doc as any).lastAutoTable.finalY + 10;
   }
 
   // ── Cloture ───────────────────────────────────────────────────────────────
@@ -149,11 +176,9 @@ export function generateCourrierPDF(
 
   // ── Sortie du document ───────────────────────────────────────────────────
   if (action === 'view') {
-    // Crée une URL de données et l'ouvre dans un nouvel onglet
     const blob = doc.output('bloburl');
     window.open(blob, '_blank');
   } else {
-    // Comportement de téléchargement classique
     const filename = `courrier-${courrier.reference || courrier.id || 'export'}.pdf`
     doc.save(filename)
   }

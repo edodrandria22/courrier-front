@@ -87,7 +87,9 @@ GET http://localhost:3000/api/notifications/subscribe 404 (Not Found)
     -- modifier la modification utilisateur sans chargement apres modification -- ok -- 30mn
 
 
--- liste nom , prenom et mail pour le courrier externe -- ok -- 30mn
+02/07/2026
+    -- affichage pour le visualisation du courrier avec liste -- a faire -- 60mn
+    --inertion avec liste nom , prenom telephone et mail pour le courrier  -- a faire -- 30mn
 
 message service doit etre factoriser avec type de retour clair
 
