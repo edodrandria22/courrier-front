@@ -4,10 +4,10 @@ import { useState } from 'react'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 import { Card } from '@/components/ui/card'
-import { Button } from '@/components/ui/button' // Importation du bouton UI si présent
-import { Send, X, User, Lock, CheckCircle, ArrowRight, Copy, Check } from 'lucide-react'
+import { Button } from '@/components/ui/button'
+import { Send, X, User, Lock, CheckCircle, ArrowRight, Copy, Check, Plus, Trash2 } from 'lucide-react'
 import { useCourrier } from '../../hooks/useCourrier'
-import { Courrier } from '../../types/courrier'
+import { Courrier, DetailPersonne } from '../../types/courrier'
 
 interface Props {
   onSuccess: () => void,
@@ -16,57 +16,77 @@ interface Props {
 }
 
 export const CourrierForm = ({ onSuccess, courrier, onClose }: Props) => {
-  const { createCourrier, updateCourrier,loading, error } = useCourrier()
+  const { createCourrier, updateCourrier, loading, error } = useCourrier()
   const [backupData, setBackupData] = useState<Partial<Courrier> | null>(null)
-  // 1. État pour stocker la référence après création réussie
   const [createdReference, setCreatedReference] = useState<string | null>(null)
   const [isCopied, setIsCopied] = useState(false)
 
+  // 1. Initialisation avec une liste au lieu de champs simples
+  const defaultPersonne: DetailPersonne = { name: '', prenom: '', email: '', telephone: '' };
+  const initialPersonnes = courrier?.detailPersonnes?.length 
+    ? courrier.detailPersonnes 
+    : [];
+
   const [formData, setFormData] = useState({
-    email: courrier?.email || '',
     object: courrier?.object || '',
     description: courrier?.description || '',
-    nom: courrier?.nom || '',
-    prenom: courrier?.prenom || '',
-    telephone: courrier?.telephone || '',
-    isConfidentiel: courrier?.isConfidentiel || false 
+    isConfidentiel: courrier?.isConfidentiel || false,
+    detailPersonnes: initialPersonnes // Remplacement des champs plats par un tableau
   })
 
+  // Gestion des champs simples (Objet, Description)
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target
     setFormData((prev) => ({ ...prev, [name]: value }))
   }
 
+  // 2. Fonctions pour gérer le tableau de personnes
+  const handlePersonneChange = (index: number, field: keyof DetailPersonne, value: string) => {
+    const updatedPersonnes = [...formData.detailPersonnes]
+    updatedPersonnes[index] = { ...updatedPersonnes[index], [field]: value }
+    setFormData((prev) => ({ ...prev, detailPersonnes: updatedPersonnes }))
+  }
+
+  const addPersonne = () => {
+    setFormData((prev) => ({
+      ...prev,
+      detailPersonnes: [...prev.detailPersonnes, { ...defaultPersonne }]
+    }))
+  }
+
+  const removePersonne = (index: number) => {
+    const updatedPersonnes = formData.detailPersonnes.filter((_, i) => i !== index)
+    setFormData((prev) => ({ ...prev, detailPersonnes: updatedPersonnes }))
+  }
+
+  // 3. Mise à jour de la logique de confidentialité pour sauvegarder la liste
   const handleConfidentialToggle = (e: React.ChangeEvent<HTMLInputElement>) => {
     const isChecked = e.target.checked
 
     if (isChecked) {
       setBackupData({
         object: formData.object,
-        nom: formData.nom,
-        prenom: formData.prenom,
-        telephone: formData.telephone,
         description: formData.description,
+        detailPersonnes: formData.detailPersonnes, // On sauvegarde la liste
       })
 
       setFormData((prev) => ({
         ...prev,
         isConfidentiel: true,
         object: 'Pli fermé',
-        nom: '',
-        prenom: '',
-        telephone: '',
         description: '',
+        // detailPersonnes: formData.detailPersonnes,
+        // detailPersonnes: [{ ...defaultPersonne }], // On vide la liste
+        detailPersonnes: [],
       }))
     } else {
       setFormData((prev) => ({
         ...prev,
         isConfidentiel: false,
         object: backupData?.object || '',
-        nom: backupData?.nom || '',
-        prenom: backupData?.prenom || '',
-        telephone: backupData?.telephone || '',
         description: backupData?.description || '',
+        // On restaure la liste ou on met une liste vide par défaut
+        detailPersonnes: backupData?.detailPersonnes || [{ ...defaultPersonne }],
       }))
     }
   }
@@ -74,24 +94,24 @@ export const CourrierForm = ({ onSuccess, courrier, onClose }: Props) => {
   const handleFormSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
 
-    const courrierData: Courrier = formData;
-    var result;
+    // Adapté pour correspondre à votre type Courrier
+    const courrierData = {
+      ...formData,
+      detailPersones: formData.detailPersonnes // Assurez-vous que la clé API correspond
+    } as unknown as Courrier; 
+
+    let result;
     if (courrier) {
-      result = await updateCourrier(courrier.id||0,courrierData);
-    }
-    else{
+      result = await updateCourrier(courrier.id || 0, courrierData);
+    } else {
       result = await createCourrier(courrierData);
     }
-    // console.log(result)
+    
     if (result.success) {
-      // 2. On récupère la référence générée par votre API (ex: result.reference ou result.data.reference)
-      // Ajustez "result.reference" selon la structure exacte renvoyée par votre hook useCourrier
-      // console.log(result)
       setCreatedReference(result.courrier?.reference || "REF-" + Math.floor(100000 + Math.random() * 900000))
     }
   }
 
-  // Fonction utilitaire pour copier la référence dans le presse-papier
   const handleCopyReference = () => {
     if (createdReference) {
       navigator.clipboard.writeText(createdReference)
@@ -102,7 +122,7 @@ export const CourrierForm = ({ onSuccess, courrier, onClose }: Props) => {
 
   const isFieldDisabled = loading || formData.isConfidentiel
 
-  {/* 3. ÉCRAN DE SUCCÈS INTERMÉDIAIRE : Affiché avant d'appeler onSuccess */}
+  {/* ÉCRAN DE SUCCÈS INTERMÉDIAIRE */}
   if (createdReference) {
     return (
       <Card className="max-w-md mx-auto border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 p-8 text-center space-y-6 shadow-lg rounded-2xl animate-fade-in mt-10">
@@ -117,7 +137,6 @@ export const CourrierForm = ({ onSuccess, courrier, onClose }: Props) => {
           </p>
         </div>
 
-        {/* Bloc d'affichage de la Référence */}
         <div className="bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-4 flex items-center justify-between gap-3">
           <div className="text-left">
             <span className="text-[10px] font-bold tracking-wider text-slate-400 uppercase block">Référence unique</span>
@@ -133,7 +152,6 @@ export const CourrierForm = ({ onSuccess, courrier, onClose }: Props) => {
           </button>
         </div>
 
-        {/* Bouton de validation finale qui déclenche le onSuccess externe */}
         <Button
           onClick={onSuccess}
           type="button"
@@ -147,31 +165,23 @@ export const CourrierForm = ({ onSuccess, courrier, onClose }: Props) => {
     )
   }
 
-  {/* LE FORMULAIRE RESTE IDENTIQUE EN DESSOUS */}
   return (
     <Card className="max-w-3xl mx-auto border-border bg-card shadow-none md:border md:shadow-sm">
-      <form onSubmit={handleFormSubmit} className="p-6 space-y-6">
+      <form onSubmit={handleFormSubmit} className="p-6 space-y-8">
 
         {/* En-tête avec Switch Confidentiel */}
         <div className="border-b border-border pb-4 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div>
             {courrier ? (
-              <>
-                <h2 className="text-lg font-bold text-foreground">
-                  Modifier le Courrier {courrier?.reference}
-                </h2>
-              </>
+              <h2 className="text-lg font-bold text-foreground">
+                Modifier le Courrier {courrier?.reference}
+              </h2>
             ) : (
               <>
-                <h2 className="text-lg font-bold text-foreground">
-                  Nouveau Courrier
-                </h2>
-                <p className="text-sm text-muted-foreground">
-                  Enregistrement d'un nouveau courrier entrant.
-                </p>
+                <h2 className="text-lg font-bold text-foreground">Nouveau Courrier</h2>
+                <p className="text-sm text-muted-foreground">Enregistrement d'un nouveau courrier entrant.</p>
               </>
             )}
-            
           </div>
           
           <label className="flex items-center gap-2 cursor-pointer p-2 rounded-lg hover:bg-muted/50 border border-transparent hover:border-border transition-colors">
@@ -196,60 +206,11 @@ export const CourrierForm = ({ onSuccess, courrier, onClose }: Props) => {
           </div>
         )}
 
-        {/* Section Identité */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div className="space-y-2">
-            <label className="text-sm font-semibold flex items-center gap-2 text-foreground">
-              <User className="w-3 h-3" /> Nom
-            </label>
-            <Input
-              name="nom"
-              value={formData.nom}
-              onChange={handleInputChange}
-              placeholder="Nom du correspondant"
-              className="bg-background/50 border-border disabled:opacity-50"
-              disabled={isFieldDisabled}
-            />
-          </div>
-          <div className="space-y-2">
-            <label className="text-sm font-semibold text-foreground">Prénom</label>
-            <Input
-              name="prenom"
-              value={formData.prenom}
-              onChange={handleInputChange}
-              placeholder="Prénom (optionnel)"
-              className="bg-background/50 border-border disabled:opacity-50"
-              disabled={isFieldDisabled}
-            />
-          </div>
-          <div className="space-y-2">
-            <label className="text-sm font-semibold text-foreground">Téléphone</label>
-            <Input
-              name="telephone"
-              value={formData.telephone}
-              onChange={handleInputChange}
-              placeholder="Téléphone (optionnel)"
-              className="bg-background/50 border-border disabled:opacity-50"
-              disabled={isFieldDisabled}
-            />
-          </div>
-        </div>
-
-        {/* Email & Objet */}
-        <div className="space-y-4">
-          <div className="space-y-2">
-            <label className="text-sm font-semibold text-foreground">Email</label>
-            <Input
-              name="email"
-              type="email"
-              value={formData.email}
-              onChange={handleInputChange}
-              placeholder="adresse@mail.com"
-              className="bg-background/50 border-border"
-              disabled={loading}
-            />
-          </div>
-
+        
+        {/* Informations sur le courrier (Objet & Description) */}
+        <div className="space-y-4 pt-4 border-t border-border">
+          <h3 className="text-sm font-bold uppercase tracking-wider text-muted-foreground">Détails du document</h3>
+          
           <div className="space-y-2">
             <label className="text-sm font-semibold text-foreground">Objet</label>
             <Input
@@ -262,45 +223,108 @@ export const CourrierForm = ({ onSuccess, courrier, onClose }: Props) => {
               disabled={isFieldDisabled}
             />
           </div>
-        </div>
 
-        {/* Description */}
-        <div className="space-y-2">
-          <label className="text-sm font-semibold text-foreground">Description</label>
-          <Textarea
-            name="description"
-            value={formData.description}
-            onChange={handleInputChange}
-            rows={5}
-            placeholder="Détails du courrier..."
-            className="resize-none bg-background/50 border-border disabled:opacity-50"
-            disabled={isFieldDisabled}
-          />
+          <div className="space-y-2">
+            <label className="text-sm font-semibold text-foreground">Description</label>
+            <Textarea
+              name="description"
+              value={formData.description}
+              onChange={handleInputChange}
+              rows={5}
+              placeholder="Détails supplémentaires..."
+              className="resize-none bg-background/50 border-border disabled:opacity-50"
+              disabled={isFieldDisabled}
+            />
+          </div>
+        </div>
+        {/* 4. Boucle sur la liste des demandeurs */}
+        <div className="space-y-4">
+          <div className="flex items-center justify-between">
+            <h3 className="text-sm font-bold uppercase tracking-wider text-muted-foreground">Informations Demandeurs</h3>
+            <Button 
+              type="button" 
+              variant="outline" 
+              size="sm" 
+              onClick={addPersonne}
+              disabled={isFieldDisabled}
+              className="h-8 text-xs flex items-center gap-1"
+            >
+              <Plus className="w-3 h-3" /> Ajouter
+            </Button>
+          </div>
+
+          {formData.detailPersonnes.map((personne, index) => (
+            <div key={index} className="relative border border-border bg-muted/20 p-4 rounded-xl space-y-4">
+              
+              {/* Bouton pour supprimer une personne (visible seulement s'il y en a plus d'1) */}
+              {formData.detailPersonnes.length > 0 && !isFieldDisabled && (
+                <button
+                  type="button"
+                  onClick={() => removePersonne(index)}
+                  className="absolute top-2 right-2 p-1.5 text-muted-foreground hover:text-destructive hover:bg-destructive/10 rounded-md transition-colors"
+                  title="Retirer ce demandeur"
+                >
+                  <Trash2 className="w-4 h-4" />
+                </button>
+              )}
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <label className="text-sm font-semibold flex items-center gap-2 text-foreground">
+                    <User className="w-3 h-3" /> Nom
+                  </label>
+                  <Input
+                    value={personne.name}
+                    onChange={(e) => handlePersonneChange(index, 'name', e.target.value)}
+                    placeholder="Nom du correspondant (optionnel)"
+                    className="bg-background border-border disabled:opacity-50"
+                    disabled={isFieldDisabled}
+                  />
+                </div>
+                <div className="space-y-2">
+                  <label className="text-sm font-semibold text-foreground">Prénom</label>
+                  <Input
+                    value={personne.prenom || ''}
+                    onChange={(e) => handlePersonneChange(index, 'prenom', e.target.value)}
+                    placeholder="Prénom (optionnel)"
+                    className="bg-background border-border disabled:opacity-50"
+                    disabled={isFieldDisabled}
+                  />
+                </div>
+                <div className="space-y-2">
+                  <label className="text-sm font-semibold text-foreground">Email</label>
+                  <Input
+                    type="email"
+                    value={personne.email || ''}
+                    onChange={(e) => handlePersonneChange(index, 'email', e.target.value)}
+                    placeholder="adresse@mail.com"
+                    className="bg-background border-border disabled:opacity-50"
+                    disabled={isFieldDisabled}
+                  />
+                </div>
+                <div className="space-y-2">
+                  <label className="text-sm font-semibold text-foreground">Téléphone</label>
+                  <Input
+                    value={personne.telephone || ''}
+                    onChange={(e) => handlePersonneChange(index, 'telephone', e.target.value)}
+                    placeholder="Téléphone (optionnel)"
+                    className="bg-background border-border disabled:opacity-50"
+                    disabled={isFieldDisabled}
+                  />
+                </div>
+              </div>
+            </div>
+          ))}
         </div>
 
         {/* Boutons d'actions */}
-        
         <div className="flex items-center justify-end gap-3 pt-6 border-t border-border">
           {onClose && (
             <button
               type="button"
               onClick={onClose}
               disabled={loading}
-              style={{
-                backgroundColor: 'var(--secondary)',
-                color: '#ffffff',
-                borderColor: 'var(--secondary)',
-                borderWidth: '1px',
-                borderStyle: 'solid',
-                padding: '8px 16px',
-                borderRadius: '6px',
-                fontWeight: '600',
-                fontSize: '14px',
-                cursor: loading ? 'not-allowed' : 'pointer',
-                opacity: loading ? '0.5' : '1',
-                boxShadow: '0 1px 2px 0 rgba(0, 0, 0, 0.05)',
-                transition: 'all 0.2s'
-              }}
+              className="px-4 py-2 bg-secondary text-secondary-foreground border border-secondary rounded-md font-semibold text-sm hover:opacity-90 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
             >
               Annuler
             </button>

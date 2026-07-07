@@ -54,7 +54,7 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
 
           {/* Mobile sidebar (Sheet) */}
           {isMobile && (
-            <MobileSidebar open={sidebarOpen} onOpenChange={setSidebarOpen} />
+            <MobileSidebar user={user} open={sidebarOpen} onOpenChange={setSidebarOpen} />
           )}
 
           <div className="flex-1 flex flex-col overflow-hidden">

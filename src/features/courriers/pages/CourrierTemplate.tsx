@@ -52,7 +52,7 @@ export const CourrierTemplate = ({ initialCourrier, isRecherche }: CourrierTempl
   // États de pagination distincts
   const [hasMoreCourriers, setHasMoreCourriers] = useState(true);
   const [hasMoreMessages, setHasMoreMessages] = useState(true);
-  const [isReadAt, setIsReadAt] = useState<boolean | null>(null);
+  const [isTraiterAt, setIsTraiterAt] = useState<boolean | null>(null);
   const stepRef = useRef(step);
   useEffect(() => { stepRef.current = step }, [step]);
 
@@ -60,17 +60,17 @@ export const CourrierTemplate = ({ initialCourrier, isRecherche }: CourrierTempl
 
   useEffect(() => {
     const initCourriers = async () => {
-      const data = await fetchCourriersByUser(undefined, isReadAt);
+      const data = await fetchCourriersByUser(undefined, isTraiterAt);
       if (data && data.length < nbLimit) setHasMoreCourriers(false);
     };
     initCourriers();
-  }, [fetchCourriersByUser, isReadAt]);
+  }, [fetchCourriersByUser, isTraiterAt]);
 
   const loadMoreCourriers = async () => {
     if (loading || !hasMoreCourriers) return;
     const lastDate = courriers[courriers.length - 1]?.createdAt;
     if (lastDate) {
-      const newItems = await fetchCourriersByUser(lastDate,isReadAt);
+      const newItems = await fetchCourriersByUser(lastDate,isTraiterAt);
       if (!newItems || newItems.length < nbLimit) setHasMoreCourriers(false);
     }
   };
@@ -280,8 +280,8 @@ const handleLocalCloturation = useCallback(async (id: number) => {
           loading={loading && courriers.length === 0} 
           error={error} 
           onSelect={(c) => setStep({ level: 'messages', courrier: c })} 
-          setIsReadAt={setIsReadAt}
-          isReadAt={isReadAt}
+          setIsTraiterAt={setIsTraiterAt}
+          isTraiterAt={isTraiterAt}
           setHasMoreCourriers={setHasMoreCourriers}
         />
         {hasMoreCourriers && courriers.length > 0 && (

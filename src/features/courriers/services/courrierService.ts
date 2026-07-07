@@ -82,19 +82,19 @@ export const courrierService = {
     }
   },
 
-  getCourriersByUser: async (dateCursor?: string,isReadAt?: boolean|null): Promise<Courrier[]> => {
+  getCourriersByUser: async (dateCursor?: string,isTraiterAt?: boolean|null): Promise<Courrier[]> => {
     try {
       const fetchWithAuth = useFetchAuth();
       // 1. Construire l'URL avec le paramètre de recherche si la date est fournie
       const url = dateCursor
         ? `/api/courriers/getAllbyUser?date=${encodeURIComponent(dateCursor)}${
-            isReadAt !== null && isReadAt !== undefined
-              ? `&isReadAt=${isReadAt}`
+            isTraiterAt !== null && isTraiterAt !== undefined
+              ? `&isTraiterAt=${isTraiterAt}`
               : ''
           }`
         : `/api/courriers/getAllbyUser${
-            isReadAt !== null && isReadAt !== undefined
-              ? `?isReadAt=${isReadAt}`
+            isTraiterAt !== null && isTraiterAt !== undefined
+              ? `?isTraiterAt=${isTraiterAt}`
               : ''
           }`;
       const res = await fetchWithAuth(url);
@@ -161,11 +161,8 @@ export const courrierService = {
         body: JSON.stringify({
           object: data.object,
           description: data.description,
-          email: data.email,
-          nom: data.nom,
-          prenom: data.prenom,
-          telephone: data.telephone,
           isConfidentiel: data.isConfidentiel ?? false,
+          detailPersonnes: data.detailPersonnes,
         }),
       });
       if (!res.ok) {
@@ -283,11 +280,8 @@ export const courrierService = {
         body: JSON.stringify({
           object: data.object,
           description: data.description,
-          email: data.email,
-          nom: data.nom,
-          prenom: data.prenom,
-          telephone: data.telephone,
           isConfidentiel: data.isConfidentiel ?? false,
+          detailPersonnes: data.detailPersonnes
         }),
       });
       if (!res.ok) {

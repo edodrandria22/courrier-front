@@ -41,7 +41,7 @@ export default function Sidebar({ user, onNavigate }: SidebarProps) {
     },
     {
       id: 'send',
-      name: "Boîte d'envoie",
+      name: "Boîte d'envoi",
       icon: Send,
       path: '/message/courrier/send',
     },

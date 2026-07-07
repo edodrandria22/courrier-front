@@ -88,9 +88,11 @@ GET http://localhost:3000/api/notifications/subscribe 404 (Not Found)
 
 
 02/07/2026
-    -- affichage pour le visualisation du courrier avec liste -- a faire -- 60mn
-    --inertion avec liste nom , prenom telephone et mail pour le courrier  -- a faire -- 30mn
+    -- affichage pour le visualisation du courrier avec liste -- ok -- 60mn
+    --insertion avec liste nom , prenom telephone et mail pour le courrier  -- a faire -- 30mn
 
+07/07/2026
+    -- changer lu et non lu en traiter et non traite --ok -- 30mn
 message service doit etre factoriser avec type de retour clair
 
 mercure pour envoyer message

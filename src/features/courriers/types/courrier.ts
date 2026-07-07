@@ -87,6 +87,7 @@ export interface Courrier {
   numRef?: number;
   observation?: string;
   detailPersonnes: Array<DetailPersonne>;
+  isTraiterAt?: string | null;
 
 }
 
