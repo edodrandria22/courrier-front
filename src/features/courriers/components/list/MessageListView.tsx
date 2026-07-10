@@ -42,6 +42,7 @@ export const MessageListView = ({ courrier, messages, loading, error, currentUse
   // if (messages.length > 0) {
   //   isDestinataire = isDestinataireOf(messages[0]);
   // }
+  console.log(courrier)
   const isButtonLu = isLastRecipient && !courrier.isReadAt;
 
   const statusLu = courrier.isReadAt ? 'lu' : 'non-lu'
@@ -207,7 +208,9 @@ export const MessageListView = ({ courrier, messages, loading, error, currentUse
                   <FileText className="w-3.5 h-3.5" /> Description
                 </p>
                 <p className="text-sm text-foreground whitespace-pre-line">{courrier.description}</p>
-                {courrier.numero !== undefined && (
+              </div>
+            )}
+            {courrier.numero !== undefined && (
                   <p className="flex items-center gap-2 text-foreground">
                     {/* <span className="font-semibold text-muted-foreground w-3.5 text-center">N°</span> */}
                     <span className="font-medium">Numéro :</span> {courrier.numero}
@@ -219,8 +222,6 @@ export const MessageListView = ({ courrier, messages, loading, error, currentUse
                     <span className="font-medium">Numéro de référence :</span> {courrier.numRef}
                   </p>
                 )}
-              </div>
-            )}
 
             {/* Flux du Courrier (Expéditeur -> Destinataire initial) */}
  

@@ -1,10 +1,10 @@
 import { useState, useCallback } from 'react';
-import { Utilisateur } from '../types/utilisateur';
 import { utilisateurService } from '../services/utilisateurService';
 import { logger } from '@/lib/logger';
+import { User } from '@/features/auth/types/login';
 
 export const useUtilisateurs = () => {
-  const [utilisateurs, setUtilisateurs] = useState<Utilisateur[]>([]);
+  const [utilisateurs, setUtilisateurs] = useState<User[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -21,7 +21,7 @@ export const useUtilisateurs = () => {
       setLoading(false);
     }
   }, []);
-  const rechercheUtilisateurs = useCallback(async (nomComplet: string, date?: string): Promise<Utilisateur[]> => {
+  const rechercheUtilisateurs = useCallback(async (nomComplet: string, date?: string): Promise<User[]> => {
     setLoading(true);
     setError(null);
     try {

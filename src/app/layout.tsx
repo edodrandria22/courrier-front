@@ -55,7 +55,7 @@ export const metadata: Metadata = {
 function NotificationWrapper() {
   return <NotificationDisplay />
 }
-
+import { Toaster } from "@/components/ui/sonner" // ou le bon chemin
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -67,6 +67,7 @@ export default function RootLayout({
         <ThemeProvider attribute="class" defaultTheme="light" enableSystem={false}>
           {children}
           <NotificationWrapper />
+          <Toaster position="top-right" richColors />
         </ThemeProvider>
         <Analytics />
       </body>

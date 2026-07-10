@@ -2,7 +2,7 @@
 
 import React, { createContext, useContext, useEffect, ReactNode, Context } from 'react';
 import { useUtilisateurs } from '../hooks/useUtilisateurs';
-import { Utilisateur } from '../types/utilisateur';
+import { Utilisateur } from '../types/numeroDepart';
 
 // 1. Définition de la structure de ce que le Contexte va partager
 interface UtilisateursContextType {

@@ -11,7 +11,7 @@ import { cn } from '@/lib/utils'
 
 import { useTransferer } from '../hooks/useTransferer'
 import { useUtilisateurs } from '@/features/utilisateurs/hooks/useUtilisateurs'
-import type { Utilisateur } from '@/features/utilisateurs/types/utilisateur';
+import type { Utilisateur } from '@/features/utilisateurs/types/numeroDepart';
 import { format } from 'date-fns';
 
 // Si vous utilisiez le contexte pour autre chose, vous pouvez le garder, 

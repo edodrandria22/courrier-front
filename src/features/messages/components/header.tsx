@@ -10,7 +10,7 @@ import {
   DropdownMenuTrigger,
   DropdownMenuSeparator,
 } from '@/components/ui/dropdown-menu'
-import { LogOut, Settings, Menu, Palette, User as UserIcon } from 'lucide-react'
+import { LogOut, Settings, Menu, Palette, User as UserIcon, Hash } from 'lucide-react'
 import { User } from '@/features/auth/types/login'
 import { ThemePicker } from '@/features/theme/components/ThemePicker'
 
@@ -103,6 +103,12 @@ export default function Header({user,loading ,onMenuToggle, showMenu }: HeaderPr
               <Settings className="w-4 h-4 mr-2" />
               <span>Parametres</span>
             </DropdownMenuItem>
+            {user?.role!="Admin" && (
+              <DropdownMenuItem className="cursor-pointer" onClick={() => router.push('/message/profile/numeroDepart')}>
+                <Hash className="w-4 h-4 mr-2" />
+                <span>Numéro de départ</span>
+              </DropdownMenuItem>
+            )}
 
             <DropdownMenuItem
               className="cursor-pointer text-destructive focus:text-destructive"

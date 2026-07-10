@@ -15,7 +15,7 @@ import { useComposeMessage } from '../../hooks/useCompose'
 import { useUtilisateurs } from '@/features/utilisateurs/hooks/useUtilisateurs'
 import type { Attachment } from '../../types/compose'
 import { format } from 'date-fns';
-import type { Utilisateur } from '@/features/utilisateurs/types/utilisateur';
+import type { Utilisateur } from '@/features/utilisateurs/types/numeroDepart';
 
 interface ComposeFormProps {
   courrierId: number;

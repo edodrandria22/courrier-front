@@ -5,7 +5,7 @@ export function useFetchAuth() {
 
     const login = process.env.NEXT_PUBLIC_LOGIN_URL || '/login';
 
-    const fetchWithAuth = async (url: string, options: RequestInit = {}) => {
+    const fetchWithAuth = async (url: string, options: RequestInit = {}): Promise<Response> => {
         const response = await fetch(url, options);
 
         if (response.status === 401 || response.status === 403) {
