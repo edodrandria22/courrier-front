@@ -20,6 +20,7 @@ import { useMessagePermissions } from '@/hooks/useMessagePermissions'
   TooltipTrigger,
 } from "@/components/ui/tooltip" // Ajustez le chemin selon votre structure de projet
 import { useState } from 'react'
+import { useMessages } from '@/features/messages/hooks/useMessages'
 
 // ... (dans votre composant)
 interface Props {
@@ -35,13 +36,26 @@ interface Props {
 }
 
 export const MessageListView = ({ courrier, messages, loading, error, currentUserId, onSelect, onBack, isRecherche = false, updateHistorique }: Props) => {
-  const { isMessageVisible, isLastRecipient } = useMessagePermissions(messages, currentUserId)
+  const { isMessageVisible, isLastRecipient,isLastMessage, isDestinataireOf } = useMessagePermissions(messages, currentUserId);
+
+  // var isDestinataire = false;
+  // if (messages.length > 0) {
+  //   isDestinataire = isDestinataireOf(messages[0]);
+  // }
+  const isButtonLu = isLastRecipient && !courrier.isReadAt;
+
   const statusLu = courrier.isReadAt ? 'lu' : 'non-lu'
   const status = courrier.cloturePar ? 'finalise' : statusLu;
   const isConfidentiel = courrier.isConfidentiel // Vérification de la confidentialité du courrier
   // console.log(courrier);
   // États pour la gestion du formulaire d'observation
-  
+  const { marquerLu, loading: loadingMarquer } = useMessages();
+
+  const marquerLuMessage = async () => {
+    if (!courrier.messageId) return;
+    await marquerLu(Number(courrier.messageId));
+  };
+
   const [isEditingObs, setIsEditingObs] = useState(false)
   const [obsValue, setObsValue] = useState(courrier.observation || '')
   const [isUpdatingObs, setIsUpdatingObs] = useState(false)
@@ -92,6 +106,7 @@ export const MessageListView = ({ courrier, messages, loading, error, currentUse
     <div className="flex flex-col h-full bg-background">
       
       {/* 1. Barre d'actions supérieure (Retour + Transfert) */}
+      
       <div className="px-4 md:px-6 py-3 border-b border-border flex items-center justify-between sticky top-0 bg-background/95 backdrop-blur z-10">
         <div className="flex items-center gap-3">
           {!isRecherche && (
@@ -123,7 +138,19 @@ export const MessageListView = ({ courrier, messages, loading, error, currentUse
         {/* 2. Détails complets du courrier */}
         <div className="p-4 md:p-6 pb-2">
           <div className="flex flex-col gap-4 p-4 sm:p-5 bg-card text-card-foreground rounded-xl border shadow-sm max-w-4xl mx-auto">
-            
+             {isButtonLu && (
+              <div className="flex items-center gap-1.5 col-span-2 sm:col-span-1">
+                <Button 
+                          size="sm" 
+                          style={{ color: '#ffffff' }}
+                          className="h-8 text-xs"
+                          onClick={marquerLuMessage}
+                          disabled={loadingMarquer}
+                >
+                        {loadingMarquer ? 'Enregistrement...' : 'Marquer lu'}
+                </Button>
+              </div>
+            )}
             {/* En-tête : Référence et Statuts */}
             <div className="flex flex-wrap items-center justify-between gap-2 border-b pb-3">
               <div className="space-y-1">

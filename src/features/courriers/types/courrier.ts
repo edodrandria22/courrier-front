@@ -88,6 +88,7 @@ export interface Courrier {
   observation?: string;
   detailPersonnes: Array<DetailPersonne>;
   isTraiterAt?: string | null;
+  messageId?:string|null
 
 }
 
