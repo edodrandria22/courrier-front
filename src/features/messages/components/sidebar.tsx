@@ -9,6 +9,7 @@ import {
   ClipboardEdit,
   User as UserIcon,
   Send,
+  BarChart3,
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { User } from '@/features/auth/types/login'
@@ -32,6 +33,12 @@ export default function Sidebar({ user, onNavigate }: SidebarProps) {
       icon: ClipboardEdit,
       path: '/message/courrier',
     });
+    actionItems.push({
+      id: 'statistique',
+      name: 'Statistique',
+      icon: BarChart3,
+      path: '/message/courrier/statistique',
+    })
     systemFolders.push(
     {
       id: 'inbox',

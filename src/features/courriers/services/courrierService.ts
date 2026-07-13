@@ -1,5 +1,5 @@
 import { User } from '@/features/auth/types/login';
-import { MessageCourrier, Courrier } from '../types/courrier';
+import { MessageCourrier, Courrier, Statistique } from '../types/courrier';
 import { CourrierSearchCriteria } from '../types/recherche';
 import { logger } from '@/lib/logger';
 import { useFetchAuth } from '@/hooks/useFetchAuth';
@@ -318,4 +318,36 @@ export const courrierService = {
       throw error;
     }
   },
+  getStatistique: async (dateDebut: string, dateFin: string): Promise<Statistique> => {
+    try {
+      const fetchWithAuth = useFetchAuth();
+      const res = await fetchWithAuth(`/api/courriers/statistique?dateDebut=${dateDebut}&dateFin=${dateFin}`);
+      if (!res.ok) {
+        const json = await res.json();
+        throw new Error(json.error ?? json.message ?? 'Erreur lors de la récupération des statistiques');
+      }
+      
+      const json = await res.json();
+      return json.data;
+    } catch (error) {
+      logger.exception('courrierService.getStatistique - Exception', error);
+      throw error;
+    }
+  },
+  getNombreNonTraite: async (): Promise<Statistique> => {
+    try {
+      const fetchWithAuth = useFetchAuth();
+      const res = await fetchWithAuth(`/api/courriers/nonTraite`);
+      if (!res.ok) {
+        const json = await res.json();
+        throw new Error(json.error ?? json.message ?? 'Erreur lors de la récupération des nombres courrier non traités');
+      }
+      
+      const json = await res.json();
+      return json.data;
+    } catch (error) {
+      logger.exception('courrierService.getNonTraite - Exception', error);
+      throw error;
+    }
+  }
 };

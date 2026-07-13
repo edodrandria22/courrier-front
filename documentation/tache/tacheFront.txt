@@ -95,7 +95,12 @@ GET http://localhost:3000/api/notifications/subscribe 404 (Not Found)
     -- changer lu et non lu en traiter et non traite --ok -- 30mn
 10/07/2026
     -- boutton pour voir une message -- ok -- 30mn
-    -- formulaire pour changer le depart courrier envoyer et recu -- a faire 60 mn
-message service doit etre factoriser avec type de retour clair
+    -- formulaire pour changer le depart courrier envoyer et recu -- ok 60 mn
+
+13/07/2026
+    --statistique pour le nombre de courrier traiter et non traite nombre de courrier recu et envoye -- a faire -- 30mn
+    --nombre de courrier par traite -- a faire -- 30 mn
+    
+--message service doit etre factoriser avec type de retour clair
 
 mercure pour envoyer message

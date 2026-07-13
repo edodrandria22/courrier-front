@@ -89,6 +89,15 @@ export interface Courrier {
   detailPersonnes: Array<DetailPersonne>;
   isTraiterAt?: string | null;
   messageId?:string|null
+}
 
+export interface Statistique {
+    nonTraite: number;
+    recu?: number;
+    envoye?: number;
+    traite?: number;
+    lu?: number;
+    nonLu?: number;
+    
 }
 
