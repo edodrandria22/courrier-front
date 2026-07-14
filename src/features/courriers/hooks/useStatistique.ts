@@ -23,22 +23,8 @@ export const useStatistique = () => {
       setLoading(false)
     }
   }, []);
-  const getNonLu = useCallback(async () => {
-    setLoading(true)
-    setError(null)
-
-    try {
-      const stat =  await courrierService.getNombreNonTraite();
-      setStatistique(stat);
-    } catch (err) {
-      const errorMsg = err instanceof Error ? err.message : 'Erreur lors de la recuperation non lu'
-      setError(errorMsg)
-
-    } finally {
-      setLoading(false)
-    }
-  }, []);
+  
   
 
-  return { statistique, loading, error,getStatistique, getNonLu }
+  return { statistique, loading, error,getStatistique}
 }

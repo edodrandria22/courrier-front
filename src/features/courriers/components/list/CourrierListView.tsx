@@ -32,7 +32,8 @@ interface Props {
   isUpdate?: boolean,
   isTraiterAt?: boolean | null
   setIsTraiterAt?: (isReadAt: boolean | null) => void,
-  setHasMoreCourriers?: (hasMore: boolean) => void
+  setHasMoreCourriers?: (hasMore: boolean) => void,
+  nbNonTraite?: number
 }
 
 type SearchField = 'nom' | 'reference' | 'description'
@@ -49,7 +50,7 @@ const STATUT_CONFIG: Record<string, { label: string; icon: React.ElementType; cl
   archive:   { label: 'Archivé',   icon: Archive,      className: 'bg-gray-100 text-gray-800 dark:bg-muted/30 dark:text-muted-foreground border-transparent' },
 }
 
-export const CourrierListView = ({ courriers, loading, error, onSelect,  onEdit, isUpdate = false, isTraiterAt, setIsTraiterAt, setHasMoreCourriers}: Props) => {
+export const CourrierListView = ({ courriers, loading, error, onSelect,  onEdit, isUpdate = false, isTraiterAt, setIsTraiterAt, setHasMoreCourriers, nbNonTraite}: Props) => {
   const [query, setQuery] = useState('')
   const [searchField, setSearchField] = useState<SearchField>('nom')
 
@@ -175,7 +176,7 @@ export const CourrierListView = ({ courriers, loading, error, onSelect,  onEdit,
                 )}
               >
                 <Square className="w-3.5 h-3.5" />
-                Non traiter
+                Non traiter {nbNonTraite !== undefined && nbNonTraite > 0 && `(${nbNonTraite})`}
               </button>
             </div>
           )}

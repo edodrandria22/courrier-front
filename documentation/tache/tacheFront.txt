@@ -100,7 +100,8 @@ GET http://localhost:3000/api/notifications/subscribe 404 (Not Found)
 13/07/2026
     --statistique pour le nombre de courrier traiter et non traite nombre de courrier recu et envoye -- a faire -- 30mn
     --nombre de courrier par traite -- a faire -- 30 mn
-    
+
+14/07/2026
+    --mercure pour envoyer message --a faire -- 60mn 
 --message service doit etre factoriser avec type de retour clair
 
-mercure pour envoyer message

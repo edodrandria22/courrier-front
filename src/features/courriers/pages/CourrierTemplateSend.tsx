@@ -5,7 +5,6 @@ import { useEffect, useRef, useState, useCallback } from 'react'
 import { courrierService } from '../services/courrierService'
 // import { messageService } from '../../messages/services/messageService'
 import { useCourrier } from '../hooks/useCourrier'
-import { useCurrentUser } from '@/hooks/useCurrentUser'
 import { Courrier, MessageCourrier } from '../types/courrier'
 import { CourrierListView } from '../components/list/CourrierListView'
 import { MessageListView } from '../components/list/MessageListView'
@@ -14,6 +13,7 @@ import { useMercureSubscription } from '@/hooks/useMercureSubscription'
 import { useNotifications } from '@/hooks/useNotifications'
 import { useCloturer } from '../hooks/useCloturer'
 import { User } from '@/features/auth/types/login'
+import { useCurrentUser } from '@/features/auth/hooks/useCurrentUser'
 
 type Step =
   | { level: 'courriers' }
@@ -136,7 +136,7 @@ export const CourrierTemplateSend = ({ initialCourrier, isRecherche }: CourrierT
     // console.log(incomingData);
 
     // Vérifier si l'utilisateur actuel est le destinataire du message
-    const estPourMoi = incomingData.destinataire?.id=== currentUserId || incomingData.expediteur?.id=== currentUserId;
+    const estPourMoi = incomingData.expediteur?.id=== currentUserId;
 
     // NOTIFICATION : Nouveau message reçu
     if (estPourMoi) {
@@ -149,27 +149,10 @@ export const CourrierTemplateSend = ({ initialCourrier, isRecherche }: CourrierT
     }
 
     // 1. Mise à jour de la liste des courriers (inchangé)
-    setCourriers?.((prev) => {
-      const existingIndex = prev.findIndex(c => Number(c.id) === Number(courrierConcerne.id));
-
-      if (existingIndex !== -1) {
-        const merged = { ...prev[existingIndex], ...courrierConcerne };
-        const otherCourriers = prev.filter(c => Number(c.id) !== Number(courrierConcerne.id));
-        return [merged, ...otherCourriers]; 
-      }
-
-      courrierService.getCourrierById(Number(courrierConcerne.id)).then((full) => {
-        if (full) {
-          setCourriers?.((currentPrev) => {
-            const filtered = currentPrev.filter(c => Number(c.id) !== Number(full.id));
-            return [full, ...filtered]; 
-          });
-        }
-      });
-
-      return prev;
+    setCourriers?.((prev) => {    
+          return [courrierConcerne, ...prev];
     });
-
+    
     // 2. Logique d'affichage des messages
     const current = stepRef.current;
     const isViewingThisCourrier =
@@ -195,7 +178,7 @@ export const CourrierTemplateSend = ({ initialCourrier, isRecherche }: CourrierT
     }
     
     // N'oubliez pas d'ajouter setMessages dans les dépendances du useCallback
-  }, [setCourriers, setMessages, addNotification]);
+  }, [setCourriers, setMessages, addNotification,currentCourrierId]);
 
   // Topic "lectureMessage" : marquage lu/non lu en temps réel
   const handleLecture = useCallback((data: { id: number; courrier :Courrier;isReadAt: string | null }) => {

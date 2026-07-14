@@ -42,7 +42,7 @@ export const MessageListView = ({ courrier, messages, loading, error, currentUse
   // if (messages.length > 0) {
   //   isDestinataire = isDestinataireOf(messages[0]);
   // }
-  console.log(courrier)
+  // console.log(courrier)
   const isButtonLu = isLastRecipient && !courrier.isReadAt;
 
   const statusLu = courrier.isReadAt ? 'lu' : 'non-lu'

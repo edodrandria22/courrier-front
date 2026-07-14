@@ -1,5 +1,5 @@
 import { useState, useCallback } from 'react';
-import {MessageCourrier, Courrier } from '../types/courrier';
+import {MessageCourrier, Courrier, Statistique } from '../types/courrier';
 import { courrierService } from '../services/courrierService';
 import { logger } from '@/lib/logger';
 
@@ -8,6 +8,7 @@ export const useCourrier = () => {
   const [messages, setMessages] = useState<MessageCourrier[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  // const [nbNonTraite, setNbNonTraite] = useState<Statistique|null>(null);
 
   const fetchCourriers = useCallback(async () => {
     setLoading(true);
@@ -157,6 +158,23 @@ export const useCourrier = () => {
       setLoading(false);
     }
   }, []);
+  const getNbNonTraite = useCallback(async (): Promise<Statistique> => {
+    setLoading(true)
+    setError(null)
+
+    try {
+      const stat =  await courrierService.getNombreNonTraite();
+      // setNbNonTraite(stat);
+      return stat;
+    } catch (err) {
+      const errorMsg = err instanceof Error ? err.message : 'Erreur lors de la recuperation non lu'
+      setError(errorMsg)
+      return { nonTraite: 0 };
+
+    } finally {
+      setLoading(false)
+    }
+  }, []);
 
   return {
     courriers,
@@ -171,6 +189,7 @@ export const useCourrier = () => {
     setMessages,
     fetchCourriersByUserSend,
     updateCourrier,
-    updateHistorique
+    updateHistorique,
+    getNbNonTraite,
   };
 };

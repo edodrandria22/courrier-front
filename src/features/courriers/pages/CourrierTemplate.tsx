@@ -1,11 +1,11 @@
 'use client'
 
-import { useEffect, useRef, useState, useCallback } from 'react'
+import { useEffect, useRef, useState, useCallback} from 'react'
 // import { useMercure } from '@/hooks/useMercure'
 import { courrierService } from '../services/courrierService'
 // import { messageService } from '../../messages/services/messageService'
 import { useCourrier } from '../hooks/useCourrier'
-import { useCurrentUser } from '@/hooks/useCurrentUser'
+import { useCurrentUser } from '@/features/auth/hooks/useCurrentUser'
 import { Courrier, MessageCourrier } from '../types/courrier'
 import { CourrierListView } from '../components/list/CourrierListView'
 import { MessageListView } from '../components/list/MessageListView'
@@ -27,9 +27,9 @@ interface CourrierTemplateProps {
 
 export const CourrierTemplate = ({ initialCourrier, isRecherche }: CourrierTemplateProps = {}) => {
   const { user } = useCurrentUser();
-  const currentUserId = user?.id ?? null;
+  const currentUserId = user?.id;
   const nbLimit = process.env.NEXT_PUBLIC_NB_LIMIT ? parseInt(process.env.NEXT_PUBLIC_NB_LIMIT) : 2;
-  const { addNotification } = useNotifications()
+  const { addNotification } = useNotifications();
 
   const {
     courriers,
@@ -40,14 +40,16 @@ export const CourrierTemplate = ({ initialCourrier, isRecherche }: CourrierTempl
     fetchMessages,
     setCourriers,
     setMessages,
-    updateHistorique
-  } = useCourrier()
+    updateHistorique,
+    getNbNonTraite
+  } = useCourrier();
   
   const [step, setStep] = useState<Step>(
     initialCourrier 
       ? { level: 'messages', courrier: initialCourrier }
       : { level: 'courriers' }
   );
+  const [nbNonTraiteState, setNbNonTraiteState] = useState(0);
   
   // États de pagination distincts
   const [hasMoreCourriers, setHasMoreCourriers] = useState(true);
@@ -63,8 +65,11 @@ export const CourrierTemplate = ({ initialCourrier, isRecherche }: CourrierTempl
       const data = await fetchCourriersByUser(undefined, isTraiterAt);
       if (data && data.length < nbLimit) setHasMoreCourriers(false);
     };
+    const nonTraiter = getNbNonTraite();
     initCourriers();
+    nonTraiter.then(stat => setNbNonTraiteState(stat.nonTraite));
   }, [fetchCourriersByUser, isTraiterAt]);
+ 
 
   const loadMoreCourriers = async () => {
     if (loading || !hasMoreCourriers) return;
@@ -134,7 +139,7 @@ export const CourrierTemplate = ({ initialCourrier, isRecherche }: CourrierTempl
   // Topic "message" : nouveau transfert reçu
   const handleTransfert = useCallback((incomingData: MessageCourrier) => {
     const courrierConcerne = incomingData.courrier;
-    // console.log(incomingData);
+    
 
     // Vérifier si l'utilisateur actuel est le destinataire du message
     // const estPourMoi = incomingData.destinataire?.id=== currentUserId || incomingData.expediteur?.id=== currentUserId;
@@ -142,32 +147,20 @@ export const CourrierTemplate = ({ initialCourrier, isRecherche }: CourrierTempl
 
     // NOTIFICATION : Nouveau message reçu
     if (estPourMoi) {
+      setNbNonTraiteState(prev => prev + 1);
       addNotification(
         `📬 Nouveau message reçu - ${courrierConcerne.object}`,
         `De: ${incomingData.expediteur?.nom || 'Expéditeur'} - ${incomingData.observation?.substring(0, 50) || 'Contenu du message...'}`,
         'success', // 'success' pour les messages qui me sont destinés
         { courrierId: courrierConcerne.id, messageId: incomingData.id, isForMe: true }
       );
-    }
+    
 
-    // 1. Mise à jour de la liste des courriers (inchangé)
-    setCourriers?.((prev) => {
-      const existingIndex = prev.findIndex(c => Number(c.id) === Number(courrierConcerne.id));
-
-      if (existingIndex !== -1) {
-        const merged = { ...prev[existingIndex], ...courrierConcerne };
-        const otherCourriers = prev.filter(c => Number(c.id) !== Number(courrierConcerne.id));
-        return [merged, ...otherCourriers]; 
-      }
-
-      setCourriers?.((currentPrev) => {
-        const filtered = currentPrev.filter(c => Number(c.id) !== Number(courrierConcerne.id));
-        return [courrierConcerne, ...filtered]; 
+      // 1. Mise à jour de la liste des courriers (inchangé)
+      setCourriers?.((prev) => {    
+          return [courrierConcerne, ...prev];
       });
-      
-
-      return prev;
-    });
+    }
 
     // 2. Logique d'affichage des messages
     const current = stepRef.current;
@@ -194,7 +187,7 @@ export const CourrierTemplate = ({ initialCourrier, isRecherche }: CourrierTempl
     }
     
     // N'oubliez pas d'ajouter setMessages dans les dépendances du useCallback
-  }, [setCourriers, setMessages, addNotification]);
+  }, [setCourriers, setMessages, addNotification,currentUserId]);
 
   // Topic "lectureMessage" : marquage lu/non lu en temps réel
   const handleLecture = useCallback((data: { id: number; courrier :Courrier;isReadAt: string | null }) => {
@@ -283,6 +276,7 @@ const handleLocalCloturation = useCallback(async (id: number) => {
           setIsTraiterAt={setIsTraiterAt}
           isTraiterAt={isTraiterAt}
           setHasMoreCourriers={setHasMoreCourriers}
+          nbNonTraite={nbNonTraiteState}
         />
         {hasMoreCourriers && courriers.length > 0 && (
           <div className="flex justify-center px-4 pb-4 pt-2">
