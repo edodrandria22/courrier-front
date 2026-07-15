@@ -40,14 +40,14 @@ export default function MercureTestPage() {
         const eventSource = new EventSource(url);
 
         eventSource.onopen = () => {
-            console.log("Connecté au Hub !");
+            // console.log("Connecté au Hub !");
             setStatus('connected');
         };
 
         eventSource.onmessage = (event) => {
             try {
                 const data: CourrierData = JSON.parse(event.data);
-                console.log("Données reçues:", data);
+                // console.log("Données reçues:", data);
                 setNotifications((prev) => {
                     const exists = prev.find(n => n.id === data.id);
                     if (exists) return prev.map(n => n.id === data.id ? data : n);

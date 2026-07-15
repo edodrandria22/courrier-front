@@ -5,7 +5,6 @@ import { useRouter } from 'next/navigation'
 import Sidebar from '@/features/messages/components/sidebar'
 import MobileSidebar from '@/features/messages/components/MobileSidebar'
 import Header from '@/features/messages/components/header'
-import { NotificationProvider } from '@/components/notification-provider'
 import { ThemePresetProvider } from '@/features/theme/components/ThemePresetProvider'
 import { useIsMobile } from '@/hooks/use-mobile'
 // 1. Importation du Provider (Ajustez le chemin si nécessaire)
@@ -47,7 +46,6 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
       {/* 2. On enveloppe le tout pour donner accès au contexte à tout le Dashboard */}
       {/* <UtilisateursProvider> */}
         <div className="flex h-screen bg-background">
-          <NotificationProvider />
 
           {/* Desktop sidebar */}
           {!isMobile && <Sidebar user={user} />}

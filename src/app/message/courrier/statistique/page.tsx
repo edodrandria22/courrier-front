@@ -40,8 +40,8 @@ export default function StatistiquePage() {
   ].filter(item => item.value > 0) : []; // On enlève les valeurs à 0
 
   // Debug logs
-  console.log('Statistique brute:', statistique);
-  console.log('Data transformée:', data);
+  // console.log('Statistique brute:', statistique);
+  // console.log('Data transformée:', data);
 
   // Création d'une clé unique basée sur les valeurs pour forcer Recharts à se rafraîchir
   const chartKey = data.map(d => d.value).join('-');

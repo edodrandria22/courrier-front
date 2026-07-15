@@ -24,7 +24,7 @@ export default function TrackingPage() {
       setReference('');
       setIsSuccess(true);
       // Fait disparaître le message de succès après 1 seconde
-      setTimeout(() => setIsSuccess(false), 1000);
+      setTimeout(() => setIsSuccess(false), 1500);
     }
   };
 

@@ -1,6 +1,5 @@
 import type { Metadata, Viewport } from 'next'
 import { Geist, Geist_Mono } from 'next/font/google'
-import { Analytics } from '@vercel/analytics/next'
 import { ThemeProvider } from '@/components/theme-provider'
 import { NotificationDisplay } from '@/features/notifications/components/NotificationDisplay'
 import './globals.css'
@@ -69,7 +68,6 @@ export default function RootLayout({
           <NotificationWrapper />
           <Toaster position="top-right" richColors />
         </ThemeProvider>
-        <Analytics />
       </body>
     </html>
   )

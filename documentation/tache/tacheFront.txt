@@ -102,6 +102,13 @@ GET http://localhost:3000/api/notifications/subscribe 404 (Not Found)
     --nombre de courrier par traite -- a faire -- 30 mn
 
 14/07/2026
-    --mercure pour envoyer message --a faire -- 60mn 
---message service doit etre factoriser avec type de retour clair
+    --mercure pour envoyer message --ok -- 60mn 
+    --lien trop lent -- a faire -- 60mn
+    --factorisaytion code -- a faire -- 120mn
+
+15/07/2026
+    --transferer dans le voir message -- ok -- 30mn
+    --message apres suivre courrier -- ok -- 30mn 
+
+    --Warning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}. -- ok -- 15 mn
 

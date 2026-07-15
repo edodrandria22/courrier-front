@@ -44,7 +44,7 @@ export default function NumeroDepartTemplate() {
         fetchNumeroDepart(isSendMode); 
       }
     } catch (err) {
-      toast.error("Erreur lors de la modification du numéro"+ error);
+      toast.error("Erreur lors de la modification du numéro"+ (err as Error).message);
     }
   };
 
