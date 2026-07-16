@@ -27,25 +27,46 @@ export const viewport: Viewport = {
 }
 
 export const metadata: Metadata = {
-  title: 'Gestion de Courrier ESPA Polytechnique Vontovorona',
+  title: 'Gestion de Courrier Mesupress',
   description: 'Plateforme de gestion de courrier sécurisée avec envoi de pièces jointes, dossiers personnalisés et notifications temps réel.',
-  generator: 'v0.app',
-  icons: {
+  generator: 'edodrandria',
+  // icons: {
+  //   icon: [
+  //     {
+  //       url: '/icon-light-32x32.png',
+  //       media: '(prefers-color-scheme: light)',
+  //     },
+  //     {
+  //       url: '/icon-dark-32x32.png',
+  //       media: '(prefers-color-scheme: dark)',
+  //     },
+  //     {
+  //       url: '/icon.svg',
+  //       type: 'image/svg+xml',
+  //     },
+  //   ],
+  //   apple: '/apple-icon.png',
+  // },
+   icons: {
     icon: [
       {
-        url: '/icon-light-32x32.png',
-        media: '(prefers-color-scheme: light)',
+        url: '/mesupres.jpg',
+        type: 'image/jpeg',
+        sizes: '32x32', // Pour l'onglet du navigateur
       },
       {
-        url: '/icon-dark-32x32.png',
-        media: '(prefers-color-scheme: dark)',
-      },
-      {
-        url: '/icon.svg',
-        type: 'image/svg+xml',
+        url: '/mesupres.jpg',
+        type: 'image/jpeg',
+        sizes: '192x192', // Pour les raccourcis mobiles Android
       },
     ],
-    apple: '/apple-icon.png',
+    apple: [
+      {
+        url: '/mesupres.jpg',
+        type: 'image/jpeg',
+        sizes: '180x180', // Pour les appareils Apple (iPhone / iPad)
+      },
+    ],
   },
   keywords: ['email', 'courrier', 'gestion', 'pièces jointes', 'collaboratif'],
 }

@@ -29,22 +29,26 @@ export default function TrackingPage() {
   };
 
   return (
+    
     <div className="relative min-h-[90vh] flex flex-col items-center justify-center px-4 py-12 overflow-hidden selection:bg-primary/30">
-      
+      <Link 
+                href="/"
+                className="fixed top-6 left-6 inline-flex items-center gap-2 px-4 py-2 rounded-md transition-all duration-200 text-sm font-medium whitespace-nowrap z-50 hover:bg-accent hover:text-accent-foreground"
+                style={{
+                    backgroundColor: 'transparent',
+                    border: '1px solid transparent',
+                    fontWeight: '500',
+                    minWidth: 'auto'
+                }}
+            >
+                <ArrowLeft className="w-4 h-4" />
+                <span>Retour à l'accueil</span>
+      </Link>
       {/* Background Animated Halo */}
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-primary/10 blur-[120px] rounded-full -z-10 animate-[pulse_8s_ease-in-out_infinite]" />
 
       <div className="w-full max-w-[420px] space-y-6 relative z-10 animate-in fade-in zoom-in-95 duration-700">
         
-        {/* Bouton retour avec transition fluide */}
-        <Link 
-          href="/" 
-          className="group inline-flex items-center gap-2 text-[11px] font-bold uppercase tracking-[0.2em] text-muted-foreground/60 hover:text-primary transition-all duration-300"
-        >
-          <ArrowLeft className="w-4 h-4 group-hover:-translate-x-2 transition-transform duration-300 ease-out" />
-          Retour au registre
-        </Link>
-
         {/* Card principale */}
         <div className="relative overflow-hidden rounded-[2.5rem] border border-border/60 bg-card/70 backdrop-blur-2xl shadow-2xl shadow-primary/5 transition-all duration-500">
           

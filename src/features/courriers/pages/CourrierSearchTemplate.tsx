@@ -15,7 +15,8 @@ interface CourrierSearchTemplateProps {
 
 export const CourrierSearchTemplate = ({ onCourrierSelect }: CourrierSearchTemplateProps) => {
   const [searchResults, setSearchResults] = useState<Courrier[]>([])
-  const [loading, setLoading] = useState(false)
+  const [loading, setLoading] = useState(false);
+  const [loadingMore, setLoadingMore] = useState(false);
   const [error, setError] = useState<string | null>(null)
   const [hasSearched, setHasSearched] = useState(false)
   const [selectedCourrier, setSelectedCourrier] = useState<Courrier | null>(null)
@@ -46,9 +47,9 @@ export const CourrierSearchTemplate = ({ onCourrierSelect }: CourrierSearchTempl
   }
 
   const loadMoreResults = async () => {
-    if (loading || !hasMore || !searchCriteria) return
+    if (loading || loadingMore || !hasMore || !searchCriteria) return
     
-    setLoading(true)
+    setLoadingMore(true)
     
     try {
       // Ajouter un curseur basé sur le dernier résultat
@@ -67,7 +68,7 @@ export const CourrierSearchTemplate = ({ onCourrierSelect }: CourrierSearchTempl
       // console.error('Load more error:', err)
       toast.error('Erreur lors du chargement des résultats supplémentaires')
     } finally {
-      setLoading(false)
+      setLoadingMore(false)
     }
   }
 
@@ -151,7 +152,7 @@ export const CourrierSearchTemplate = ({ onCourrierSelect }: CourrierSearchTempl
                         : 'bg-card text-primary border-primary/30 hover:border-primary hover:bg-primary/5 hover:shadow-sm active:scale-95'
                     ].join(' ')}
                   >
-                    {loading ? (
+                    {loadingMore ? (
                       <svg className="animate-spin h-4 w-4 text-muted-foreground" viewBox="0 0 24 24">
                         <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
                         <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
@@ -161,7 +162,7 @@ export const CourrierSearchTemplate = ({ onCourrierSelect }: CourrierSearchTempl
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
                       </svg>
                     )}
-                    <span>{loading ? 'Chargement...' : 'Afficher plus de résultats'}</span>
+                    <span>{loadingMore ? 'Chargement...' : 'Afficher plus de résultats'}</span>
                   </button>
                 </div>
               )}

@@ -32,15 +32,15 @@ export const LoginTemplate = () => {
                 <div className="w-full max-w-md">
                 <div className="text-center mb-8">
                     <Link href="/" className="inline-block group">
-                        <div className="relative w-16 h-16 mx-auto mb-4 rounded-2xl overflow-hidden shadow-[0_0_25px_rgba(var(--primary),0.2)] group-hover:shadow-primary/40 transition-all duration-300 border border-border">
+                        {/* <div className="relative w-16 h-16 mx-auto mb-4 rounded-2xl overflow-hidden shadow-[0_0_25px_rgba(var(--primary),0.2)] group-hover:shadow-primary/40 transition-all duration-300 border border-border">
                             <Image
-                                src="/espa-logo.png"
+                                src="/mesupres.jpg"
                                 alt="Logo Espa Courier"
                                 fill
                                 className="object-cover"
                                 priority
                             />
-                        </div>
+                        </div> */}
                         <h1 className="text-3xl font-black tracking-tighter text-foreground group-hover:text-primary transition-colors italic">
                             ESPA COURIER
                         </h1>

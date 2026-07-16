@@ -104,27 +104,30 @@ export default function Sidebar({ user, onNavigate }: SidebarProps) {
   return (
     <aside className="w-64 bg-sidebar border-r border-sidebar-border flex flex-col h-screen">
       {/* Logo Image & Nom Projet */}
-      <div className="p-6 border-b border-sidebar-border">
-        <Link href="/message/courrier/receive" className="flex items-center gap-3 group">
-          <div className="relative w-9 h-9 rounded-lg overflow-hidden border border-sidebar-border shadow-sm group-hover:shadow-sidebar-primary/30 transition-all">
+      <div className="p-5 border-b border-sidebar-border">
+        <div className="flex items-center gap-3 group select-none">
+          {/* Conteneur du Logo */}
+          <div className="relative w-10 h-10 rounded-xl overflow-hidden border border-sidebar-border bg-white shadow-sm group-hover:border-sidebar-primary/40 group-hover:shadow-md transition-all duration-300 flex items-center justify-center">
             <Image 
-              src="/espa-logo.png" 
-              alt="Logo ESPA"
+              src="/mesupres.jpg" 
+              alt="Logo MESUPRES" 
               fill
-              className="object-cover"
+              className="object-contain p-1.5 group-hover:scale-105 transition-transform duration-300"
+              priority
             />
           </div>
-          <div className="flex flex-col">
-            <span className="text-sm font-black tracking-tighter text-sidebar-foreground italic leading-none">
-              ESPA COURIER
+          
+          {/* Texte de la Marque */}
+          <div className="flex flex-col min-w-0">
+            <span className="text-sm font-bold tracking-wider text-sidebar-foreground group-hover:text-sidebar-primary transition-colors duration-300">
+              MESUPRES
             </span>
-            <span className="text-[9px] uppercase tracking-widest text-sidebar-primary font-bold mt-1">
-              Polytechnique
+            <span className="text-[10px] text-muted-foreground font-medium tracking-normal truncate mt-0.5">
+              Enseignement Supérieur
             </span>
           </div>
-        </Link>
+        </div>
       </div>
-
       {/* Actions List */}
       <div className="mb-6 mt-5 px-2">
         <div className="px-4 py-2 text-[10px] font-bold text-muted-foreground uppercase tracking-[0.2em]">
@@ -205,7 +208,7 @@ export default function Sidebar({ user, onNavigate }: SidebarProps) {
         <div className="flex items-center gap-2 px-2">
           <ShieldCheck className="w-4 h-4 text-sidebar-primary" />
           <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider">
-            ESPA Sécurisé
+            MESUPRES Sécurisé
           </span>
         </div>
       </div>
