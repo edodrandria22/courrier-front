@@ -1,13 +1,13 @@
 'use client'
 
 import { useState } from 'react'
-import { useRouter } from 'next/navigation'
 import { Courrier } from '../types/courrier'
 import { CourrierSearchCriteria } from '../types/recherche'
 import { CourrierSearchForm } from '../components/search/CourrierSearchForm'
 import { CourrierListView } from '../components/list/CourrierListView'
 import { CourrierTemplate } from './CourrierTemplate'
 import { courrierService } from '../services/courrierService'
+import { toast } from 'sonner'
 
 interface CourrierSearchTemplateProps {
   onCourrierSelect?: (courrier: Courrier) => void
@@ -22,7 +22,6 @@ export const CourrierSearchTemplate = ({ onCourrierSelect }: CourrierSearchTempl
   const [searchCriteria, setSearchCriteria] = useState<CourrierSearchCriteria | null>(null)
   const [hasMore, setHasMore] = useState(true)
   const nbLimitCourrier = process.env.NEXT_PUBLIC_NB_LIMIT_COURRIERS ? parseInt(process.env.NEXT_PUBLIC_NB_LIMIT_COURRIERS) : 2;
-  const nbLimitMessage = process.env.NEXT_PUBLIC_NB_LIMIT_MESSAGES ? parseInt(process.env.NEXT_PUBLIC_NB_LIMIT_MESSAGES) : 2;
   const handleSearch = async (criteria: CourrierSearchCriteria) => {
     setLoading(true)
     setError(null)
@@ -38,8 +37,9 @@ export const CourrierSearchTemplate = ({ onCourrierSelect }: CourrierSearchTempl
         setHasMore(false)
       }
     } catch (err) {
-      setError('Erreur lors de la recherche')
-      console.error('Search error:', err)
+      // setError('Erreur lors de la recherche')
+      // console.error('Search error:', err)
+      toast.error('Erreur lors de la recherche');
     } finally {
       setLoading(false)
     }
@@ -52,19 +52,20 @@ export const CourrierSearchTemplate = ({ onCourrierSelect }: CourrierSearchTempl
     
     try {
       // Ajouter un curseur basé sur le dernier résultat
-      const lastResult = searchResults[searchResults.length - 1]
-      const dateCursor = lastResult?.createdAt
+      const lastResult = searchResults[searchResults.length - 1];
+      const dateCursor = lastResult?.dateMessage
       
       const newResults = await courrierService.searchCourriers(searchCriteria, dateCursor)
       
-      if (newResults.length === 0 || newResults.length < nbLimit) {
+      if (newResults.length === 0 || newResults.length < nbLimitCourrier) {
         setHasMore(false)
       }
       
       setSearchResults(prev => [...prev, ...newResults])
     } catch (err) {
-      setError('Erreur lors du chargement des résultats supplémentaires')
+      // setError('Erreur lors du chargement des résultats supplémentaires')
       // console.error('Load more error:', err)
+      toast.error('Erreur lors du chargement des résultats supplémentaires')
     } finally {
       setLoading(false)
     }
@@ -171,3 +172,4 @@ export const CourrierSearchTemplate = ({ onCourrierSelect }: CourrierSearchTempl
     </div>
   )
 }
+
