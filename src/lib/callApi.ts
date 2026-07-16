@@ -56,7 +56,8 @@ export async function callApiPost(
   request: NextRequest,
   url: string,
   requiredFields: string[] = [],
-  isFormData: boolean = false // 👈 nouvel argument
+  isFormData: boolean = false, // 👈 nouvel argument
+  allowedParams: string[] = [] // 👈 nouvel argument
 ) {
   try {
     const api = getServerAxios(request);
@@ -110,12 +111,20 @@ export async function callApiPost(
         { status: 400 }
       );
     }
+    
+    const { searchParams } = new URL(request.url);
+    const queryParams: Record<string, string> = {};
+    allowedParams.forEach((key) => {
+      const value = searchParams.get(key);
+      if (value) queryParams[key] = value;
+    });
 
     // 🚀 Envoi vers backend
     const response = await api.post(url, body, {
       headers: isFormData
         ? { "Content-Type": undefined } // Laisse Axios générer le boundary automatiquement
         : { "Content-Type": "application/json" },
+      params: queryParams,
     });
 
     return NextResponse.json(response.data, { status: 201 });

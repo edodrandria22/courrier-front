@@ -4,56 +4,6 @@ import { CourrierSearchCriteria } from '../types/recherche';
 import { logger } from '@/lib/logger';
 import { useFetchAuth } from '@/hooks/useFetchAuth';
 
-// ─── Types bruts de l'API ──────────────────────────────────────────────────
-
-
-// ─── Fonctions de mapping ─────────────────────────────────────────────────
-
-// function mapApiToCourrier(api: ApiCourrier): CourrierItem {
-//   return {
-//     id: api.id,
-//     reference: api.reference,
-//     objet: api.object,
-//     description: api.description,
-//     statut: api.cloturePar ? 'finalise' : 'en_cours',
-//     dateCreation: api.dateMessage ?? new Date().toISOString(),
-//     demandeur: {
-//       nom: api.nom,
-//       prenom: api.prenom,
-//       email: api.email ?? '',
-//     },
-//   };
-// }
-
-// function mapApiToMessage(api: ApiMessage, idCourrier: number): MessageCourrier {
-//   return {
-//     id: api.id,
-//     idCourrier,
-//     contenu: api.observation ?? '',
-//     dateCreation: api.dateValidation ?? api.isReadAt ?? new Date().toISOString(),
-//     estFinalise: api.dateValidation !== null,
-//     expediteur: {
-//       id: api.expediteur.id,
-//       nom: api.expediteur.role,
-//       prenom: '',
-//     },
-//     destinataire: {
-//       id: api.destinataire.id,
-//       nom: api.destinataire.nom,
-//       prenom: api.destinataire.prenom,
-//       adresse: api.destinataire.adresse,
-//     },
-//     pieceJointes: (api.fichiers ?? []).map((f) => ({
-//       id: f.id,
-//       nom: f.nom ?? f.name ?? '',
-//       taille: f.taille ?? f.size ?? 0,
-//       type: f.type ?? '',
-//       url: f.url ?? '',
-//     })),
-//   };
-// }
-
-// ─── Service ─────────────────────────────────────────────────────────────
 
 export const courrierService = {
   // ─── Courriers ───────────────────────────────────────────────────────────
@@ -86,19 +36,21 @@ export const courrierService = {
     try {
       const fetchWithAuth = useFetchAuth();
       // 1. Construire l'URL avec le paramètre de recherche si la date est fournie
-      const url = dateCursor
-        ? `/api/courriers/getAllbyUser?date=${encodeURIComponent(dateCursor)}${
-            isTraiterAt !== null && isTraiterAt !== undefined
-              ? `&isTraiterAt=${isTraiterAt}`
-              : ''
-          }`
-        : `/api/courriers/getAllbyUser${
-            isTraiterAt !== null && isTraiterAt !== undefined
-              ? `?isTraiterAt=${isTraiterAt}`
-              : ''
-          }`;
-      const res = await fetchWithAuth(url);
+      const params = new URLSearchParams();
 
+      params.set("limit", process.env.NEXT_PUBLIC_NB_LIMIT_COURRIERS || "10");
+
+      if (dateCursor) {
+        params.set("date", dateCursor);
+      }
+
+      if (isTraiterAt !== null && isTraiterAt !== undefined) {
+        params.set("isTraiterAt", String(isTraiterAt));
+      }
+
+    const url = `/api/courriers/getAllbyUser?${params.toString()}`;
+
+    const res = await fetchWithAuth(url);
       if (!res.ok) {
           // Optionnel : passer plus de détails au logger pour le débogage
           await logger.error(`courrierService.getCourriersByUser (date: ${dateCursor})`, res);
@@ -116,9 +68,15 @@ export const courrierService = {
     try {
       const fetchWithAuth = useFetchAuth();
       // 1. Construire l'URL avec le paramètre de recherche si la date est fournie
-      const url = dateCursor 
-          ? `/api/courriers/getAllbyUserSend?date=${encodeURIComponent(dateCursor)}` 
-          : '/api/courriers/getAllbyUserSend';
+      const params = new URLSearchParams();
+      
+      params.set("limit", process.env.NEXT_PUBLIC_NB_LIMIT_COURRIERS || "10");
+      
+      if (dateCursor) {
+        params.set("date", dateCursor);
+      }
+      
+      const url = `/api/courriers/getAllbyUserSend?${params.toString()}`;
 
       const res = await fetchWithAuth(url);
 
@@ -183,9 +141,15 @@ export const courrierService = {
   getMessagesByCourrier: async (idCourrier: number, dateCursor?: string): Promise<MessageCourrier[]> => {
     try {
       const fetchWithAuth = useFetchAuth();
-      const url = dateCursor
-        ? `/api/courriers/${idCourrier}/messages?date=${encodeURIComponent(dateCursor)}`
-        : `/api/courriers/${idCourrier}/messages`;
+      const params = new URLSearchParams();
+      
+      params.set("limit", process.env.NEXT_PUBLIC_NB_LIMIT_MESSAGES || "10");
+      
+      if (dateCursor) {
+        params.set("date", dateCursor);
+      }
+      
+      const url = `/api/courriers/${idCourrier}/messages?${params.toString()}`;
 
       const res = await fetchWithAuth(url);
       if (!res.ok) {
@@ -253,8 +217,10 @@ export const courrierService = {
         dateFin: criteria.dateFin || '2050-01-01',
         date: date || null // Ajouter la date de pagination dans le DTO
       };
-
-      const res = await fetchWithAuth('/api/courriers/recherche', {
+      const params = new URLSearchParams();
+      
+      params.set("limit", process.env.NEXT_PUBLIC_NB_LIMIT_COURRIERS || "10");
+      const res = await fetchWithAuth('/api/courriers/recherche?' + params.toString(), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(searchCriteria),

@@ -6,10 +6,10 @@ const fetchAuth = useFetchAuth();
 export const utilisateurService = {
   getUtilisateurs: async (date?: string): Promise<User[]> => {
     try {
-      const nbLimit = Number(process.env.NEXT_PUBLIC_NB_LIMIT_UTILISATEURS) || 2;
+      const nbLimit = Number(process.env.NEXT_PUBLIC_NB_LIMIT_UTILISATEUR) || 2;
       const params = new URLSearchParams({ limit: String(nbLimit), ...(date && { date }) });
       
-      const res = await fetchAuth(`/api/utilisateurs?${params}`);
+      const res = await fetchAuth(`/api/utilisateurs?${params.toString()}`);
       
       if (!res.ok) {
         await logger.error('utilisateurService.getUtilisateurs - Réponse HTTP KO', res);
@@ -25,7 +25,10 @@ export const utilisateurService = {
   },
   rechercheUtilisateurs: async (nomComplet: string, date?: string): Promise<User[]> => {
     try {
-      const response = await fetchAuth("/api/utilisateurs/recherche", {
+      const nbLimit = Number(process.env.NEXT_PUBLIC_NB_LIMIT_UTILISATEUR) || 2;
+      const params = new URLSearchParams({ limit: String(nbLimit)});
+  
+      const response = await fetchAuth(`/api/utilisateurs/recherche?${params.toString()}`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

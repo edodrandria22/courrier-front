@@ -21,9 +21,8 @@ export const CourrierSearchTemplate = ({ onCourrierSelect }: CourrierSearchTempl
   const [selectedCourrier, setSelectedCourrier] = useState<Courrier | null>(null)
   const [searchCriteria, setSearchCriteria] = useState<CourrierSearchCriteria | null>(null)
   const [hasMore, setHasMore] = useState(true)
-  const router = useRouter()
-  const nbLimit = process.env.NEXT_PUBLIC_NB_LIMIT ? parseInt(process.env.NEXT_PUBLIC_NB_LIMIT) : 2;
-
+  const nbLimitCourrier = process.env.NEXT_PUBLIC_NB_LIMIT_COURRIERS ? parseInt(process.env.NEXT_PUBLIC_NB_LIMIT_COURRIERS) : 2;
+  const nbLimitMessage = process.env.NEXT_PUBLIC_NB_LIMIT_MESSAGES ? parseInt(process.env.NEXT_PUBLIC_NB_LIMIT_MESSAGES) : 2;
   const handleSearch = async (criteria: CourrierSearchCriteria) => {
     setLoading(true)
     setError(null)
@@ -35,7 +34,7 @@ export const CourrierSearchTemplate = ({ onCourrierSelect }: CourrierSearchTempl
       const results = await courrierService.searchCourriers(criteria)
       setSearchResults(results)
       // Si moins de résultats que la limite, pas de "plus de résultats"
-      if (results.length < nbLimit) {
+      if (results.length < nbLimitCourrier) {
         setHasMore(false)
       }
     } catch (err) {

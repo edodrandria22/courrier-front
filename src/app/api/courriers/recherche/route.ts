@@ -4,5 +4,6 @@ import { callApiPost } from "@/lib/callApi";
 
 export async function POST(request: NextRequest) {
   const requiredFields: string[] = [];
-  return callApiPost(request, "/courriers/recherche", requiredFields);
+  const allowedParams: string[] = ["page", "limit"];
+  return callApiPost(request, "/courriers/recherche", requiredFields, false, allowedParams);
 }

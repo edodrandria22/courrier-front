@@ -3,5 +3,6 @@ import { callApiPost } from "@/lib/callApi";
 
 export async function POST(request: NextRequest) {
     const requiredFields: string[] = [];
-    return callApiPost(request, "utilisateurs/recherche", requiredFields);
+    const allowedParams: string[] = ["limit"];
+    return callApiPost(request, "utilisateurs/recherche", requiredFields,false,allowedParams);
 }

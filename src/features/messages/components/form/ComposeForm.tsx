@@ -30,7 +30,7 @@ const formatFileSize = (bytes: number) => {
 }
 
 export const ComposeForm = ({ courrierId, courrierReference, courrierObjet }: ComposeFormProps) => {
-  const router = useRouter()
+  const router = useRouter();
   const { sendMessage, loading, error } = useComposeMessage()
   const fileInputRef = useRef<HTMLInputElement>(null)
 

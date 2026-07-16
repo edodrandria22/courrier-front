@@ -104,7 +104,6 @@ GET http://localhost:3000/api/notifications/subscribe 404 (Not Found)
 14/07/2026
     --mercure pour envoyer message --ok -- 60mn 
     --lien trop lent -- a faire -- 60mn
-    --factorisaytion code -- a faire -- 120mn
 
 15/07/2026
     --transferer dans le voir message -- ok -- 30mn
@@ -112,3 +111,10 @@ GET http://localhost:3000/api/notifications/subscribe 404 (Not Found)
 
     --Warning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}. -- ok -- 15 mn
 
+16/07/2026
+    --modifier pagination getCourrier -- a faire --20mn
+    --modifer pagination getMessage -- a faire --20mn
+    --modifer pagination recherche utilisateur -- a faire -- 20 mn
+    --modifier page de garde pour adapter a mesupress -- a faire -- 60 mn
+
+--factorisaytion code -- a faire -- 120mn

@@ -28,7 +28,8 @@ interface CourrierTemplateProps {
 export const CourrierTemplateSend = ({ initialCourrier, isRecherche }: CourrierTemplateProps = {}) => {
   const { user } = useCurrentUser();
   const currentUserId = user?.id ?? null;
-  const nbLimit = process.env.NEXT_PUBLIC_NB_LIMIT ? parseInt(process.env.NEXT_PUBLIC_NB_LIMIT) : 2;
+  const nbLimitCourrier = process.env.NEXT_PUBLIC_NB_LIMIT_COURRIERS ? parseInt(process.env.NEXT_PUBLIC_NB_LIMIT_COURRIERS) : 2;
+  const nbLimitMessage = process.env.NEXT_PUBLIC_NB_LIMIT_MESSAGES ? parseInt(process.env.NEXT_PUBLIC_NB_LIMIT_MESSAGES) : 2;
   const { addNotification } = useNotifications()
 
   const {
@@ -61,7 +62,7 @@ export const CourrierTemplateSend = ({ initialCourrier, isRecherche }: CourrierT
   useEffect(() => {
     const initCourriers = async () => {
       const data = await fetchCourriersByUserSend();
-      if (data && data.length < nbLimit) setHasMoreCourriers(false);
+      if (data && data.length < nbLimitCourrier) setHasMoreCourriers(false);
     };
     initCourriers();
   }, [fetchCourriersByUserSend]);
@@ -71,7 +72,7 @@ export const CourrierTemplateSend = ({ initialCourrier, isRecherche }: CourrierT
     const lastDate = courriers[courriers.length - 1]?.createdAt;
     if (lastDate) {
       const newItems = await fetchCourriersByUserSend(lastDate);
-      if (!newItems || newItems.length < nbLimit) setHasMoreCourriers(false);
+      if (!newItems || newItems.length < nbLimitCourrier) setHasMoreCourriers(false);
     }
   };
 
@@ -87,7 +88,7 @@ export const CourrierTemplateSend = ({ initialCourrier, isRecherche }: CourrierT
       const initMessages = async () => {
         setHasMoreMessages(true); // Reset pour le nouveau courrier
         const data = await fetchMessages(currentCourrierId);
-        if (data && data.length < nbLimit) setHasMoreMessages(false);
+        if (data && data.length < nbLimitMessage) setHasMoreMessages(false);
       };
       initMessages();
     }
@@ -99,7 +100,7 @@ export const CourrierTemplateSend = ({ initialCourrier, isRecherche }: CourrierT
     const lastMsgDate = messages[messages.length - 1]?.createdAt;
     if (lastMsgDate) {
       const newMsgs = await fetchMessages(currentCourrierId, lastMsgDate);
-      if (!newMsgs || newMsgs.length < nbLimit) setHasMoreMessages(false);
+      if (!newMsgs || newMsgs.length < nbLimitMessage) setHasMoreMessages(false);
     }
   };
   const handleMessageRead = (messageId: number) => {
