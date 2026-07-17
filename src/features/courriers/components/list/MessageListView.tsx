@@ -10,7 +10,6 @@ import { Badge } from '@/components/ui/badge'
 import { Skeleton } from '@/components/ui/skeleton'
 import { Courrier, MessageCourrier } from '../../types/courrier'
 import { cn } from '@/lib/utils'
-import Link from 'next/link'
 import { formatDateTime } from '@/hooks/utils'
 import { useMessagePermissions } from '@/hooks/useMessagePermissions'
            import {
@@ -22,7 +21,7 @@ import { useMessagePermissions } from '@/hooks/useMessagePermissions'
 import { useState } from 'react'
 import { useMessages } from '@/features/messages/hooks/useMessages'
 import { TransfererDialog } from '@/features/messages/components/TransfererDialog'
-
+import { useRouter } from 'next/navigation'
 // ... (dans votre composant)
 interface Props {
   courrier: Courrier
@@ -77,6 +76,10 @@ export const MessageListView = ({ courrier, messages, loading, error, currentUse
       setIsUpdatingObs(false);
     }
   }
+  const router = useRouter();
+  const onSuccessTransfere = () => {
+    router.push('/message/courrier/send');
+  }
   const getStatusConfig = (status?: string) => {
     switch (status) {
       case 'non-lu':
@@ -125,7 +128,7 @@ export const MessageListView = ({ courrier, messages, loading, error, currentUse
         </div>
 
         {isLastRecipient && !courrier.cloturePar && (
-          <TransfererDialog messageId={Number(courrier.messageId)} onSuccess={onBack} />
+          <TransfererDialog messageId={Number(courrier.messageId)} onSuccess={onSuccessTransfere} />
         )}
       </div>
 

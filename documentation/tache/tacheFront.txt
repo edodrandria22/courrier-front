@@ -115,6 +115,8 @@ GET http://localhost:3000/api/notifications/subscribe 404 (Not Found)
     --modifier pagination getCourrier -- a faire --20mn
     --modifer pagination getMessage -- a faire --20mn
     --modifer pagination recherche utilisateur -- a faire -- 20 mn
-    --modifier page de garde pour adapter a mesupress -- a faire -- 60 mn
-
---factorisaytion code -- a faire -- 120mn
+    --modifier page de garde pour adapter a mesupress -- ok -- 60 mn
+17/07/2026
+    -- apres transferer message redirection vers boite d'envoie -- ok -- 10mn
+    --changer pagination courrier receive/send/search avec dateMessage -- ok --20 mn
+    --factorisaytion code -- a faire -- 120mn

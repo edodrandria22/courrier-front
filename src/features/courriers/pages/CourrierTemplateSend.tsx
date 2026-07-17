@@ -69,7 +69,7 @@ export const CourrierTemplateSend = ({ initialCourrier, isRecherche }: CourrierT
 
   const loadMoreCourriers = async () => {
     if (loading || !hasMoreCourriers) return;
-    const lastDate = courriers[courriers.length - 1]?.createdAt;
+    const lastDate = courriers[courriers.length - 1]?.dateMessage;
     if (lastDate) {
       const newItems = await fetchCourriersByUserSend(lastDate);
       if (!newItems || newItems.length < nbLimitCourrier) setHasMoreCourriers(false);
