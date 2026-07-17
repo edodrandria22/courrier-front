@@ -188,8 +188,8 @@ export const CourrierTemplate = ({ initialCourrier, isRecherche }: CourrierTempl
   }, [setCourriers, setMessages, addNotification,currentUserId]);
 
   // Topic "lectureMessage" : marquage lu/non lu en temps réel
-  const handleLecture = useCallback((data: { id: number; courrier :Courrier;isReadAt: string | null }) => {
-    setCourriers(prev => prev.map(m => m.id === data.courrier.id ? { ...m, isReadAt: data.isReadAt } : m));
+  const handleLecture = useCallback((data: { id: number; courrier :Courrier;isReadAt: string | null ; historiqueId: number}) => {
+    setCourriers(prev => prev.map(m => m.historiqueId === data.historiqueId ? { ...m, isReadAt: data.isReadAt } : m));
     setMessages(prev => prev.map(m => m.id === data.id ? { ...m, isReadAt: data.isReadAt } : m));
     setStep(prev => {
        if (prev.level === 'messages' && prev.courrier.id === data.courrier.id) {
@@ -258,7 +258,7 @@ const handleLocalCloturation = useCallback(async (id: number) => {
 
 
   useMercureSubscription<MessageCourrier>('message', handleTransfert);
-  useMercureSubscription<{ id: number; courrier:Courrier;isReadAt: string | null }>('lectureMessage', handleLecture);
+  useMercureSubscription<{ id: number; courrier:Courrier;isReadAt: string | null , historiqueId:number}>('lectureMessage', handleLecture);
   useMercureSubscription<{ id: number; cloturePar: User | null }>('clotureCourrier', handleCloturer);
 
   // --- RENDU ---

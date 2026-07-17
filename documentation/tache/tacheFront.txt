@@ -120,3 +120,5 @@ GET http://localhost:3000/api/notifications/subscribe 404 (Not Found)
     -- apres transferer message redirection vers boite d'envoie -- ok -- 10mn
     --changer pagination courrier receive/send/search avec dateMessage -- ok --20 mn
     --factorisaytion code -- a faire -- 120mn
+
+boite de reception mercure il y a encore de courrier lorsque on envoie vers une autre 
