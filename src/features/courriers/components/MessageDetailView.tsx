@@ -79,7 +79,9 @@ export const MessageDetailView = ({ courrier, message, messages, currentUserId, 
       setLoadingCloturer(false);
     }
   };
-
+  const onSuccessTransfere = () => {
+    router.push('/message/courrier/send');
+  }
   // useEffect(() => {
   //   if (isDestinataire && !message.isReadAt && !hasMarkedRef.current) {
   //     hasMarkedRef.current = true;
@@ -244,7 +246,7 @@ export const MessageDetailView = ({ courrier, message, messages, currentUserId, 
           
           {canTransfer && isLastMessage(message) && !courrier.cloturePar && (
             <>
-              <TransfererDialog messageId={message.id} onSuccess={onBack} />
+              <TransfererDialog messageId={message.id} onSuccess={onSuccessTransfere} />
               <Button
                 variant="outline"
                 size="sm"

@@ -147,36 +147,37 @@ export const CourrierTemplateSend = ({ initialCourrier, isRecherche }: CourrierT
         'success', // 'success' pour les messages qui me sont destinés
         { courrierId: courrierConcerne.id, messageId: incomingData.id, isForMe: true }
       );
+      setCourriers?.((prev) => {    
+            return [courrierConcerne, ...prev];
+      });
+      
+      // 2. Logique d'affichage des messages
+      const current = stepRef.current;
+      const isViewingThisCourrier =
+        (current.level === 'messages' || current.level === 'detail') &&
+        Number(current.courrier.id) === Number(courrierConcerne.id);
+
+      if (isViewingThisCourrier) {
+        // Met à jour l'état du courrier actuel (clôture etc.)
+        setStep(prev => prev.level !== 'courriers'
+          ? { ...prev, courrier: { ...prev.courrier, cloturePar: courrierConcerne.cloturePar } }
+          : prev
+        );
+        
+        // NOUVEAU : On insère le message directement en haut de la liste !
+        setMessages?.(prevMsgs => {
+          // Sécurité : on vérifie que le message n'est pas déjà dans la liste
+          const alreadyExists = prevMsgs.some(m => Number(m.id) === Number(incomingData.id));
+          if (alreadyExists) return prevMsgs;
+
+          // On place incomingData (le nouveau message) en position 0
+          return [incomingData, ...prevMsgs];
+        });
+      }
     }
 
     // 1. Mise à jour de la liste des courriers (inchangé)
-    setCourriers?.((prev) => {    
-          return [courrierConcerne, ...prev];
-    });
     
-    // 2. Logique d'affichage des messages
-    const current = stepRef.current;
-    const isViewingThisCourrier =
-      (current.level === 'messages' || current.level === 'detail') &&
-      Number(current.courrier.id) === Number(courrierConcerne.id);
-
-    if (isViewingThisCourrier) {
-      // Met à jour l'état du courrier actuel (clôture etc.)
-      setStep(prev => prev.level !== 'courriers'
-        ? { ...prev, courrier: { ...prev.courrier, cloturePar: courrierConcerne.cloturePar } }
-        : prev
-      );
-      
-      // NOUVEAU : On insère le message directement en haut de la liste !
-      setMessages?.(prevMsgs => {
-        // Sécurité : on vérifie que le message n'est pas déjà dans la liste
-        const alreadyExists = prevMsgs.some(m => Number(m.id) === Number(incomingData.id));
-        if (alreadyExists) return prevMsgs;
-
-        // On place incomingData (le nouveau message) en position 0
-        return [incomingData, ...prevMsgs];
-      });
-    }
     
     // N'oubliez pas d'ajouter setMessages dans les dépendances du useCallback
   }, [setCourriers, setMessages, addNotification,currentCourrierId]);
