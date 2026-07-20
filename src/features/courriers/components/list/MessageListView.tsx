@@ -45,7 +45,7 @@ export const MessageListView = ({ courrier, messages, loading, error, currentUse
   // console.log(courrier)
   const isButtonLu = isLastRecipient && !courrier.isReadAt;
 
-  const statusLu = courrier.isReadAt ? 'lu' : 'non-lu'
+  const statusLu = courrier.isReadAt ? 'arrivée' : 'non arrivée'
   const status = courrier.cloturePar ? 'finalise' : statusLu;
   const isConfidentiel = courrier.isConfidentiel // Vérification de la confidentialité du courrier
   // console.log(courrier);
@@ -147,7 +147,7 @@ export const MessageListView = ({ courrier, messages, loading, error, currentUse
                           onClick={marquerLuMessage}
                           disabled={loadingMarquer}
                 >
-                        {loadingMarquer ? 'Enregistrement...' : 'Marquer lu'}
+                        {loadingMarquer ? 'Enregistrement...' : 'Marquer comme arrivée'}
                 </Button>
               </div>
             )}
@@ -209,19 +209,35 @@ export const MessageListView = ({ courrier, messages, loading, error, currentUse
                 <p className="text-sm text-foreground whitespace-pre-line">{courrier.description}</p>
               </div>
             )}
-            {courrier.numero !== undefined && (
+            {/* Si c'est envoyé, on affiche le Numéro (départ) en premier */}
+            {courrier.isSend ? (
+              <>
+                {courrier.numero !== undefined && (
                   <p className="flex items-center gap-2 text-foreground">
-                    {/* <span className="font-semibold text-muted-foreground w-3.5 text-center">N°</span> */}
-                    <span className="font-medium">Numéro :</span> {courrier.numero}
+                    <span className="font-medium">Numéro départ :</span> {courrier.numero}
                   </p>
                 )}
                 {courrier.numRef !== undefined && (
                   <p className="flex items-center gap-2 text-foreground">
-                    {/* <span className="font-semibold text-muted-foreground w-3.5 text-center">N°</span> */}
-                    <span className="font-medium">Numéro de référence :</span> {courrier.numRef}
+                    <span className="font-medium">Numéro arrivée :</span> {courrier.numRef}
                   </p>
                 )}
-
+              </>
+            ) : (
+              /* Si c'est reçu (non envoyé), c'est le numRef (départ) qui passe en premier */
+              <>
+                {courrier.numRef !== undefined && (
+                  <p className="flex items-center gap-2 text-foreground">
+                    <span className="font-medium">Numéro départ :</span> {courrier.numRef}
+                  </p>
+                )}
+                {courrier.numero !== undefined && (
+                  <p className="flex items-center gap-2 text-foreground">
+                    <span className="font-medium">Numéro arrivée :</span> {courrier.numero}
+                  </p>
+                )}
+              </>
+            )}
             {/* Flux du Courrier (Expéditeur -> Destinataire initial) */}
  
 
@@ -359,7 +375,7 @@ export const MessageListView = ({ courrier, messages, loading, error, currentUse
               <div className="flex items-center gap-1.5">
                 <Calendar className="w-3.5 h-3.5 text-muted-foreground" />
                 <div>
-                  <span className="block font-medium text-[10px] text-muted-foreground/80">Date du message</span>
+                  <span className="block font-medium text-[10px] text-muted-foreground/80">Date de depart</span>
                   <span className="text-foreground">{courrier.dateMessage ? formatDateTime(courrier.dateMessage) : "—"}</span>
                 </div>
               </div>
@@ -367,9 +383,9 @@ export const MessageListView = ({ courrier, messages, loading, error, currentUse
               <div className="flex items-center gap-1.5 col-span-2 sm:col-span-1">
                 <Clock className="w-3.5 h-3.5 text-muted-foreground" />
                 <div>
-                  <span className="block font-medium text-[10px] text-muted-foreground/80">Lu le</span>
+                  <span className="block font-medium text-[10px] text-muted-foreground/80">Date d'arrivée</span>
                   <span className="text-foreground">
-                    {courrier.isReadAt ? formatDateTime(courrier.isReadAt) : "Non lu"}
+                    {courrier.isReadAt ? formatDateTime(courrier.isReadAt) : "Non arrivée"}
                   </span>
                 </div>
               </div>
@@ -506,8 +522,8 @@ export const MessageListView = ({ courrier, messages, loading, error, currentUse
                         <th className="px-4 py-3 font-medium">Destinataire</th>
                         <th className="px-4 py-3 font-medium">Statut</th>
                         {/* <th className="px-4 py-3 font-medium max-w-[250px]">Observation</th> */}
-                        <th className="px-4 py-3 font-medium">Numero Expediteur</th>
-                        <th className="px-4 py-3 font-medium">Numero Destinataire</th>
+                        <th className="px-4 py-3 font-medium">Numero depart</th>
+                        <th className="px-4 py-3 font-medium">Numero arrivée</th>
                         <th className="px-4 py-3 font-medium">Date</th>
                         <th className="px-4 py-3 font-medium w-10"></th>
                       </tr>
@@ -560,11 +576,11 @@ export const MessageListView = ({ courrier, messages, loading, error, currentUse
                             <td className="px-4 py-3 whitespace-nowrap">
                               {isRead ? (
                                 <Badge variant="outline" className="text-[10px] px-2 py-0.5 bg-emerald-500/10 text-emerald-600 border-emerald-500/20 font-medium">
-                                  <CheckCircle2 className="w-3 h-3 mr-1" /> Lu
+                                  <CheckCircle2 className="w-3 h-3 mr-1" /> {statusLu}
                                 </Badge>
                               ) : (
                                 <Badge variant="outline" className="text-[10px] px-2 py-0.5 bg-primary/10 text-primary border-primary/20 font-medium">
-                                  Non lu
+                                  {statusLu}
                                 </Badge>
                               )}
                             </td>
