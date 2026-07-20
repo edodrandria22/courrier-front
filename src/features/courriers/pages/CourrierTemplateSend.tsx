@@ -183,15 +183,15 @@ export const CourrierTemplateSend = ({ initialCourrier, isRecherche }: CourrierT
   }, [setCourriers, setMessages, addNotification,currentCourrierId]);
 
   // Topic "lectureMessage" : marquage lu/non lu en temps réel
-  const handleLecture = useCallback((data: { id: number; courrier :Courrier;isReadAt: string | null }) => {
-    setCourriers(prev => prev.map(m => m.id === data.courrier.id ? { ...m, isReadAt: data.isReadAt } : m));
-    setMessages(prev => prev.map(m => m.id === data.id ? { ...m, isReadAt: data.isReadAt } : m));
+    const handleLecture = useCallback((data: { id: number; courrier :Courrier;isReadAt: string | null ; numeroExpediteur: number; numeroDestinataire: number}) => {
+    setCourriers(prev => prev.map(m => Number(m.messageId) === data.id ? { ...m, isReadAt: data.isReadAt,  numero:data.numeroExpediteur, numRef: data.numeroDestinataire } : m));
+    setMessages(prev => prev.map(m => m.id === data.id ? { ...m, isReadAt: data.isReadAt, numeroExpediteur: data.numeroExpediteur, numeroDestinataire: data.numeroDestinataire } : m));
     setStep(prev => {
       if (prev.level === 'messages' && prev.courrier.id === data.courrier.id) {
-        return { ...prev, courrier: { ...prev.courrier, isReadAt: data.isReadAt } };
+        return { ...prev, courrier: { ...prev.courrier, isReadAt: data.isReadAt , numero:data.numeroExpediteur, numRef: data.numeroDestinataire } };
       }
       if (prev.level === 'detail' && prev.message.id === data.id) {
-        return { ...prev, message: { ...prev.message, isReadAt: data.isReadAt } };
+        return { ...prev, message: { ...prev.message, isReadAt: data.isReadAt, numeroExpediteur: data.numeroExpediteur, numeroDestinataire: data.numeroDestinataire } };
       }
       return prev;
     });
@@ -253,7 +253,7 @@ const handleLocalCloturation = useCallback(async (id: number) => {
 
 
   useMercureSubscription<MessageCourrier>('message', handleTransfert);
-  useMercureSubscription<{ id: number; courrier:Courrier;isReadAt: string | null }>('lectureMessage', handleLecture);
+  useMercureSubscription<{ id: number; courrier:Courrier;isReadAt: string | null , numeroExpediteur: number, numeroDestinataire: number}>('lectureMessage', handleLecture);
   useMercureSubscription<{ id: number; cloturePar: User | null }>('clotureCourrier', handleCloturer);
 
   // --- RENDU ---
