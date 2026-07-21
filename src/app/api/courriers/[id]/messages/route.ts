@@ -6,6 +6,6 @@ export async function GET(
   { params }: { params: Promise<{ id: string }> }
 ) {
   const { id } = await params;
-  const allowed = ["date"];
+  const allowed = ["date","limit"];
   return callApiGet(request, `/courriers/${id}/messages`, allowed);
 }

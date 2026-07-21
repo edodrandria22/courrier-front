@@ -13,4 +13,11 @@ export interface CourrierSearchCriteria {
   statut?: 'en_cours' | 'finalise';
   date?: string; // Pour la pagination (dans le DTO)
   isConfidentiel?: boolean;
+  numeroExpediteur?: number;
+  numeroDestinataire?: number;
+  dateMessageDebut?: string;
+  dateMessageFin?: string;
+  dateReceptionDebut?: string;
+  dateReceptionFin?: string;
 }
+

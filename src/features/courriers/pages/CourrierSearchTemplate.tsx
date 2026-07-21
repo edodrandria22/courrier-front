@@ -107,9 +107,9 @@ export const CourrierSearchTemplate = ({ onCourrierSelect }: CourrierSearchTempl
   }
 
   return (
-    <div className="space-y-6">
+    <div className="max-w-7xl mx-auto space-y-6">
       {/* Formulaire de recherche */}
-      <CourrierSearchForm onSearch={handleSearch} loading={loading} reinitialiser={handleReset} />
+      <CourrierSearchForm onSearch={handleSearch} loading={loading} reinitialiser={handleReset} initialCriteria={searchCriteria} />
 
       {/* Résultats de recherche */}
       {hasSearched && (

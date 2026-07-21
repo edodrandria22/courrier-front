@@ -213,8 +213,6 @@ export const courrierService = {
       // Ajouter la date du jour par défaut si aucune date n'est fournie
       const searchCriteria = {
         ...criteria,
-        dateDebut: criteria.dateDebut || '2026-01-01',
-        dateFin: criteria.dateFin || '2050-01-01',
         date: date || null // Ajouter la date de pagination dans le DTO
       };
       const params = new URLSearchParams();

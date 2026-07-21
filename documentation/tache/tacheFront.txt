@@ -125,6 +125,7 @@ GET http://localhost:3000/api/notifications/subscribe 404 (Not Found)
 
 20/07/2026
     --mercure pour voir message le numero depart et arrive doit changer aussi -- ok -- 30mn
-
-
---boutton voir plus de message tsy hita 
+    --boutton voir plus de message tsy hita --ok -- 30mn
+    --recherche avec filtre entre date reception --ok -- 30mn
+    --recherche avec filtre entre date de creation courrier --ok -- 30mn
+    --retour apres recherche tsy mijanona filtre -- ok -- 30 mn
