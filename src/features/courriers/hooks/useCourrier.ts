@@ -37,8 +37,8 @@ export const useCourrier = () => {
         }
         
         // Si on a un curseur, on filtre pour éviter les doublons et on ajoute à la suite.
-        const existingIds = new Set(prev.map(c => c.id));
-        const uniqueNewData = data.filter(c => !existingIds.has(c.id));
+        const existingIds = new Set(prev.map(c => c.historiqueId));
+        const uniqueNewData = data.filter(c => !existingIds.has(c.historiqueId));
         
         return [...prev, ...uniqueNewData];
       });
@@ -65,8 +65,8 @@ export const useCourrier = () => {
         }
         
         // Si on a un curseur, on filtre pour éviter les doublons et on ajoute à la suite.
-        const existingIds = new Set(prev.map(c => c.id));
-        const uniqueNewData = data.filter(c => !existingIds.has(c.id));
+        const existingIds = new Set(prev.map(c => c.historiqueId));
+        const uniqueNewData = data.filter(c => !existingIds.has(c.historiqueId));
         
         return [...prev, ...uniqueNewData];
       });

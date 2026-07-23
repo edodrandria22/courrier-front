@@ -108,7 +108,6 @@ GET http://localhost:3000/api/notifications/subscribe 404 (Not Found)
 15/07/2026
     --transferer dans le voir message -- ok -- 30mn
     --message apres suivre courrier -- ok -- 30mn 
-
     --Warning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}. -- ok -- 15 mn
 
 16/07/2026
