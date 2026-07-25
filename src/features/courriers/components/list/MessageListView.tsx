@@ -47,6 +47,9 @@ export const MessageListView = ({ courrier, messages, loading, error, currentUse
 
   const statusLu = courrier.isReadAt ? 'arrivée' : 'non arrivée'
   const status = courrier.cloturePar ? 'finalise' : statusLu;
+  const nomClotureComplet = courrier.cloturePar?.nom && courrier.cloturePar?.prenom 
+    ? `${courrier.cloturePar.nom} ${courrier.cloturePar.prenom}`
+    : 'un utilisateur';
   const isConfidentiel = courrier.isConfidentiel // Vérification de la confidentialité du courrier
   // console.log(courrier);
   // États pour la gestion du formulaire d'observation
@@ -175,7 +178,7 @@ export const MessageListView = ({ courrier, messages, loading, error, currentUse
                 {courrier.cloturePar ? (
                   <Badge variant="secondary" className="h-6 px-2 text-xs font-medium gap-1 bg-green-100 text-green-700 hover:bg-green-100 dark:bg-green-900/30 dark:text-green-400">
                     <CheckCircle2 className="w-3.5 h-3.5" />
-                    Finalisé par {courrier.cloturePar.nom || "un utilisateur"}
+                    Finalisé par {nomClotureComplet}
                   </Badge>
                 ) : (
                   <Badge 
@@ -393,8 +396,8 @@ export const MessageListView = ({ courrier, messages, loading, error, currentUse
                 <Calendar className="w-3.5 h-3.5 text-muted-foreground" />
                 <div>
                   <span className="block font-medium text-[10px] text-muted-foreground/80">Échéance</span>
-                  <span className={`text-foreground ${courrier.dateFin ? "font-medium text-destructive" : ""}`}>
-                    {courrier.dateFin ? formatDateTime(courrier.dateFin) : "Aucune"}
+                  <span className={`text-foreground ${courrier.dateValidation ? "font-medium text-destructive" : ""}`}>
+                    {courrier.dateValidation ? formatDateTime(courrier.dateValidation) : "Aucune"}
                   </span>
                 </div>
               </div>

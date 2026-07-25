@@ -72,7 +72,7 @@ export interface Courrier {
   object: string;
   description?: string;
   numero?:number;
-  dateFin?: string;
+  dateValidation?: string;
   createdAt?: string;
   createur?: User;
   cloturePar?: User | null;
@@ -87,7 +87,7 @@ export interface Courrier {
   numRef?: number;
   observation?: string;
   detailPersonnes: Array<DetailPersonne>;
-  isTraiterAt?: string | null;
+  isTraiterAt?: string ;
   messageId?:string|null
 }
 

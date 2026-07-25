@@ -39,9 +39,9 @@ interface Props {
 type SearchField = 'nom' | 'reference' | 'description'
 
 const SEARCH_FIELDS: { value: SearchField; label: string; icon: React.ElementType; placeholder: string }[] = [
-  { value: 'nom',         label: 'Nom',       icon: User,     placeholder: 'Rechercher par nom ou prénom...' },
-  { value: 'reference',   label: 'Référence', icon: Hash,     placeholder: 'Ex: ESPA-2026-001' },
   { value: 'description', label: 'Contenu',   icon: FileText, placeholder: 'Rechercher dans l\'objet ou description...' },
+  { value: 'reference',   label: 'Référence', icon: Hash,     placeholder: 'Ex: ESPA-2026-001' },
+  { value: 'nom',         label: 'Nom',       icon: User,     placeholder: 'Rechercher par nom ou prénom...' },
 ]
 
 const STATUT_CONFIG: Record<string, { label: string; icon: React.ElementType; className: string }> = {

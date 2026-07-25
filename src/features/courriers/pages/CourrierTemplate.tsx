@@ -71,7 +71,10 @@ export const CourrierTemplate = ({ initialCourrier, isRecherche }: CourrierTempl
 
   const loadMoreCourriers = async () => {
     if (loading || !hasMoreCourriers) return;
-    const lastDate = courriers[courriers.length - 1]?.dateMessage;
+    let lastDate = courriers[courriers.length - 1]?.dateMessage;
+    if(isTraiterAt){
+      lastDate = courriers[courriers.length - 1]?.isTraiterAt;
+    }
     if (lastDate) {
       const newItems = await fetchCourriersByUser(lastDate,isTraiterAt);
       if (!newItems || newItems.length < nbLimitCourrier) setHasMoreCourriers(false);
@@ -202,10 +205,10 @@ export const CourrierTemplate = ({ initialCourrier, isRecherche }: CourrierTempl
     });
   }, [setMessages]);
 
- const handleCloturer = useCallback((data: { id: number; cloturePar: User | null }) => {
-  setCourriers(prev => prev.map(m => m.id === data.id ? { ...m, cloturePar: data.cloturePar } : m));
+ const handleCloturer = useCallback((data: { id: number; cloturePar: User | null ; dateValidation: string}) => {
+  setCourriers(prev => prev.map(m => m.id === data.id ? { ...m, cloturePar: data.cloturePar , dateValidation: data.dateValidation } : m));
   setStep(prev => prev.level !== 'courriers'
-    ? { ...prev, courrier: { ...prev.courrier, cloturePar: data.cloturePar } }
+    ? { ...prev, courrier: { ...prev.courrier, cloturePar: data.cloturePar , dateValidation: data.dateValidation } }
     : prev
   );
 }, [setCourriers, setStep]);
@@ -221,8 +224,9 @@ const handleLocalCloturation = useCallback(async (id: number) => {
       // 4. (Optionnel mais recommandé) Vérifier le succès avant de mettre à jour l'état
       if (success && courrier) {
         setCourriers(prev => 
-          prev.map(m => m.id === id ? { ...m, cloturePar: courrier.cloturePar } : m)
+          prev.map(m => m.id === id ? { ...m, cloturePar: courrier.cloturePar , dateValidation: courrier.dateValidation } : m)
         );
+        setIsTraiterAt(true);
         setStep({ level: 'courriers' });
         
       }
@@ -259,7 +263,7 @@ const handleLocalCloturation = useCallback(async (id: number) => {
 
   useMercureSubscription<MessageCourrier>('message', handleTransfert);
   useMercureSubscription<{ id: number; courrier:Courrier;isReadAt: string | null , numeroExpediteur: number, numeroDestinataire: number}>('lectureMessage', handleLecture);
-  useMercureSubscription<{ id: number; cloturePar: User | null }>('clotureCourrier', handleCloturer);
+  useMercureSubscription<{ id: number; cloturePar: User | null ; dateValidation: string}>('clotureCourrier', handleCloturer);
 
   // --- RENDU ---
 

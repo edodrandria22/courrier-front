@@ -200,11 +200,11 @@ export const CourrierForm = ({ onSuccess, courrier, onClose }: Props) => {
           </label>
         </div>
 
-        {error && (
+        {/* {error && (
           <div className="p-3 bg-destructive/10 text-destructive text-sm rounded-lg border border-destructive/20 flex items-center gap-2">
             <X className="w-4 h-4" /> {error}
           </div>
-        )}
+        )} */}
 
         
         {/* Informations sur le courrier (Objet & Description) */}
