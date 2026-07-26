@@ -32,7 +32,7 @@ export const courrierService = {
     }
   },
 
-  getCourriersByUser: async (dateCursor?: string,isTraiterAt?: boolean|null): Promise<Courrier[]> => {
+  getCourriersByUser: async (dateCursor?: string,isTraiterAt?: boolean|null, isRecu?: boolean|null): Promise<Courrier[]> => {
     try {
       const fetchWithAuth = useFetchAuth();
       // 1. Construire l'URL avec le paramètre de recherche si la date est fournie
@@ -46,6 +46,10 @@ export const courrierService = {
 
       if (isTraiterAt !== null && isTraiterAt !== undefined) {
         params.set("isTraiterAt", String(isTraiterAt));
+      }
+
+      if (isRecu !== null && isRecu !== undefined) {
+        params.set("isRecu", String(isRecu));
       }
 
     const url = `/api/courriers/getAllbyUser?${params.toString()}`;

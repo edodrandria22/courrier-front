@@ -7,7 +7,7 @@ export async function GET(request: NextRequest) {
 }
 
 export async function POST(request: NextRequest) {
-    const requiredFields = ["email", "mdp", "idRole", "nom", "prenom", "adresse"];
+    const requiredFields = ["email", "mdp", "idRole", "nom", "adresse"];
     return callApiPost(request, "utilisateurs", requiredFields);
 }
 

@@ -6,7 +6,8 @@ import {
   User, Hash, FileText, Eye, MoreVertical, Lock, 
   ArrowUpRight, ArrowDownLeft, Pencil, 
   CheckSquare,
-  Square
+  Square,
+  Package
 } from 'lucide-react'
 import { Badge } from '@/components/ui/badge'
 import { Skeleton } from '@/components/ui/skeleton'
@@ -34,6 +35,9 @@ interface Props {
   setIsTraiterAt?: (isReadAt: boolean | null) => void,
   setHasMoreCourriers?: (hasMore: boolean) => void,
   nbNonTraite?: number
+  isRecu?: boolean | null
+  setIsRecu?: (isRecu: boolean | null) => void,
+  nbIsRecu?: number
 }
 
 type SearchField = 'nom' | 'reference' | 'description'
@@ -50,7 +54,7 @@ const STATUT_CONFIG: Record<string, { label: string; icon: React.ElementType; cl
   archive:   { label: 'Archivé',   icon: Archive,      className: 'bg-gray-100 text-gray-800 dark:bg-muted/30 dark:text-muted-foreground border-transparent' },
 }
 
-export const CourrierListView = ({ courriers, loading, error, onSelect,  onEdit, isUpdate = false, isTraiterAt, setIsTraiterAt, setHasMoreCourriers, nbNonTraite}: Props) => {
+export const CourrierListView = ({ courriers, loading, error, onSelect,  onEdit, isUpdate = false, isTraiterAt, setIsTraiterAt, setHasMoreCourriers, nbNonTraite, isRecu, setIsRecu, nbIsRecu}: Props) => {
   const [query, setQuery] = useState('')
   const [searchField, setSearchField] = useState<SearchField>('nom')
 
@@ -167,10 +171,10 @@ export const CourrierListView = ({ courriers, loading, error, onSelect,  onEdit,
               </button>
               <button
                 type="button"
-                onClick={() => { setIsTraiterAt(false); setHasMoreCourriers?.(true); }}
+                onClick={() => { setIsTraiterAt(false); setIsRecu?.(true); setHasMoreCourriers?.(true); }}
                 className={cn(
                   "px-2.5 py-1 rounded-md text-xs font-medium transition-all flex items-center gap-1.5",
-                  isTraiterAt === false
+                  isTraiterAt === false && isRecu === true
                     ? "bg-background text-foreground font-semibold shadow-sm border border-border/50"
                     : "text-muted-foreground hover:text-foreground"
                 )}
@@ -178,6 +182,21 @@ export const CourrierListView = ({ courriers, loading, error, onSelect,  onEdit,
                 <Square className="w-3.5 h-3.5" />
                 Non traiter {nbNonTraite !== undefined && nbNonTraite > 0 && `(${nbNonTraite})`}
               </button>
+              {isRecu !== undefined && setIsRecu && (
+                <button
+                  type="button"
+                  onClick={() => {setIsTraiterAt(false); setIsRecu(false); setHasMoreCourriers?.(true); }}
+                  className={cn(
+                    "px-2.5 py-1 rounded-md text-xs font-medium transition-all flex items-center gap-1.5",
+                    isRecu === false && isTraiterAt === false
+                      ? "bg-background text-foreground font-semibold shadow-sm border border-border/50"
+                      : "text-muted-foreground hover:text-foreground"
+                  )}
+                >
+                  <Package className="w-3.5 h-3.5" />
+                  En route {nbIsRecu !== undefined && nbIsRecu > 0 && `(${nbIsRecu})`}
+                </button>
+              )}
             </div>
           )}
         </div>
@@ -230,6 +249,44 @@ export const CourrierListView = ({ courriers, loading, error, onSelect,  onEdit,
 
         {!loading && !error && filtered.length > 0 && (
           <div className="flex flex-col">
+            {/* EN-TÊTE DE LA LISTE */}
+            <div className="hidden sm:flex items-center px-4 py-3 border-b border-border bg-slate-50 dark:bg-muted/20 text-xs font-semibold text-muted-foreground uppercase tracking-wider">
+              <div className="flex items-center w-full min-w-0 gap-4">
+                
+                {/* Colonne Statut (Alignée sur w-8) */}
+                <div className="flex-none w-8 flex justify-center">
+                  <span className="sr-only">Statut</span>
+                </div>
+                
+                {/* Colonne Correspondant (Alignée sur w-52) */}
+                <div className="flex-none w-52">
+                  Correspondant
+                </div>
+                
+                {/* Colonne Objet (Prend l'espace restant avec flex-1) */}
+                <div className="flex-1">
+                  Objet
+                </div>
+
+                {/* Colonne N° Expéditeur */}
+                {/* Note : Pour un alignement parfait, ajoutez 'w-24' au div parent du Badge dans votre code de ligne */}
+                <div className="flex-none w-24 text-center">
+                  N° Exp.
+                </div>
+
+                {/* Colonne Référence */}
+                {/* Note : Pour un alignement parfait, ajoutez 'w-24' au div parent du Badge dans votre code de ligne */}
+                <div className="flex-none w-24 text-center">
+                  Référence
+                </div>
+                
+              </div>
+
+              {/* Colonne Date (Alignée sur w-24 tout à droite) */}
+              <div className="flex-none w-24 text-right">
+                Date
+              </div>
+            </div>
             {filtered.map((courrier) => {
               const statut = STATUT_CONFIG[courrier.cloturePar ? 'finalise' : 'en_cours']
               const StatutIcon = statut.icon
@@ -350,6 +407,14 @@ export const CourrierListView = ({ courriers, loading, error, onSelect,  onEdit,
                               "Aucune description supplémentaire"}
                           </span>
                         )} */}
+                      </div>
+                      <div className="flex-none">
+                        <Badge
+                          variant="default"
+                          className="text-[10px] text-gray-900 dark:text-white" 
+                        >
+                          {courrier.numeroExpediteur}
+                        </Badge>
                       </div>
 
                       {/* Référence (S'aligne sagement à la fin ou en dessous) */}

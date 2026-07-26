@@ -9,7 +9,7 @@ export default function StatistiquePage() {
   const currentYear = new Date().getFullYear();
   
   // Initialisation dynamique : 1er janvier de l'année en cours et date du jour
-  const [dateDebut, setDateDebut] = useState(`${currentYear}-01-01`);
+  const [dateDebut, setDateDebut] = useState(new Date().toISOString().split('T')[0]);
   const [dateFin, setDateFin] = useState(new Date().toISOString().split('T')[0]);
 
   const handleSetToday = () => {

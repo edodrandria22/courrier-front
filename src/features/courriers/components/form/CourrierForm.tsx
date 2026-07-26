@@ -170,7 +170,7 @@ export const CourrierForm = ({ onSuccess, courrier, onClose }: Props) => {
       <form onSubmit={handleFormSubmit} className="p-6 space-y-8">
 
         {/* En-tête avec Switch Confidentiel */}
-        <div className="border-b border-border pb-4 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div className="pb-4 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div>
             {courrier ? (
               <h2 className="text-lg font-bold text-foreground">
@@ -200,15 +200,15 @@ export const CourrierForm = ({ onSuccess, courrier, onClose }: Props) => {
           </label>
         </div>
 
-        {/* {error && (
+        {error && (
           <div className="p-3 bg-destructive/10 text-destructive text-sm rounded-lg border border-destructive/20 flex items-center gap-2">
             <X className="w-4 h-4" /> {error}
           </div>
-        )} */}
+        )}
 
         
         {/* Informations sur le courrier (Objet & Description) */}
-        <div className="space-y-4 pt-4 border-t border-border">
+        <div className="space-y-4 pt-4">
           <h3 className="text-sm font-bold uppercase tracking-wider text-muted-foreground">Détails du document</h3>
           
           <div className="space-y-2">
@@ -318,7 +318,7 @@ export const CourrierForm = ({ onSuccess, courrier, onClose }: Props) => {
         </div>
 
         {/* Boutons d'actions */}
-        <div className="flex items-center justify-end gap-3 pt-6 border-t border-border">
+        <div className="flex items-center justify-end gap-3 pt-6">
           {onClose && (
             <button
               type="button"

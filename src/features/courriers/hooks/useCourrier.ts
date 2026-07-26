@@ -24,11 +24,11 @@ export const useCourrier = () => {
     }
   }, []);
 
-  const fetchCourriersByUser = useCallback(async (dateCursor?: string,isTraiterAt?: boolean|null) => {
+  const fetchCourriersByUser = useCallback(async (dateCursor?: string,isTraiterAt?: boolean|null,isRecu?: boolean|null) => {
     setLoading(true);
     setError(null);
     try {
-      const data = await courrierService.getCourriersByUser(dateCursor,isTraiterAt);
+      const data = await courrierService.getCourriersByUser(dateCursor,isTraiterAt,isRecu);
       
       setCourriers((prev) => {
         // Si on n'a pas de curseur, c'est le chargement initial : on remplace tout.
@@ -169,7 +169,7 @@ export const useCourrier = () => {
     } catch (err) {
       const errorMsg = err instanceof Error ? err.message : 'Erreur lors de la recuperation non lu'
       setError(errorMsg)
-      return { nonTraite: 0 };
+      return { nonTraite: 0 , nonLu : 0};
 
     } finally {
       setLoading(false)

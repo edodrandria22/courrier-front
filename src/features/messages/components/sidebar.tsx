@@ -104,28 +104,30 @@ export default function Sidebar({ user, onNavigate }: SidebarProps) {
   return (
     <aside className="w-64 bg-sidebar border-r border-sidebar-border flex flex-col h-screen">
       {/* Logo Image & Nom Projet */}
-      <div className="p-5 border-b border-sidebar-border">
-        <div className="flex items-center gap-3 group select-none">
+      <div className="p-6 border-b border-sidebar-border relative">
+        {/* Note : J'ai passé le conteneur en flex-col (colonne) et items-center (centré) */}
+        <div className="flex flex-col items-center gap-6 group select-none text-center mt-2 pb-2">
+          
           {/* Conteneur du Logo */}
-          <div className="relative w-10 h-10 rounded-xl overflow-hidden border border-sidebar-border bg-white shadow-sm group-hover:border-sidebar-primary/40 group-hover:shadow-md transition-all duration-300 flex items-center justify-center">
+          {/* Suppression des bordures, du fond blanc et de l'ombre. Agrandissement de la taille (w-48 h-28) */}
+          <div className="relative w-40 h-24 sm:w-48 sm:h-28 transition-all duration-300 flex items-center justify-center">
             <Image 
               src="/mesupres.jpg" 
               alt="Logo MESUPRES" 
               fill
-              className="object-contain p-1.5 group-hover:scale-105 transition-transform duration-300"
+              className="object-contain group-hover:scale-105 transition-transform duration-300"
               priority
             />
           </div>
           
-          {/* Texte de la Marque */}
+          {/* Texte en dessous du logo */}
           <div className="flex flex-col min-w-0">
-            <span className="text-sm font-bold tracking-wider text-sidebar-foreground group-hover:text-sidebar-primary transition-colors duration-300">
-              MESUPRES
-            </span>
-            <span className="text-[10px] text-muted-foreground font-medium tracking-normal truncate mt-0.5">
-              Enseignement Supérieur
+            {/* Ajout du texte "RAPPORT D'ACTIVITÉS" avec un grand espacement entre les lettres (tracking-widest) */}
+            <span className="text-sm font-bold tracking-[0.15em] sm:tracking-[0.2em] text-sidebar-foreground uppercase group-hover:text-sidebar-primary transition-colors duration-300">
+              Gestion de courrier
             </span>
           </div>
+
         </div>
       </div>
       {/* Actions List */}

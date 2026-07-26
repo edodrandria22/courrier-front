@@ -24,7 +24,8 @@ export async function GET(request: NextRequest) {
     const user = {
       id: payload.id,
       email: payload.email,
-      name: payload.nom,
+      nom: payload.nom,
+      prenom: payload.prenom,
       role: payload.role,
     };
 

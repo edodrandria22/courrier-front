@@ -23,6 +23,7 @@ interface HeaderProps {
 
 export default function Header({user,loading ,onMenuToggle, showMenu }: HeaderProps) {
   const router = useRouter();
+  console.log(user)
   const handleLogout = async () => {
     try {
       await fetch('/api/auth/logout', { method: 'POST' })
@@ -85,7 +86,7 @@ export default function Header({user,loading ,onMenuToggle, showMenu }: HeaderPr
               </div>
               <div className="text-left hidden sm:block">
                 <div className="text-sm font-semibold text-foreground">
-                  {user?.nom}
+                  {user?.nom} {user?.prenom}
                 </div>
                 <div className="text-xs text-muted-foreground">
                   {user?.email}
@@ -95,7 +96,7 @@ export default function Header({user,loading ,onMenuToggle, showMenu }: HeaderPr
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end" className="w-56">
             <div className="px-2 py-1.5">
-              <p className="text-sm font-semibold text-foreground">{user?.nom}</p>
+              <p className="text-sm font-semibold text-foreground">{user?.nom} {user?.prenom}</p>
               <p className="text-xs text-muted-foreground">{user?.email}</p>
             </div>
             <DropdownMenuSeparator />

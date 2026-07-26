@@ -10,7 +10,7 @@ import { User } from "@/features/auth/types/login";
 
 const userAdminSchema = z.object({
     nom: z.string().min(2, "Le nom doit faire au moins 2 caractères"),
-    prenom: z.string().min(2, "Le prénom doit faire au moins 2 caractères"),
+    prenom: z.string(),
     email: z.string().email("Adresse email invalide"),
     mdp: z.string().min(6, "6 caractères minimum"),
     idRole: z.string().min(1, "Veuillez choisir un rôle"),

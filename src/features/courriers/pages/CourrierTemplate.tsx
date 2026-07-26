@@ -48,11 +48,13 @@ export const CourrierTemplate = ({ initialCourrier, isRecherche }: CourrierTempl
       : { level: 'courriers' }
   );
   const [nbNonTraiteState, setNbNonTraiteState] = useState(0);
+  const [nbRecuState,setNbRecuState] = useState(0);
   
   // États de pagination distincts
   const [hasMoreCourriers, setHasMoreCourriers] = useState(true);
   const [hasMoreMessages, setHasMoreMessages] = useState(true);
   const [isTraiterAt, setIsTraiterAt] = useState<boolean | null>(null);
+  const [isRecu, setIsRecu] = useState<boolean | null>(null);
   const stepRef = useRef(step);
   useEffect(() => { stepRef.current = step }, [step]);
 
@@ -60,13 +62,16 @@ export const CourrierTemplate = ({ initialCourrier, isRecherche }: CourrierTempl
 
   useEffect(() => {
     const initCourriers = async () => {
-      const data = await fetchCourriersByUser(undefined, isTraiterAt);
+      const data = await fetchCourriersByUser(undefined, isTraiterAt,isRecu);
       if (data && data.length < nbLimitCourrier) setHasMoreCourriers(false);
     };
     const nonTraiter = getNbNonTraite();
     initCourriers();
-    nonTraiter.then(stat => setNbNonTraiteState(stat.nonTraite));
-  }, [fetchCourriersByUser, isTraiterAt]);
+    nonTraiter.then(stat => {
+      setNbNonTraiteState(stat.nonTraite);
+      setNbRecuState(stat.nonLu);
+    });
+  }, [fetchCourriersByUser, isTraiterAt,isRecu]);
  
 
   const loadMoreCourriers = async () => {
@@ -76,7 +81,7 @@ export const CourrierTemplate = ({ initialCourrier, isRecherche }: CourrierTempl
       lastDate = courriers[courriers.length - 1]?.isTraiterAt;
     }
     if (lastDate) {
-      const newItems = await fetchCourriersByUser(lastDate,isTraiterAt);
+      const newItems = await fetchCourriersByUser(lastDate,isTraiterAt,isRecu);
       if (!newItems || newItems.length < nbLimitCourrier) setHasMoreCourriers(false);
     }
   };
@@ -148,7 +153,7 @@ export const CourrierTemplate = ({ initialCourrier, isRecherche }: CourrierTempl
 
     // NOTIFICATION : Nouveau message reçu
     if (estPourMoi) {
-      setNbNonTraiteState(prev => prev + 1);
+      setNbRecuState(prev => prev + 1);
       addNotification(
         `📬 Nouveau message reçu - ${courrierConcerne.object}`,
         `De: ${incomingData.expediteur?.nom || 'Expéditeur'} - ${incomingData.observation?.substring(0, 50) || 'Contenu du message...'}`,
@@ -192,7 +197,14 @@ export const CourrierTemplate = ({ initialCourrier, isRecherche }: CourrierTempl
 
   // Topic "lectureMessage" : marquage lu/non lu en temps réel
   const handleLecture = useCallback((data: { id: number; courrier :Courrier;isReadAt: string | null ; numeroExpediteur: number; numeroDestinataire: number}) => {
-    setCourriers(prev => prev.map(m => Number(m.messageId) === data.id ? { ...m, isReadAt: data.isReadAt,  numero:data.numeroDestinataire, numRef: data.numeroExpediteur } : m));
+    const existe = courriers.some(m => Number(m.messageId) === data.id);
+
+    if (existe) {
+      setNbNonTraiteState(prev => prev + 1);
+      setNbRecuState(prev => prev - 1);
+    }
+
+    setCourriers(prev => prev.map(m => Number(m.messageId) === data.id ?  { ...m, isReadAt: data.isReadAt,  numero:data.numeroDestinataire, numRef: data.numeroExpediteur } : m));
     setMessages(prev => prev.map(m => m.id === data.id ? { ...m, isReadAt: data.isReadAt, numeroExpediteur: data.numeroExpediteur, numeroDestinataire: data.numeroDestinataire } : m));
     setStep(prev => {
        if (prev.level === 'messages' && prev.courrier.id === data.courrier.id) {
@@ -203,7 +215,7 @@ export const CourrierTemplate = ({ initialCourrier, isRecherche }: CourrierTempl
       }
       return prev;
     });
-  }, [setMessages]);
+  }, [setMessages, courriers, setNbNonTraiteState, setNbRecuState]);
 
  const handleCloturer = useCallback((data: { id: number; cloturePar: User | null ; dateValidation: string}) => {
   setCourriers(prev => prev.map(m => m.id === data.id ? { ...m, cloturePar: data.cloturePar , dateValidation: data.dateValidation } : m));
@@ -279,6 +291,9 @@ const handleLocalCloturation = useCallback(async (id: number) => {
           isTraiterAt={isTraiterAt}
           setHasMoreCourriers={setHasMoreCourriers}
           nbNonTraite={nbNonTraiteState}
+          isRecu={isRecu}
+          setIsRecu={setIsRecu}
+          nbIsRecu={nbRecuState}
         />
         {hasMoreCourriers && courriers.length > 0 && (
           <div className="flex justify-center px-4 pb-4 pt-2">

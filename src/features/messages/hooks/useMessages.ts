@@ -57,19 +57,41 @@ export const useMessages = (folder: MessageFolder = 'inbox') => {
   }, []);
 
   const marquerLu = useCallback(async (id: number) => {
-    const result = await messageService.marquerLu(id);
-    if (result.success) {
-      setMessages(prev => prev.map(m => m.id === id ? { ...m, isReadAt: new Date().toISOString() } : m));
+    setLoading(true);
+    setError(null);
+    try {
+      const result = await messageService.marquerLu(id);
+      if (result.success) {
+        setMessages(prev => prev.map(m => m.id === id ? { ...m, isReadAt: new Date().toISOString() } : m));
+      }
+      return result;
+    } catch (err: unknown) {
+      logger.exception('useMessages.marquerLu', err);
+      const msg = err instanceof Error ? err.message : 'Erreur lors du marquage comme lu';
+      setError(msg);
+      return { success: false, error: msg };
+    } finally {
+      setLoading(false);
     }
-    return result;
   }, []);
 
   const marquerNonLu = useCallback(async (id: number) => {
-    const result = await messageService.marquerNonLu(id);
-    if (result.success) {
-      setMessages(prev => prev.map(m => m.id === id ? { ...m, isReadAt: null } : m));
+    setLoading(true);
+    setError(null);
+    try {
+      const result = await messageService.marquerNonLu(id);
+      if (result.success) {
+        setMessages(prev => prev.map(m => m.id === id ? { ...m, isReadAt: null } : m));
+      }
+      return result;
+    } catch (err: unknown) {
+      logger.exception('useMessages.marquerNonLu', err);
+      const msg = err instanceof Error ? err.message : 'Erreur lors du marquage comme non lu';
+      setError(msg);
+      return { success: false, error: msg };
+    } finally {
+      setLoading(false);
     }
-    return result;
   }, []);
   const recupererExterne = useCallback(async (id: number): Promise<{ success: boolean; error?: string }> => {
     setLoading(true);
