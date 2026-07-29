@@ -220,6 +220,7 @@ const handleLocalCloturation = useCallback(async (id: number) => {
         );
         setStep({ level: 'courriers' });
         
+        
       }
      
     } catch (err) {

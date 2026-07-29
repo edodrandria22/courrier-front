@@ -13,6 +13,7 @@ import { useTransferer } from '../hooks/useTransferer'
 import { useUtilisateurs } from '@/features/utilisateurs/hooks/useUtilisateurs'
 import type { User as Utilisateur} from '@/features/auth/types/login'
 import { format } from 'date-fns';
+import { routerServerGlobal } from 'next/dist/server/lib/router-utils/router-server-context'
 
 // Si vous utilisiez le contexte pour autre chose, vous pouvez le garder, 
 // mais pour la recherche dynamique nous avons besoin du hook useUtilisateurs.
@@ -111,6 +112,7 @@ export const TransfererDialog = ({ messageId, onSuccess }: Props) => {
 
     if (result.success) {
       setOpen(false)
+      
       setSelectedUserId(null)
       setObservation('')
       setAttachments([])

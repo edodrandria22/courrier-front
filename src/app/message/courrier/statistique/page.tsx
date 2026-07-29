@@ -37,7 +37,7 @@ export default function StatistiquePage() {
     { name: 'Envoyés', description:"Courriers envoyés", value: statistique.envoye || 0, color: '#52c41a' },
     { name: 'Traités', description:"Courriers traités", value: statistique.traite || 0, color: '#faad14' },
     { name: 'Arrivée', description:"Courriers arrivés (lu)", value: statistique.lu || 0, color: '#722ed1' },
-    { name: 'Non lu', description:"Courriers non arrivés mais déja envoyer par une autre utilisateur", value: statistique.nonLu || 0, color: '#eb2f96' },
+    { name: 'En route', description:"Courriers non arrivés mais déja envoyer par une autre utilisateur", value: statistique.nonLu || 0, color: '#eb2f96' },
   ].filter(item => item.value > 0) : []; // On enlève les valeurs à 0
 
   // Création d'une clé unique basée sur les valeurs pour forcer Recharts à se rafraîchir
