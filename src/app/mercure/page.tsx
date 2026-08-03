@@ -31,7 +31,7 @@ export default function MercureTestPage() {
     const [status, setStatus] = useState<'connecting' | 'connected' | 'error'>('connecting');
 
     const MERCURE_HUB_URL = 'http://'+`${process.env.NEXT_PUBLIC_IP_BACKEND}` + ':4000/.well-known/mercure'; 
-    const TOPIC = 'message'; 
+    const TOPIC = 'lectureMessage'; 
     
     useEffect(() => {
         const url = new URL(MERCURE_HUB_URL);

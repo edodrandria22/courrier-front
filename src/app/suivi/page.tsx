@@ -67,11 +67,11 @@ export default function TrackingPage() {
             </div>
             
             <div className="space-y-2">
-              <h1 className="text-3xl font-black uppercase tracking-tighter text-foreground italic">
-                Suivi <span className="text-primary not-italic tracking-normal">ESPA</span>
+              <h1 className="text-3xl font-black tracking-tighter text-foreground italic">
+                e- <span className="text-primary not-italic tracking-normal">TARATASY</span>
               </h1>
               <p className="text-[12px] text-muted-foreground/80 font-semibold leading-relaxed max-w-[280px] mx-auto uppercase tracking-widest">
-                Recevez votre bilan détaillé par email instantanément.
+                Suivre votre courrier en ligne.
               </p>
             </div>
           </div>
@@ -79,17 +79,17 @@ export default function TrackingPage() {
           {/* Formulaire */}
           <form onSubmit={handleSubmit} className="px-8 pb-10 space-y-6">
             <div className="space-y-3">
-              <label 
+              {/* <label 
                 htmlFor="reference" 
                 className="block text-[10px] font-black uppercase tracking-[0.25em] text-foreground/50 ml-1"
               >
-                Référence du document
-              </label>
+                Référence du courrier
+              </label> */}
               <div className="relative group">
                 <Hash className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground/30 group-focus-within:text-primary group-focus-within:rotate-12 transition-all duration-300 pointer-events-none" />
                 <Input
                   id="reference"
-                  placeholder="Ex: ESPA-2026-XXXX"
+                  placeholder="Référence du courrier"
                   value={reference}
                   onChange={(e) => setReference(e.target.value)}
                   disabled={loading || isSuccess}
@@ -174,9 +174,7 @@ export default function TrackingPage() {
 
         </div>
         
-        <p className="text-center text-[10px] text-muted-foreground/40 font-bold uppercase tracking-[0.3em]">
-          Système sécurisé ESPA 2026
-        </p>
+        
       </div>
     </div>
   );

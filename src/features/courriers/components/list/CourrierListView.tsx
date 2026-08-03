@@ -408,14 +408,16 @@ export const CourrierListView = ({ courriers, loading, error, onSelect,  onEdit,
                           </span>
                         )} */}
                       </div>
-                      <div className="flex-none">
-                        <Badge
-                          variant="default"
-                          className="text-[10px] text-gray-900 dark:text-white" 
-                        >
-                          {courrier.numeroExpediteur}
-                        </Badge>
-                      </div>
+                      {courrier.numeroExpediteur && (
+                        <div className="flex-none">
+                          <Badge
+                            variant="default"
+                            className="text-[10px] text-gray-900 dark:text-white" 
+                          >
+                            {courrier.numeroExpediteur}
+                          </Badge>
+                        </div>
+                      )}
 
                       {/* Référence (S'aligne sagement à la fin ou en dessous) */}
                       <div className="flex-none">

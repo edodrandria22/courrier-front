@@ -24,18 +24,15 @@ export const LoginForm = () => {
   return (
     /* Retour au style original : bg-card/50 + backdrop-blur */
     <Card className="border-border bg-card/50 backdrop-blur-sm shadow-2xl">
-      <CardHeader className="space-y-1">
-        <CardTitle className="text-2xl font-bold tracking-tight">Connexion</CardTitle>
-        <CardDescription className="text-muted-foreground">
-          Accédez à votre messagerie universitaire
-        </CardDescription>
+      <CardHeader className="space-y-1 text-center">
+        <CardTitle className="text-2xl font-bold tracking-tight text-center">Connexion</CardTitle>
       </CardHeader>
 
       <CardContent>
         <form onSubmit={handleSubmit} className="space-y-5">
           {error && (
             <div className="p-3 bg-destructive/10 text-destructive text-xs font-medium rounded-xl border border-destructive/20 animate-in fade-in slide-in-from-top-1">
-              {error}
+              {error} 
             </div>
           )}
 

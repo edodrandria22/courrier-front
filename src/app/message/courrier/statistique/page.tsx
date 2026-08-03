@@ -33,10 +33,10 @@ export default function StatistiquePage() {
   // Transformation des données pour Recharts
   const data = statistique ? [
     { name: 'Non traités', description:"Courriers non traités", value: statistique.nonTraite, color: '#ff4d4f' },
-    { name: 'Reçus', description:"Courriers reçus", value: statistique.recu || 0, color: '#1890ff' },
-    { name: 'Envoyés', description:"Courriers envoyés", value: statistique.envoye || 0, color: '#52c41a' },
+    { name: 'Boîte de réception', description:"Courriers reçus", value: statistique.recu || 0, color: '#1890ff' },
+    { name: "Boîte d'envoi", description:"Courriers envoyés", value: statistique.envoye || 0, color: '#52c41a' },
     { name: 'Traités', description:"Courriers traités", value: statistique.traite || 0, color: '#faad14' },
-    { name: 'Arrivée', description:"Courriers arrivés (lu)", value: statistique.lu || 0, color: '#722ed1' },
+    { name: 'Arrivée', description:"Courriers arrivés", value: statistique.lu || 0, color: '#722ed1' },
     { name: 'En route', description:"Courriers non arrivés mais déja envoyer par une autre utilisateur", value: statistique.nonLu || 0, color: '#eb2f96' },
   ].filter(item => item.value > 0) : []; // On enlève les valeurs à 0
 
@@ -45,7 +45,7 @@ export default function StatistiquePage() {
 
   return (
     <div className="p-8 h-screen flex flex-col">
-      <h1 className="text-2xl font-bold mb-6">Répartition des Courriers</h1>
+      <h1 className="text-2xl font-bold mb-6">Tableau de bord</h1>
       
       {/* Zone des filtres (Toujours visible) */}
       <div className="flex gap-4 mb-8 items-end">
@@ -78,13 +78,13 @@ export default function StatistiquePage() {
         </button>
         
         {/* Bouton Annuel */}
-        <button
+        {/* <button
             type="button"
             onClick={handleSetAnnuel}
             className="px-4 py-2 rounded border border-gray-300 text-gray-700 bg-transparent hover:bg-gray-50 transition-colors font-medium h-[42px] dark:border-gray-600 dark:text-gray-200 dark:hover:bg-gray-800"
             >
             Annuel
-        </button>
+        </button> */}
       </div>
 
       {/* Zone du graphique (Affichage conditionnel) */}

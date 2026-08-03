@@ -27,10 +27,10 @@ function CourrierContent() {
                     {/* Titre et contexte adaptés */}
                     <div>
                         <h1 className="text-xl font-bold tracking-tight text-slate-900 dark:text-slate-50">
-                            Gestion des Courriers
+                            Enregistrement
                         </h1>
                         <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
-                            Rédigez un nouveau document ou appliquez un modèle existant.
+                            Enregistrer un nouveau courrier ou transférer un modèle enregistré.
                         </p>
                     </div>
                     

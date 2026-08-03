@@ -35,7 +35,7 @@ export default function Sidebar({ user, onNavigate }: SidebarProps) {
     });
     actionItems.push({
       id: 'statistique',
-      name: 'Statistique',
+      name: 'Tableau de bord',
       icon: BarChart3,
       path: '/message/courrier/statistique',
     })
@@ -123,7 +123,7 @@ export default function Sidebar({ user, onNavigate }: SidebarProps) {
           {/* Texte en dessous du logo */}
           <div className="flex flex-col min-w-0">
             {/* Ajout du texte "RAPPORT D'ACTIVITÉS" avec un grand espacement entre les lettres (tracking-widest) */}
-            <span className="text-sm font-bold tracking-[0.15em] sm:tracking-[0.2em] text-sidebar-foreground uppercase group-hover:text-sidebar-primary transition-colors duration-300">
+            <span className="text-sm font-black tracking-[0.15em] sm:tracking-[0.2em] text-sidebar-foreground">
               Gestion de courrier
             </span>
           </div>
@@ -210,7 +210,7 @@ export default function Sidebar({ user, onNavigate }: SidebarProps) {
         <div className="flex items-center gap-2 px-2">
           <ShieldCheck className="w-4 h-4 text-sidebar-primary" />
           <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider">
-            MESUPRES Sécurisé
+            PLATEFORME Sécurisé
           </span>
         </div>
       </div>

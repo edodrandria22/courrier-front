@@ -10,25 +10,29 @@ import { Mail, Lock, Share2, Clock, ShieldCheck, ArrowRight, MapPin, Search } fr
 // ==========================================
 
 const APP_CONFIG = {
-  name: "Mesupres Courrier",
-  subName: "Enseignement Supérieur",
-  badge: "PLATEFORME OFFICIELLE - Mesupres",
+  name: "Ministère de l'Enseignement Supérieur et de la recherche scientifiques",
+  // subName: "Enseignement Supérieur",
+  badge: "PLATEFORME OFFICIELLE",
   title: {
-    normal: "Gestion de Courrier",
+    depart:"e-",
+    normal: "TARATASY",
     gradient: "Mesupres"
   },
-  description: "Communiquez efficacement avec vos collègues. Envoyez, recevez et gérez vos courriers avec des pièces jointes de manière intuitive et sécurisée.",
+  description: "Bienvenue sur e-Taratasy, la plateforme numérique de suivi des courriers du MESUPRES. Consultez l'état d'avancement de vos courriers en temps réel, où que vous soyez.",
   contact: {
     email: "contact@espa-poly.mg",
     address: "Vontovorona, Antananarivo 101"
   },
-  copyright: `© ${new Date().getFullYear()}. Application Mesupres Courrier.`,
+  copyright: `© ${new Date().getFullYear()}. e-TARATASY.`,
   paths: {
     logo: "/mesupres.jpg",
     logoFooter: "/logo-edogsanmhr.png",
     login: "/login",
     suivi: "/suivi",
     home: "/"
+  },
+  developer: {
+    name: "DSINT-MESUPRES",
   }
 }
 
@@ -38,7 +42,7 @@ const FEATURES_DATA = [
     icon: Mail,
     color: "text-primary",
     title: "Courriers",
-    description: "Envoyez et recevez des courriers instantanés avec mise en forme riche."
+    description: "Envoyez et recevez des courriers instantanés."
   },
   {
     icon: Search,
@@ -56,7 +60,7 @@ const FEATURES_DATA = [
     icon: Lock,
     color: "text-secondary",
     title: "Sécurisé",
-    description: "Vos échanges sont chiffrés et protégés selon les normes Mesupres."
+    description: "Vos échanges sont chiffrés et protégés."
   }
 ]
 
@@ -128,27 +132,27 @@ export default function Home() {
       
       {/* --- NAVIGATION --- */}
       <nav className="flex items-center justify-between px-6 py-4 border-b border-border backdrop-blur-md sticky top-0 z-50 bg-background/80">
-        <Link href={APP_CONFIG.paths.home} className="flex items-center gap-3 group">
-          <div className="relative w-10 h-10 rounded-lg overflow-hidden shadow-[0_0_20px_rgba(var(--primary),0.2)] group-hover:shadow-primary/40 transition-all duration-300">
+        {/* <Link href={APP_CONFIG.paths.home} className="flex items-center gap-4 group">
+          <div className="flex flex-col">
+            <span className="text-2xl font-bold tracking-tight text-foreground leading-none group-hover:text-primary transition-colors">
+              {APP_CONFIG.name}
+            </span>
+            <span className="text-[10px] uppercase tracking-tighter text-muted-foreground font-medium mt-1">
+              {APP_CONFIG.badge}
+            </span>
+          </div>
+        </Link> */}
+          <div className="relative w-20 h-20">
             <Image 
               src={APP_CONFIG.paths.logo} 
-              alt={`Logo ${APP_CONFIG.name}`}
+              alt={`Logo ${APP_CONFIG.title.gradient}`}
               fill
-              className="object-cover"
+              className="object-contain object-left"
               priority
             />
           </div>
-          <div className="flex flex-col">
-            <span className="text-xl font-bold tracking-tight text-foreground leading-none group-hover:text-primary transition-colors">
-              {APP_CONFIG.name}
-            </span>
-            <span className="text-[10px] uppercase tracking-tighter text-muted-foreground font-medium">
-              {APP_CONFIG.subName}
-            </span>
-          </div>
-        </Link>
 
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-4 ml-auto">
           <Link href={APP_CONFIG.paths.login}>
             <button
               style={BUTTON_STYLES.navLogin}
@@ -166,7 +170,7 @@ export default function Home() {
       </nav>
 
       {/* --- HERO SECTION --- */}
-      <section className="px-6 py-24 text-center max-w-5xl mx-auto relative overflow-hidden">
+      <section className="px-6 py-24 text-center max-w-5xl mx-auto relative overflow-hidden border-2 border-primary/20 rounded-3xl bg-gradient-to-br from-card via-card/80 to-primary/5 backdrop-blur-md shadow-2xl shadow-primary/10">
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-primary/5 blur-[120px] rounded-full -z-10" />
         
         <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 border border-primary/20 text-primary text-xs font-bold mb-8 animate-pulse">
@@ -175,10 +179,8 @@ export default function Home() {
         </div>
 
         <h1 className="text-5xl md:text-7xl font-extrabold text-foreground mb-8 leading-[1.1] tracking-tighter">
+          <span className="text-red-600">{APP_CONFIG.title.depart}</span>
           {APP_CONFIG.title.normal} <br />
-          <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-secondary">
-            {APP_CONFIG.title.gradient}
-          </span>
         </h1>
         
         <p className="text-xl text-muted-foreground mb-10 max-w-2xl mx-auto leading-relaxed font-light">
@@ -186,7 +188,7 @@ export default function Home() {
         </p>
 
         <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-          <Link href={APP_CONFIG.paths.login}>
+          {/* <Link href={APP_CONFIG.paths.login}>
             <button
               style={BUTTON_STYLES.heroPrimary}
               onMouseEnter={(e) => {
@@ -201,7 +203,7 @@ export default function Home() {
               Commencer maintenant
               <ArrowRight className="w-5 h-5 transition-transform" />
             </button>
-          </Link>
+          </Link> */}
 
           <Link href={APP_CONFIG.paths.suivi} className="w-full sm:w-auto">
             <button
@@ -240,54 +242,24 @@ export default function Home() {
       </section>
 
       {/* --- FOOTER --- */}
-      <footer className="border-t border-border bg-card/40 px-6 py-12">
-        <div className="max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-center gap-8 text-center md:text-left">
+      <footer className="border-t border-border bg-card/40 px-6 py-6">
           
           {/* Logo & Description */}
-          <div className="space-y-4 max-w-sm">
-            <div className="flex items-center justify-center md:justify-start gap-3">
-              <div className="relative w-8 h-8 rounded-md overflow-hidden border border-border">
-                <Image 
-                  src={APP_CONFIG.paths.logo} 
-                  alt="Logo Footer"
-                  fill
-                  className="object-cover"
-                />
-              </div>
-              <span className="text-xl font-bold tracking-tight text-foreground italic uppercase">
-                {APP_CONFIG.name}
-              </span>
-            </div>
-            <p className="text-muted-foreground text-sm">
-              Plateforme officielle du Mesupres. 
-            </p>
-          </div>
-
-          {/* Contact */}
-          <div className="flex flex-col items-center md:items-end gap-3 text-sm text-muted-foreground">
-            <h4 className="font-bold text-foreground uppercase text-xs tracking-[0.2em] mb-2">Nous contacter</h4>
-            <div className="flex items-center gap-2 hover:text-primary transition-colors">
-              <Mail className="w-4 h-4 text-primary" /> 
-              <span>{APP_CONFIG.contact.email}</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <MapPin className="w-4 h-4 text-secondary" /> 
-              <span className="italic">{APP_CONFIG.contact.address}</span>
-            </div>
-          </div>
-        </div>
-
+          
         {/* Barre Copyright */}
-        <div className="relative max-w-6xl mx-auto pt-8 mt-8 border-t border-border/50">
+        <div className="relative max-w-6xl mx-auto">
           <p className="text-center text-muted-foreground text-[10px] font-medium tracking-[0.2em] uppercase px-12">
             {APP_CONFIG.copyright}
+          </p>
+          <p className="text-center text-amber-600 text-[10px] font-medium tracking-[0.2em] uppercase px-12">
+            {APP_CONFIG.developer.name}
           </p>
 
           <div className="absolute right-4 top-1/2 -translate-y-1/2">
             <img
               src={APP_CONFIG.paths.logoFooter}
               alt="EDOGSANMHR"
-              className="h-6 w-auto opacity-80 hover:opacity-100 transition duration-300"
+              className="h-3 w-auto opacity-80 hover:opacity-100 transition duration-300"
             />
           </div>
         </div>

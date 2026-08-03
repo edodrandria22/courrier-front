@@ -19,9 +19,15 @@ export const THEME_PRESETS: ThemePreset[] = [
     primary: 'oklch(0.70 0.17 155)',
     secondary: 'oklch(0.75 0.15 45)',
   },
+  {
+    id: 'redGreen',
+    name: 'Rouge & Vert',
+    primary: 'oklch(0.63 0.24 29)',    // Rouge
+    secondary: 'oklch(0.72 0.21 142)',  // Vert
+  },
 ]
 
-export const DEFAULT_PRESET_ID = 'cyan'
+export const DEFAULT_PRESET_ID = 'redGreen'
 
 /**
  * Derive all CSS variable overrides from a primary + secondary color pair.

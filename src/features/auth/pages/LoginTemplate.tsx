@@ -42,12 +42,8 @@ export const LoginTemplate = () => {
                             />
                         </div> */}
                         <h1 className="text-3xl font-black tracking-tighter text-foreground group-hover:text-primary transition-colors italic">
-                            ESPA COURIER
+                            <span className="text-red-600">e-</span>TARATASY
                         </h1>
-                        <div className="flex items-center justify-center gap-2 mt-1">
-                            <ShieldCheck className="w-3 h-3 text-primary" />
-                            <p className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground font-bold">Portail Polytechnique</p>
-                        </div>
                     </Link>
                 </div>
 
@@ -55,9 +51,7 @@ export const LoginTemplate = () => {
                 <LoginForm />
 
                 {/* Footer discret */}
-                <p className="mt-8 text-center text-[10px] text-muted-foreground uppercase tracking-[0.3em] font-medium">
-                    &copy; 2026 Ecole Polytechnique Vontovorona
-                </p>
+                
             </div>
         </div>
         </>
