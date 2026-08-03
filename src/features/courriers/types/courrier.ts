@@ -52,7 +52,7 @@ export interface MessageCourrier {
   courrier: Courrier;
   
   // Relations utilisateurs
-  expediteur: User;
+  expediteur?: User;
   destinataire: User;
 
   fichiers: PieceJointe[];

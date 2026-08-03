@@ -293,9 +293,15 @@ export const CourrierListView = ({ courriers, loading, error, onSelect,  onEdit,
               const isLu = !!courrier.isReadAt
               const isSend = courrier.isSend ?? false
               const isConfidentiel = courrier.isConfidentiel
-              const cible = isSend ? courrier.destinataire : courrier.expediteur;
+              var cible = isSend ? courrier.destinataire : courrier.expediteur;
+              if(isSend == false && !cible)
+              {
+                cible = courrier.destinataire;
+              }
+
+
               // On génère le nom complet proprement sans risquer d'afficher "undefined"
-              const nomComplet = cible ? `${cible.nom || ''} ${cible.prenom || ''}`.trim() : "";
+              const nomComplet = cible ? `${cible.nom || ''} ${cible.prenom || ''}`.trim() : '';
 
               return (
                 <div

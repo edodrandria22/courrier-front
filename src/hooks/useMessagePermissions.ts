@@ -43,8 +43,8 @@ export function useMessagePermissions(
   const isMessageVisible = (message: MessageCourrier): boolean => {
     if (!currentUserId) return false;
     return (
-      String(message.expediteur.id) === String(currentUserId) ||
-      String(message.destinataire.id) === String(currentUserId)
+      String(message.expediteur?.id) === String(currentUserId) ||
+      String(message.destinataire?.id) === String(currentUserId)
     );
   };
 

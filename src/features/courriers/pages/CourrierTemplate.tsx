@@ -153,7 +153,12 @@ export const CourrierTemplate = ({ initialCourrier, isRecherche }: CourrierTempl
 
     // NOTIFICATION : Nouveau message reçu
     if (estPourMoi) {
-      setNbRecuState(prev => prev + 1);
+      if(!incomingData.expediteur){
+        setNbNonTraiteState(prev => prev + 1);
+      }
+      else{
+        setNbRecuState(prev => prev + 1);
+      }
       addNotification(
         `📬 Nouveau message reçu - ${courrierConcerne.object}`,
         `De: ${incomingData.expediteur?.nom || 'Expéditeur'} - ${incomingData.observation?.substring(0, 50) || 'Contenu du message...'}`,

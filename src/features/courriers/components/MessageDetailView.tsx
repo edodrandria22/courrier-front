@@ -45,7 +45,7 @@ export const MessageDetailView = ({ courrier, message, messages, currentUserId, 
   // const hasMarkedRef = useRef(false);
   const isConfidentiel = courrier.isConfidentiel; // Vérification de la confidentialité
   const router = useRouter();
-  const isValidExterne = message.destinataire.id === 2 && currentUserId === message.expediteur.id.toString();
+  const isValidExterne = message.destinataire.id === 2 && currentUserId === message.expediteur?.id.toString();
   // const handleMarkAsUnread = async () => {
   //   const result = await marquerNonLu(message.id);
   //   if (result.success) {
@@ -160,14 +160,14 @@ export const MessageDetailView = ({ courrier, message, messages, currentUserId, 
             <div className="flex items-center gap-2 flex-1 min-w-0">
               <Avatar className="h-9 w-9 border border-border shrink-0">
                 <AvatarFallback className="bg-muted/30 text-primary text-xs font-bold">
-                  {initials(message.expediteur.nom)}
+                  {initials(message.expediteur?.nom || '')}
                 </AvatarFallback>
               </Avatar>
               <div className="min-w-0">
-                <p className="text-xs font-bold text-foreground">{message.expediteur.nom}</p>
-                {message.expediteur.adresse && (
+                <p className="text-xs font-bold text-foreground">{message.expediteur?.nom}</p>
+                {message.expediteur?.adresse && (
                   <p className="text-[10px] text-muted-foreground/70 flex items-center gap-1 truncate">
-                    <MapPin className="w-2.5 h-2.5 shrink-0" /> {message.expediteur.adresse}
+                    <MapPin className="w-2.5 h-2.5 shrink-0" /> {message.expediteur?.adresse}
                   </p>
                 )}
               </div>

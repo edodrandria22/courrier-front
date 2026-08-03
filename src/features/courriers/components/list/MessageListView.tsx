@@ -564,7 +564,7 @@ export const MessageListView = ({ courrier, messages, loading, error, currentUse
                             {/* 2. Expéditeur */}
                             <td className="px-4 py-3 whitespace-nowrap">
                               <span className={cn('text-sm', !isRead ? 'font-bold text-foreground' : 'font-medium text-foreground/80')}>
-                                {message.expediteur.nom} {message.expediteur.prenom}
+                                {message.expediteur?.nom} {message.expediteur?.prenom}
                               </span>
                             </td>
 
