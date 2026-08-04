@@ -111,11 +111,11 @@ export const useCourrier = () => {
       setLoading(false);
     }
   }, [setMessages]);
-  const createCourrier = useCallback(async (data: Courrier): Promise<{ success: boolean; error?: string , courrier?: Courrier}> => {
+  const createCourrier = useCallback(async (data: Courrier, files?: File[]): Promise<{ success: boolean; error?: string , courrier?: Courrier}> => {
     setLoading(true);
     setError(null);
     try {
-      const result = await courrierService.createCourrier(data);
+      const result = await courrierService.createCourrier(data, files);
       if (!result.success) setError(result.error ?? 'Erreur lors de la création');
       return result;
     } catch (err: unknown) {

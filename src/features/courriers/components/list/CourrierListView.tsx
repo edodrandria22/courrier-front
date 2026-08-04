@@ -146,7 +146,7 @@ export const CourrierListView = ({ courriers, loading, error, onSelect,  onEdit,
             <div className="flex items-center gap-1 border border-border rounded-lg p-0.5 bg-muted/20 sm:ml-auto">
               <button
                 type="button"
-                onClick={() => { setIsTraiterAt(null); setHasMoreCourriers?.(true); }}
+                onClick={() => { setIsTraiterAt(null); setIsRecu?.(null); setHasMoreCourriers?.(true); }}
                 className={cn(
                   "px-2.5 py-1 rounded-md text-xs font-medium transition-all",
                   isTraiterAt === null
@@ -158,7 +158,7 @@ export const CourrierListView = ({ courriers, loading, error, onSelect,  onEdit,
               </button>
               <button
                 type="button"
-                onClick={() => { setIsTraiterAt(true); setHasMoreCourriers?.(true); }}
+                onClick={() => { setIsTraiterAt(true); setIsRecu?.(null); setHasMoreCourriers?.(true); }}
                 className={cn(
                   "px-2.5 py-1 rounded-md text-xs font-medium transition-all flex items-center gap-1.5",
                   isTraiterAt === true

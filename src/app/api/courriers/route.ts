@@ -7,5 +7,5 @@ export async function GET(request: NextRequest) {
 
 export async function POST(request: NextRequest) {
   const requiredFields = ["object"];
-  return callApiPost(request, "/courriers", requiredFields);
+  return callApiPost(request, "/courriers", requiredFields, true);
 }

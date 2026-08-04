@@ -1,13 +1,15 @@
 'use client'
 
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 import { Card } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
-import { Send, X, User, Lock, CheckCircle, ArrowRight, Copy, Check, Plus, Trash2 } from 'lucide-react'
+import { Send, X, User, Lock, CheckCircle, ArrowRight, Copy, Check, Plus, Trash2, Paperclip, FileText } from 'lucide-react'
 import { useCourrier } from '../../hooks/useCourrier'
 import { Courrier, DetailPersonne } from '../../types/courrier'
+import { Attachment } from '@/features/messages/types/compose'
+import { cn } from '@/lib/utils'
 
 interface Props {
   onSuccess: () => void,
@@ -30,9 +32,26 @@ export const CourrierForm = ({ onSuccess, courrier, onClose }: Props) => {
   const [formData, setFormData] = useState({
     object: courrier?.object || '',
     description: courrier?.description || '',
+    observation: courrier?.observation || '',
     isConfidentiel: courrier?.isConfidentiel || false,
     detailPersonnes: initialPersonnes // Remplacement des champs plats par un tableau
-  })
+  });
+
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const [attachments, setAttachments] = useState<Attachment[]>([]);
+    const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = Array.from(e.target.files || [])
+    const newAttachments = files.map((file) => ({
+      file,
+      id: `${Date.now()}-${Math.random().toString(36).substring(2, 9)}`,
+    }))
+    
+    setAttachments((prev) => [...prev, ...newAttachments])
+    if (fileInputRef.current) fileInputRef.current.value = ''
+  }
+  const handleRemoveAttachment = (id: string) => {
+    setAttachments((prev) => prev.filter((att) => att.id !== id))
+  }
 
   // Gestion des champs simples (Objet, Description)
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -67,6 +86,7 @@ export const CourrierForm = ({ onSuccess, courrier, onClose }: Props) => {
       setBackupData({
         object: formData.object,
         description: formData.description,
+        observation: formData.observation,
         detailPersonnes: formData.detailPersonnes, // On sauvegarde la liste
       })
 
@@ -85,6 +105,7 @@ export const CourrierForm = ({ onSuccess, courrier, onClose }: Props) => {
         isConfidentiel: false,
         object: backupData?.object || '',
         description: backupData?.description || '',
+        observation: backupData?.observation || '',
         // On restaure la liste ou on met une liste vide par défaut
         detailPersonnes: backupData?.detailPersonnes || [{ ...defaultPersonne }],
       }))
@@ -104,7 +125,8 @@ export const CourrierForm = ({ onSuccess, courrier, onClose }: Props) => {
     if (courrier) {
       result = await updateCourrier(courrier.id || 0, courrierData);
     } else {
-      result = await createCourrier(courrierData);
+      const files = attachments.map((att) => att.file)
+      result = await createCourrier(courrierData, files);
     }
     
     if (result.success) {
@@ -235,6 +257,71 @@ export const CourrierForm = ({ onSuccess, courrier, onClose }: Props) => {
               className="resize-none bg-background/50 border-border disabled:opacity-50"
               disabled={isFieldDisabled}
             />
+          </div>
+        </div>
+        <div className="space-y-4 pt-4">
+          <div className="space-y-2">
+            <label className="text-sm font-semibold text-foreground">Observation</label>
+            <Textarea
+              name="observation"
+              value={formData.observation}
+              onChange={handleInputChange}
+              rows={5}
+              placeholder="Détails supplémentaires..."
+              className="resize-none bg-background/50 border-border disabled:opacity-50"
+              disabled={isFieldDisabled}
+            />
+          </div>
+          <div className="space-y-2">
+              <label className="text-sm font-semibold text-foreground">
+                Documents <span className="text-muted-foreground font-normal">(optionnel)</span>
+              </label>
+              <div
+                onClick={() => !loading && fileInputRef.current?.click()}
+                className={cn(
+                  'border-2 border-dashed border-border rounded-lg p-6 text-center transition-all group',
+                  loading ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer hover:bg-accent/5 hover:border-primary/40'
+                )}
+              >
+                <input
+                  ref={fileInputRef}
+                  type="file"
+                  multiple
+                  onChange={handleFileChange}
+                  className="hidden"
+                  disabled={loading}
+                />
+                <Paperclip className="w-6 h-6 mx-auto mb-2 text-muted-foreground/50 group-hover:text-primary/50 group-hover:scale-110 transition-all" />
+                <p className="text-xs font-medium text-muted-foreground">
+                  Cliquez pour ajouter des fichiers
+                </p>
+              </div>
+
+              {attachments.length > 0 && (
+                <div className="space-y-2">
+                  {attachments.map((att) => (
+                    <div
+                      key={att.id}
+                      className="flex items-center justify-between p-2 bg-muted/30 border border-border rounded-lg text-xs"
+                    >
+                      <div className="flex items-center gap-2 truncate text-foreground">
+                        <FileText className="w-4 h-4 text-primary shrink-0" />
+                        <span className="truncate max-w-[160px] sm:max-w-[300px] font-medium">{att.file.name}</span>
+                      </div>
+                      <Button
+                        type="button"
+                        variant="ghost"
+                        size="icon"
+                        onClick={() => handleRemoveAttachment(att.id)}
+                        className="h-6 w-6 text-destructive hover:bg-destructive/10 shrink-0"
+                        disabled={loading}
+                      >
+                        <X className="w-3 h-3" />
+                      </Button>
+                    </div>
+                  ))}
+                </div>
+              )}
           </div>
         </div>
         {/* 4. Boucle sur la liste des demandeurs */}

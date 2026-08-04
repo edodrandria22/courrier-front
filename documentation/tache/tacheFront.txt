@@ -129,7 +129,10 @@ GET http://localhost:3000/api/notifications/subscribe 404 (Not Found)
     --recherche avec filtre entre date de creation courrier --ok -- 30mn
     --retour apres recherche tsy mijanona filtre -- ok -- 30 mn
 
-
-redirection vers boite d'envoie apres insertion transfere courrier -- a faire 
-page par defaut rouge -- a faire 
-changement de nombre de non traite meme si on ne clique pas
+04/08/2026
+    --changer page pour inserer nouvelle courrier avec observation et fichier jointe -- ok -- 60mn
+    --le status doit etre arrive pour le message detail -- a faire -- 30mn
+    --page pour modifier courrier -- a faire -- 60mn
+    --redirection vers boite d'envoie apres insertion transfere courrier -- a faire 
+    --page par defaut rouge -- a faire 
+    --changement de nombre de non traite meme si on ne clique pas

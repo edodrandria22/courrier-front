@@ -114,18 +114,30 @@ export const courrierService = {
     }
   },
 
-  createCourrier: async (data: Courrier): Promise<{ success: boolean; error?: string; courrier?: Courrier }> => {
+  createCourrier: async (data: Courrier, files: File[] = []): Promise<{ success: boolean; error?: string; courrier?: Courrier }> => {
     try {
       const fetchWithAuth = useFetchAuth();
+      const formData = new FormData();
+
+      // 1. Champs simples
+      formData.append('object', data.object);
+      formData.append('description', data.description || '');
+      formData.append('isConfidentiel', (data.isConfidentiel ?? false).toString());
+      formData.append('observation', data.observation || '');
+
+      formData.append('detailPersonnes', JSON.stringify(data.detailPersonnes));
+
+      // 3. Fichiers (si vous réactivez l'envoi de fichiers)
+      if (files) {
+        Array.from(files).forEach((file) => {
+          formData.append('fichiers[]', file);
+        });
+      }
+
+      // 4. Envoi de la requête
       const res = await fetchWithAuth('/api/courriers', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          object: data.object,
-          description: data.description,
-          isConfidentiel: data.isConfidentiel ?? false,
-          detailPersonnes: data.detailPersonnes,
-        }),
+        body: formData,
       });
       if (!res.ok) {
         await logger.error('courrierService.createCourrier', res);
