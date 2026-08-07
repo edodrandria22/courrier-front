@@ -33,9 +33,12 @@ interface Props {
   onBack: () => void
   isRecherche?: boolean,
   updateHistorique: (id: number, observation: string) => Promise<Courrier>
+  hasMoreMessages?: boolean
+  onLoadMore?: () => void
+  loadingMore?: boolean
 }
 
-export const MessageListView = ({ courrier, messages, loading, error, currentUserId, onSelect, onBack, isRecherche = false, updateHistorique }: Props) => {
+export const MessageListView = ({ courrier, messages, loading, error, currentUserId, onSelect, onBack, isRecherche = false, updateHistorique, hasMoreMessages, onLoadMore, loadingMore }: Props) => {
   const { isMessageVisible, isLastRecipient,isLastMessage, isDestinataireOf } = useMessagePermissions(messages, currentUserId);
 
   // var isDestinataire = false;
@@ -629,6 +632,38 @@ export const MessageListView = ({ courrier, messages, loading, error, currentUse
               </div>
           )}
         </div>
+        
+        {hasMoreMessages && messages.length > 0 && onLoadMore && (
+          <div className="flex justify-center px-4 pb-4 pt-2">
+            <button
+              onClick={onLoadMore}
+              disabled={loadingMore}
+              className={[
+                'group relative w-full sm:w-auto px-5 py-2.5 sm:py-2 rounded-lg text-sm font-medium transition-all flex items-center justify-center gap-2 border',
+                loadingMore
+                  ? 'bg-muted text-muted-foreground border-border cursor-not-allowed'
+                  : 'bg-card text-primary border-primary/30 hover:border-primary hover:bg-primary/5 hover:shadow-sm active:scale-95'
+              ].join(' ')}
+            >
+              {loadingMore ? (
+                <svg className="animate-spin h-4 w-4 text-muted-foreground" viewBox="0 0 24 24">
+                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
+                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
+                </svg>
+              ) : (
+                <svg
+                  className="w-4 h-4 text-primary/50 group-hover:text-primary transition-colors"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 15l7-7 7 7" />
+                </svg>
+              )}
+              <span>{loadingMore || !hasMoreMessages ? 'Récupération...' : 'Charger les messages précédents'}</span>
+            </button>
+          </div>
+        )}
       </div>
     </div>
   )

@@ -2,7 +2,7 @@ import { NextRequest } from "next/server";
 import { callApiGet, callApiPost } from "@/lib/callApi";
 
 export async function GET(request: NextRequest) {
-  return callApiGet(request, "/courriers",["date","limit"]);
+  return callApiGet(request, "/courriers",["reference","date","limit"]);
 }
 
 export async function POST(request: NextRequest) {

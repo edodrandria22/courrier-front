@@ -140,7 +140,8 @@ GET http://localhost:3000/api/notifications/subscribe 404 (Not Found)
     --page par defaut rouge -- ok --15 mn
     --page de liste des utilisateur le loading pour la pagination -- a faire --10 mn
     --mettre en rond le logo -- a faire -- 10mn
-      <section className="px-6 py-24 text-center max-w-5xl mx-auto relative overflow-hidden border-2 border-primary/20 rounded-3xl bg-gradient-to-br from-card via-card/80 to-primary/5 backdrop-blur-md shadow-2xl shadow-primary/10">
-
-       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-primary/5 blur-[120px] rounded-full -z-10" />
-       
+    
+    --mettre une reference de recherche pour le modification courrier --  a faire -- 30mn
+    -- factorisation code -- a faire -- 120 mn
+        --courrier list -- a faire -- 30mn
+        --message list -- a faire 30 mn 

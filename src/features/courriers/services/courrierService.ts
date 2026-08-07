@@ -8,7 +8,7 @@ import { useFetchAuth } from '@/hooks/useFetchAuth';
 export const courrierService = {
   // ─── Courriers ───────────────────────────────────────────────────────────
 
-  getCourriers: async (dateCursor?: string): Promise<Courrier[]> => {
+  getCourriers: async (reference?: string,dateCursor?: string): Promise<Courrier[]> => {
     try {
       const fetchWithAuth = useFetchAuth();
       // 1. Construire l'URL avec le paramètre de recherche si la date est fournie
@@ -18,6 +18,10 @@ export const courrierService = {
 
       if (dateCursor) {
         params.set("date", dateCursor);
+      }
+
+      if (reference) {
+        params.set("reference", reference);
       }
 
       const url = `/api/courriers?${params.toString()}`;

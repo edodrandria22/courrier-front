@@ -30,7 +30,7 @@ function CourrierContent() {
                             Enregistrement
                         </h1>
                         <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
-                            Enregistrer un nouveau courrier ou transférer un modèle enregistré.
+                            Enregistrer un nouveau courrier ou modifier un courrier enregistré.
                         </p>
                     </div>
                     

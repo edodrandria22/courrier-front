@@ -10,11 +10,11 @@ export const useCourrier = () => {
   const [error, setError] = useState<string | null>(null);
   // const [nbNonTraite, setNbNonTraite] = useState<Statistique|null>(null);
 
-  const fetchCourriers = useCallback(async (dateCursor?: string) => {
+  const fetchCourriers = useCallback(async (reference?: string,dateCursor?: string) => {
     setLoading(true);
     setError(null);
     try {
-      const data = await courrierService.getCourriers(dateCursor);
+      const data = await courrierService.getCourriers(reference,dateCursor);
       setCourriers((prev) => {
         // Si on n'a pas de curseur, c'est le chargement initial : on remplace tout.
         if (!dateCursor) {
