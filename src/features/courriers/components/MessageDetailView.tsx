@@ -123,7 +123,7 @@ export const MessageDetailView = ({ courrier, message, messages, currentUserId, 
 
             {message.isReadAt && (
               <Badge variant="outline" className="text-[10px] px-2 py-0 h-5 bg-emerald-500/10 text-emerald-400 border-emerald-500/20 flex items-center">
-                <CheckCircle2 className="w-3 h-3 mr-1" /> Lu
+                <CheckCircle2 className="w-3 h-3 mr-1" /> Arrivée
               </Badge>
             )}
 

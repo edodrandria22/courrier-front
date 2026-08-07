@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from 'next'
 import { Geist, Geist_Mono } from 'next/font/google'
 import { ThemeProvider } from '@/components/theme-provider'
 import { NotificationDisplay } from '@/features/notifications/components/NotificationDisplay'
+import { ThemePresetProvider } from '@/features/theme/components/ThemePresetProvider'
 import './globals.css'
 
 const geist = Geist({ 
@@ -84,11 +85,13 @@ export default function RootLayout({
   return (
     <html lang="fr" suppressHydrationWarning>
       <body className={`${geist.variable} ${geistMono.variable} font-sans antialiased`}>
-        <ThemeProvider attribute="class" defaultTheme="light" enableSystem={false}>
-          {children}
-          <NotificationWrapper />
-          <Toaster position="top-right" richColors />
-        </ThemeProvider>
+        <ThemePresetProvider>
+          <ThemeProvider attribute="class" defaultTheme="light" enableSystem={false}>
+            {children}
+            <NotificationWrapper />
+            <Toaster position="top-right" richColors />
+          </ThemeProvider>
+        </ThemePresetProvider>
       </body>
     </html>
   )

@@ -153,7 +153,7 @@ export const CourrierForm = ({ onSuccess, courrier, onClose }: Props) => {
         </div>
         
         <div className="space-y-2">
-          <h3 className="text-xl font-bold text-slate-900 dark:text-slate-50">Courrier Enregistré !</h3>
+          <h3 className="text-xl font-bold text-slate-900 dark:text-slate-50">{courrier ? 'Courrier modifié !' : 'Courrier enregistré !'}</h3>
           <p className="text-sm text-slate-500 dark:text-slate-400">
             Le document a été indexé avec succès dans le système.
           </p>

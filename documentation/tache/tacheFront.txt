@@ -131,9 +131,10 @@ GET http://localhost:3000/api/notifications/subscribe 404 (Not Found)
 
 04/08/2026
     --changer page pour inserer nouvelle courrier avec observation et fichier jointe -- ok -- 60mn
-05/08/2026    
-    --le status doit etre arrive pour le message detail -- a faire -- 30mn
-    --page pour modifier courrier -- a faire -- 60mn
-    --redirection vers boite d'envoie apres insertion transfere courrier -- a faire 
+05/08/2026
+    --page pour modifier courrier -- ok -- 60mn    
+    --changement de nombre de non traite meme si on ne clique pas -- ok -- 30mn
+07/08/2026  
+    --le status doit etre arrive pour le message detail -- ok -- 10mn
+    --redirection vers boite d'envoie apres insertion transfere courrier -- ok -- 30mn
     --page par defaut rouge -- a faire 
-    --changement de nombre de non traite meme si on ne clique pas
