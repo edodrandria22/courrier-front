@@ -3,7 +3,7 @@
 import Image from 'next/image'
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
-import { Mail, Lock, Share2, Clock, ShieldCheck, ArrowRight, MapPin, Search } from 'lucide-react'
+import { Mail, Lock, Share2, Clock, ShieldCheck, ArrowRight, MapPin, Search, FileText, Archive, Send, Inbox } from 'lucide-react'
 
 // ==========================================
 // 1. CONFIGURATION & DONNÉES DE L'APPLICATION
@@ -172,6 +172,14 @@ export default function Home() {
       {/* --- HERO SECTION --- */}
       <section className="px-6 py-24 text-center max-w-5xl mx-auto relative overflow-hidden border-2 border-primary/20 rounded-3xl bg-gradient-to-br from-card via-card/80 to-primary/5 backdrop-blur-md shadow-2xl shadow-primary/10">
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-primary/5 blur-[120px] rounded-full -z-10" />
+        
+        {/* Icônes décoratives pour la gestion de courrier */}
+        <FileText className="absolute top-8 left-8 w-10 h-10 text-primary/15 -rotate-12" />
+        <Archive className="absolute top-8 right-8 w-10 h-10 text-primary/15 rotate-12" />
+        <Send className="absolute bottom-8 left-8 w-10 h-10 text-primary/15 rotate-12" />
+        <Inbox className="absolute bottom-8 right-8 w-10 h-10 text-primary/15 -rotate-12" />
+        <Mail className="absolute top-1/2 left-4 w-8 h-8 text-primary/10 -rotate-6" />
+        <Clock className="absolute top-1/2 right-4 w-8 h-8 text-primary/10 rotate-6" />
         
         <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 border border-primary/20 text-primary text-xs font-bold mb-8 animate-pulse">
           <ShieldCheck className="w-3 h-3" />
