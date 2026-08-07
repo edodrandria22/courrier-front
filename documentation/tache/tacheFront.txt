@@ -137,4 +137,10 @@ GET http://localhost:3000/api/notifications/subscribe 404 (Not Found)
 07/08/2026  
     --le status doit etre arrive pour le message detail -- ok -- 10mn
     --redirection vers boite d'envoie apres insertion transfere courrier -- ok -- 30mn
-    --page par defaut rouge -- a faire 
+    --page par defaut rouge -- ok --15 mn
+    --page de liste des utilisateur le loading pour la pagination -- a faire --10 mn
+    --mettre en rond le logo -- a faire -- 10mn
+      <section className="px-6 py-24 text-center max-w-5xl mx-auto relative overflow-hidden border-2 border-primary/20 rounded-3xl bg-gradient-to-br from-card via-card/80 to-primary/5 backdrop-blur-md shadow-2xl shadow-primary/10">
+
+       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-primary/5 blur-[120px] rounded-full -z-10" />
+       

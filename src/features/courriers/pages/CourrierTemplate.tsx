@@ -244,6 +244,7 @@ const handleLocalCloturation = useCallback(async (id: number) => {
           prev.map(m => m.id === id ? { ...m, cloturePar: courrier.cloturePar , dateValidation: courrier.dateValidation } : m)
         );
         setIsTraiterAt(true);
+        setIsRecu(null);
         setStep({ level: 'courriers' });
         
       }

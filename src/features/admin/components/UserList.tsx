@@ -52,7 +52,7 @@ export const UserList: React.FC<UserListProps> = ({ users, isLoading, fetchUsers
                             </tr>
                         </thead>
                         <tbody className="divide-y divide-slate-100">
-                            {isLoading ? (
+                            {isLoading && users.length === 0 ? (
                                 <tr>
                                     <td colSpan={4} className="p-0">
                                         <AppTableSkeleton rows={8} cols={4} className="border-0 shadow-none rounded-none" />
