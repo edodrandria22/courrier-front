@@ -10,12 +10,25 @@ export const useCourrier = () => {
   const [error, setError] = useState<string | null>(null);
   // const [nbNonTraite, setNbNonTraite] = useState<Statistique|null>(null);
 
-  const fetchCourriers = useCallback(async () => {
+  const fetchCourriers = useCallback(async (dateCursor?: string) => {
     setLoading(true);
     setError(null);
     try {
-      const data = await courrierService.getCourriers();
-      setCourriers(data);
+      const data = await courrierService.getCourriers(dateCursor);
+      setCourriers((prev) => {
+        // Si on n'a pas de curseur, c'est le chargement initial : on remplace tout.
+        if (!dateCursor) {
+          return data;
+        }
+        
+        // Si on a un curseur, on filtre pour éviter les doublons et on ajoute à la suite.
+        const existingIds = new Set(prev.map(c => c.id));
+        const uniqueNewData = data.filter(c => !existingIds.has(c.id));
+        
+        return [...prev, ...uniqueNewData];
+      });
+
+      return data; // Important : retourner les données pour que le composant sache combien ont été reçues
     } catch (err: unknown) {
       logger.exception('useCourrier.fetchCourriers', err);
       setError(err instanceof Error ? err.message : 'Impossible de charger les courriers');

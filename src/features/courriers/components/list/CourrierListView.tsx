@@ -259,9 +259,11 @@ export const CourrierListView = ({ courriers, loading, error, onSelect,  onEdit,
                 </div>
                 
                 {/* Colonne Correspondant (Alignée sur w-52) */}
-                <div className="flex-none w-52">
-                  Correspondant
-                </div>
+                { !isUpdate && (
+                  <div className="flex-none w-52">
+                    Correspondant
+                  </div>
+                )}
                 
                 {/* Colonne Objet (Prend l'espace restant avec flex-1) */}
                 <div className="flex-1">
@@ -270,9 +272,12 @@ export const CourrierListView = ({ courriers, loading, error, onSelect,  onEdit,
 
                 {/* Colonne N° Expéditeur */}
                 {/* Note : Pour un alignement parfait, ajoutez 'w-24' au div parent du Badge dans votre code de ligne */}
-                <div className="flex-none w-24 text-center">
-                  N° Exp.
-                </div>
+                
+                { !isUpdate && (
+                  <div className="flex-none w-24 text-center">
+                    N° Exp.
+                  </div>
+                )}
 
                 {/* Colonne Référence */}
                 {/* Note : Pour un alignement parfait, ajoutez 'w-24' au div parent du Badge dans votre code de ligne */}

@@ -8,12 +8,19 @@ import { useFetchAuth } from '@/hooks/useFetchAuth';
 export const courrierService = {
   // ─── Courriers ───────────────────────────────────────────────────────────
 
-  getCourriers: async (): Promise<Courrier[]> => {
+  getCourriers: async (dateCursor?: string): Promise<Courrier[]> => {
     try {
       const fetchWithAuth = useFetchAuth();
       // 1. Construire l'URL avec le paramètre de recherche si la date est fournie
-      const url = '/api/courriers';
+      const params = new URLSearchParams();
 
+      params.set("limit", process.env.NEXT_PUBLIC_NB_LIMIT_COURRIERS || "10");
+
+      if (dateCursor) {
+        params.set("date", dateCursor);
+      }
+
+      const url = `/api/courriers?${params.toString()}`;
       const res = await fetchWithAuth(url);
 
       if (!res.ok) {

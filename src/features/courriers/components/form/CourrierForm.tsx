@@ -259,71 +259,73 @@ export const CourrierForm = ({ onSuccess, courrier, onClose }: Props) => {
             />
           </div>
         </div>
-        <div className="space-y-4 pt-4">
-          <div className="space-y-2">
-            <label className="text-sm font-semibold text-foreground">Observation</label>
-            <Textarea
-              name="observation"
-              value={formData.observation}
-              onChange={handleInputChange}
-              rows={5}
-              placeholder="Détails supplémentaires..."
-              className="resize-none bg-background/50 border-border disabled:opacity-50"
-              disabled={isFieldDisabled}
-            />
-          </div>
-          <div className="space-y-2">
-              <label className="text-sm font-semibold text-foreground">
-                Documents <span className="text-muted-foreground font-normal">(optionnel)</span>
-              </label>
-              <div
-                onClick={() => !loading && fileInputRef.current?.click()}
-                className={cn(
-                  'border-2 border-dashed border-border rounded-lg p-6 text-center transition-all group',
-                  loading ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer hover:bg-accent/5 hover:border-primary/40'
-                )}
-              >
-                <input
-                  ref={fileInputRef}
-                  type="file"
-                  multiple
-                  onChange={handleFileChange}
-                  className="hidden"
-                  disabled={loading}
-                />
-                <Paperclip className="w-6 h-6 mx-auto mb-2 text-muted-foreground/50 group-hover:text-primary/50 group-hover:scale-110 transition-all" />
-                <p className="text-xs font-medium text-muted-foreground">
-                  Cliquez pour ajouter des fichiers
-                </p>
-              </div>
-
-              {attachments.length > 0 && (
-                <div className="space-y-2">
-                  {attachments.map((att) => (
-                    <div
-                      key={att.id}
-                      className="flex items-center justify-between p-2 bg-muted/30 border border-border rounded-lg text-xs"
-                    >
-                      <div className="flex items-center gap-2 truncate text-foreground">
-                        <FileText className="w-4 h-4 text-primary shrink-0" />
-                        <span className="truncate max-w-[160px] sm:max-w-[300px] font-medium">{att.file.name}</span>
-                      </div>
-                      <Button
-                        type="button"
-                        variant="ghost"
-                        size="icon"
-                        onClick={() => handleRemoveAttachment(att.id)}
-                        className="h-6 w-6 text-destructive hover:bg-destructive/10 shrink-0"
-                        disabled={loading}
-                      >
-                        <X className="w-3 h-3" />
-                      </Button>
-                    </div>
-                  ))}
+        { !courrier && (
+          <div className="space-y-4 pt-4">
+            <div className="space-y-2">
+              <label className="text-sm font-semibold text-foreground">Observation</label>
+              <Textarea
+                name="observation"
+                value={formData.observation}
+                onChange={handleInputChange}
+                rows={5}
+                placeholder="Détails supplémentaires..."
+                className="resize-none bg-background/50 border-border disabled:opacity-50"
+                disabled={isFieldDisabled}
+              />
+            </div>
+            <div className="space-y-2">
+                <label className="text-sm font-semibold text-foreground">
+                  Documents <span className="text-muted-foreground font-normal">(optionnel)</span>
+                </label>
+                <div
+                  onClick={() => !loading && fileInputRef.current?.click()}
+                  className={cn(
+                    'border-2 border-dashed border-border rounded-lg p-6 text-center transition-all group',
+                    loading ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer hover:bg-accent/5 hover:border-primary/40'
+                  )}
+                >
+                  <input
+                    ref={fileInputRef}
+                    type="file"
+                    multiple
+                    onChange={handleFileChange}
+                    className="hidden"
+                    disabled={loading}
+                  />
+                  <Paperclip className="w-6 h-6 mx-auto mb-2 text-muted-foreground/50 group-hover:text-primary/50 group-hover:scale-110 transition-all" />
+                  <p className="text-xs font-medium text-muted-foreground">
+                    Cliquez pour ajouter des fichiers
+                  </p>
                 </div>
-              )}
+
+                {attachments.length > 0 && (
+                  <div className="space-y-2">
+                    {attachments.map((att) => (
+                      <div
+                        key={att.id}
+                        className="flex items-center justify-between p-2 bg-muted/30 border border-border rounded-lg text-xs"
+                      >
+                        <div className="flex items-center gap-2 truncate text-foreground">
+                          <FileText className="w-4 h-4 text-primary shrink-0" />
+                          <span className="truncate max-w-[160px] sm:max-w-[300px] font-medium">{att.file.name}</span>
+                        </div>
+                        <Button
+                          type="button"
+                          variant="ghost"
+                          size="icon"
+                          onClick={() => handleRemoveAttachment(att.id)}
+                          className="h-6 w-6 text-destructive hover:bg-destructive/10 shrink-0"
+                          disabled={loading}
+                        >
+                          <X className="w-3 h-3" />
+                        </Button>
+                      </div>
+                    ))}
+                  </div>
+                )}
+            </div>
           </div>
-        </div>
+        )}
         {/* 4. Boucle sur la liste des demandeurs */}
         <div className="space-y-4">
           <div className="flex items-center justify-between">
