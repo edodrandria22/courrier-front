@@ -139,9 +139,8 @@ GET http://localhost:3000/api/notifications/subscribe 404 (Not Found)
     --redirection vers boite d'envoie apres insertion transfere courrier -- ok -- 30mn
     --page par defaut rouge -- ok --15 mn
     --page de liste des utilisateur le loading pour la pagination -- a faire --10 mn
-    --mettre en rond le logo -- a faire -- 10mn
     
-    --mettre une reference de recherche pour le modification courrier --  a faire -- 30mn
-    -- factorisation code -- a faire -- 120 mn
-        --courrier list -- a faire -- 30mn
-        --message list -- a faire 30 mn 
+    --mettre une reference de recherche pour le modification courrier --  ok -- 30mn
+    -- factorisation code -- ok -- 120 mn
+        --courrier list -- ok -- 30mn
+        --message list -- ok -- 30 mn 

@@ -493,7 +493,7 @@ export const CourrierListView = ({ courriers, loading, error, onSelect,  onEdit,
         )}
       </div>
       
-      {hasMoreCourriers && courriers.length > 0 && onLoadMore && (
+      {hasMoreCourriers && filtered.length > 0 && onLoadMore && (
         <div className="flex justify-center px-4 pb-4 pt-2">
           <button
             onClick={onLoadMore}
