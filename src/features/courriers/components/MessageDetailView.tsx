@@ -45,7 +45,7 @@ export const MessageDetailView = ({ courrier, message, messages, currentUserId, 
   // const hasMarkedRef = useRef(false);
   const isConfidentiel = courrier.isConfidentiel; // Vérification de la confidentialité
   const router = useRouter();
-  const isValidExterne = message.destinataire.id === 2 && currentUserId === message.expediteur?.id.toString();
+  const isValidExterne = message.destinataire.id === 2 && canTransfer && isLastMessage(message);
   // const handleMarkAsUnread = async () => {
   //   const result = await marquerNonLu(message.id);
   //   if (result.success) {
@@ -226,8 +226,14 @@ export const MessageDetailView = ({ courrier, message, messages, currentUserId, 
         <Button onClick={onBack} variant="outline" className="border-border hover:bg-accent text-xs shrink-0">
           Retour aux transferts
         </Button>
+        
         {isValidExterne && (
-          <Button onClick={recupererExterneCourrier} disabled={loading} variant="outline" className="border-border hover:bg-accent text-xs shrink-0">
+          <Button 
+            onClick={recupererExterneCourrier} 
+            disabled={loading} 
+            variant="outline" 
+            className="border-border hover:bg-accent text-xs shrink-0 ml-auto"
+          >
             Retourner l'externe
           </Button>
         )}

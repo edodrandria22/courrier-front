@@ -144,3 +144,6 @@ GET http://localhost:3000/api/notifications/subscribe 404 (Not Found)
     -- factorisation code -- ok -- 120 mn
         --courrier list -- ok -- 30mn
         --message list -- ok -- 30 mn 
+10/08/2026
+    --boutton retourner externe doit afficher seulement au dernier message -- a faire -- 15 mn
+    --css du boutton retourner externe -- a faire -- 15 mn
