@@ -131,42 +131,15 @@ export const CourrierSearchTemplate = ({ onCourrierSelect }: CourrierSearchTempl
           )}
 
           {searchResults.length > 0 && (
-            <>
               <CourrierListView
                 courriers={searchResults}
                 loading={loading}
                 error={error}
                 onSelect={handleCourrierSelect}
+                hasMoreCourriers={hasMore}
+                onLoadMore={loadMoreResults}
+                loadingMore={loadingMore}
               />
-              
-              {/* Bouton "Afficher plus de résultats" */}
-              {hasMore && (
-                <div className="flex justify-center px-4 pb-4 pt-2">
-                  <button
-                    onClick={loadMoreResults}
-                    disabled={loading}
-                    className={[
-                      'group relative w-full sm:w-auto px-5 py-2.5 sm:py-2 rounded-lg text-sm font-medium transition-all flex items-center justify-center gap-2 border',
-                      loading
-                        ? 'bg-muted text-muted-foreground border-border cursor-not-allowed'
-                        : 'bg-card text-primary border-primary/30 hover:border-primary hover:bg-primary/5 hover:shadow-sm active:scale-95'
-                    ].join(' ')}
-                  >
-                    {loadingMore ? (
-                      <svg className="animate-spin h-4 w-4 text-muted-foreground" viewBox="0 0 24 24">
-                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
-                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
-                      </svg>
-                    ) : (
-                      <svg className="w-4 h-4 text-primary/50 group-hover:text-primary transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
-                      </svg>
-                    )}
-                    <span>{loadingMore ? 'Chargement...' : 'Afficher plus de résultats'}</span>
-                  </button>
-                </div>
-              )}
-            </>
           )}
         </div>
       )}

@@ -45,7 +45,7 @@ export const MessageDetailView = ({ courrier, message, messages, currentUserId, 
   // const hasMarkedRef = useRef(false);
   const isConfidentiel = courrier.isConfidentiel; // Vérification de la confidentialité
   const router = useRouter();
-  const isValidExterne = message.destinataire.id === 2 && canTransfer && isLastMessage(message);
+  const isValidExterne = message.destinataire.id === 2 && isLastMessage(message);
   // const handleMarkAsUnread = async () => {
   //   const result = await marquerNonLu(message.id);
   //   if (result.success) {
@@ -250,7 +250,7 @@ export const MessageDetailView = ({ courrier, message, messages, currentUserId, 
             </Button>
           )} */}
           
-          {canTransfer && isLastMessage(message) && !courrier.cloturePar && (
+          {canTransfer && isLastMessage(message) && !courrier.cloturePar && courrier.isReadAt && (
             <>
               <TransfererDialog messageId={message.id} onSuccess={onSuccessTransfere} />
               <Button

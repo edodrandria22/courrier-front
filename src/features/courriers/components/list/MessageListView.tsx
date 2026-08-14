@@ -133,7 +133,7 @@ export const MessageListView = ({ courrier, messages, loading, error, currentUse
           <h1 className="text-sm font-semibold hidden sm:block">Détails du courrier</h1>
         </div>
 
-        {isLastRecipient && !courrier.cloturePar && (
+        {isLastRecipient && !courrier.cloturePar && courrier.isReadAt && (
           <TransfererDialog messageId={Number(courrier.messageId)} onSuccess={onSuccessTransfere} />
         )}
       </div>
