@@ -148,4 +148,7 @@ GET http://localhost:3000/api/notifications/subscribe 404 (Not Found)
     --boutton retourner externe doit afficher seulement au dernier message -- ok -- 15 mn
     --css du boutton retourner externe -- ok -- 15 mn
 
+17/08/2026
+     --quand on clique sur le boutton retour on doit revenir a la page precedente sans scroller -- ok -- 60 mn
+
 sur la page de recherche le sroll doit avoir qu'une seule scroll -- a faire -- 60mn

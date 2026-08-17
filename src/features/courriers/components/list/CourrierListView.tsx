@@ -152,12 +152,24 @@ export const CourrierListView = ({ courriers, loading, error, onSelect,  onEdit,
                 onClick={() => { setIsTraiterAt(null); setIsRecu?.(null); setHasMoreCourriers?.(true); }}
                 className={cn(
                   "px-2.5 py-1 rounded-md text-xs font-medium transition-all",
-                  isTraiterAt === null
+                  isTraiterAt === null && isRecu === null
                     ? "bg-background text-foreground shadow-sm border border-border/50"
                     : "text-muted-foreground hover:text-foreground"
                 )}
               >
                 Tous
+              </button>
+              <button
+                type="button"
+                onClick={() => { setIsTraiterAt(null); setIsRecu?.(true); setHasMoreCourriers?.(true); }}
+                className={cn(
+                  "px-2.5 py-1 rounded-md text-xs font-medium transition-all",
+                  isTraiterAt === null && isRecu === true
+                    ? "bg-background text-foreground shadow-sm border border-border/50"
+                    : "text-muted-foreground hover:text-foreground"
+                )}
+              >
+                Arrivée
               </button>
               <button
                 type="button"

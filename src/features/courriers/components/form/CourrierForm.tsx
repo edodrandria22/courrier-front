@@ -437,7 +437,7 @@ export const CourrierForm = ({ onSuccess, courrier, onClose }: Props) => {
               transition: 'all 0.2s'
             }}
           >
-            {loading ? 'Traitement...' : <span className="flex items-center gap-2"><Send className="w-4 h-4" /> {courrier ? 'Modifier le courrier' : 'Créer le courrier'}</span>}
+            {loading ? 'Traitement...' : <span className="flex items-center gap-2"><Send className="w-4 h-4" /> {courrier ? 'Enregistrer la modification' : 'Créer le courrier'}</span>}
           </button>
         </div>
       </form>
