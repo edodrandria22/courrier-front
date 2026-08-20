@@ -86,7 +86,7 @@ export const CourrierForm = ({ onSuccess, courrier, onClose }: Props) => {
       setBackupData({
         object: formData.object,
         description: formData.description,
-        observation: formData.observation,
+        // observation: formData.observation,
         detailPersonnes: formData.detailPersonnes, // On sauvegarde la liste
       })
 
@@ -95,6 +95,7 @@ export const CourrierForm = ({ onSuccess, courrier, onClose }: Props) => {
         isConfidentiel: true,
         object: 'Pli fermé',
         description: '',
+        observation: formData.observation || '',
         // detailPersonnes: formData.detailPersonnes,
         // detailPersonnes: [{ ...defaultPersonne }], // On vide la liste
         detailPersonnes: [],
@@ -105,7 +106,7 @@ export const CourrierForm = ({ onSuccess, courrier, onClose }: Props) => {
         isConfidentiel: false,
         object: backupData?.object || '',
         description: backupData?.description || '',
-        observation: backupData?.observation || '',
+        // observation: backupData?.observation || '',
         // On restaure la liste ou on met une liste vide par défaut
         detailPersonnes: backupData?.detailPersonnes || [{ ...defaultPersonne }],
       }))
@@ -270,7 +271,7 @@ export const CourrierForm = ({ onSuccess, courrier, onClose }: Props) => {
                 rows={5}
                 placeholder="Détails supplémentaires..."
                 className="resize-none bg-background/50 border-border disabled:opacity-50"
-                disabled={isFieldDisabled}
+                disabled={loading}
               />
             </div>
             <div className="space-y-2">
