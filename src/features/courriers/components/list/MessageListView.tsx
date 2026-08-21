@@ -95,9 +95,10 @@ export const MessageListView = ({ courrier, messages, loading, error, currentUse
   const onSuccessTransfere = () => {
     if (onTransferSuccess) {
       onTransferSuccess();
-    } else {
-      router.push('/message/courrier/send');
     }
+      router.refresh(); 
+      router.push('/message/courrier/send');
+    
   }
   const getStatusConfig = (status?: string) => {
     switch (status) {

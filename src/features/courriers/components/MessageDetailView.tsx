@@ -63,6 +63,7 @@ export const MessageDetailView = ({ courrier, message, messages, currentUserId, 
       toast.error(result.error ?? 'Erreur lors du transfert');
       return;
     }
+    router.refresh();
     router.push(`/message/courrier/receive`);
     
   };
@@ -84,6 +85,7 @@ export const MessageDetailView = ({ courrier, message, messages, currentUserId, 
     if (onTransferSuccess) {
       onTransferSuccess();
     } 
+    router.refresh();
     router.push('/message/courrier/send');
     
   }
