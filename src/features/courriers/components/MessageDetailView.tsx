@@ -25,6 +25,7 @@ interface Props {
   onBack: () => void
   onMessageRead?: (id: number) => void
   onCloture: (id: number) => Promise<void>
+  onTransferSuccess?: () => void
 }
 
 const formatDate = (iso: string) =>
@@ -37,7 +38,7 @@ const initials = (nom: string, prenom?: string) => {
   return res || '?';
 };
 
-export const MessageDetailView = ({ courrier, message, messages, currentUserId, onBack, onMessageRead, onCloture }: Props) => {
+export const MessageDetailView = ({ courrier, message, messages, currentUserId, onBack, onMessageRead, onCloture, onTransferSuccess }: Props) => {
   const { canTransfer, isLastMessage, isDestinataireOf } = useMessagePermissions(messages, currentUserId);
   const isDestinataire = isDestinataireOf(message);
   // const { marquerLu, marquerNonLu, loading } = useMessages();
@@ -80,7 +81,11 @@ export const MessageDetailView = ({ courrier, message, messages, currentUserId, 
     }
   };
   const onSuccessTransfere = () => {
+    if (onTransferSuccess) {
+      onTransferSuccess();
+    } 
     router.push('/message/courrier/send');
+    
   }
   // useEffect(() => {
   //   if (isDestinataire && !message.isReadAt && !hasMarkedRef.current) {

@@ -58,6 +58,17 @@ export const CourrierTemplate = ({ initialCourrier, isRecherche }: CourrierTempl
   const stepRef = useRef(step);
   useEffect(() => { stepRef.current = step }, [step]);
 
+  const handleTransferSuccess = useCallback(() => {
+    // Recharger la liste des courriers après un transfert réussi
+    const initCourriers = async () => {
+      const data = await fetchCourriersByUser(undefined, isTraiterAt, isRecu);
+      if (data && data.length < nbLimitCourrier) setHasMoreCourriers(false);
+    };
+    initCourriers();
+    // Revenir à la liste des courriers
+    setStep({ level: 'courriers' });
+  }, [fetchCourriersByUser, isTraiterAt, isRecu, nbLimitCourrier]);
+
   // --- LOGIQUE COURRIERS ---
 
   useEffect(() => {
@@ -344,6 +355,7 @@ const handleLocalCloturation = useCallback(async (id: number) => {
           onBack={() => setStep({ level: 'messages', courrier: step.courrier })}
           onMessageRead={handleMessageRead}
           onCloture={handleLocalCloturation}
+          onTransferSuccess={handleTransferSuccess}
         />
       </div>
     </div>
