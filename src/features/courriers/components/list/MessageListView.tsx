@@ -93,9 +93,13 @@ export const MessageListView = ({ courrier, messages, loading, error, currentUse
   }
   const router = useRouter();
   const onSuccessTransfere = () => {
+    // Appeler d'abord le callback de succès pour recharger les données
     if (onTransferSuccess) {
       onTransferSuccess();
     } 
+    // Rafraîchir la page pour forcer le rechargement des données
+    router.refresh();
+    // Ensuite naviguer vers la page d'envoi
     router.push('/message/courrier/send');
   }
   const getStatusConfig = (status?: string) => {
