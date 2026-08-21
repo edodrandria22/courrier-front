@@ -37,9 +37,10 @@ interface Props {
   hasMoreMessages?: boolean
   onLoadMore?: () => void
   loadingMore?: boolean
+  onTransferSuccess?: () => void
 }
 
-export const MessageListView = ({ courrier, messages, loading, error, currentUserId, onSelect, onBack, isRecherche = false, updateHistorique, hasMoreMessages, onLoadMore, loadingMore }: Props) => {
+export const MessageListView = ({ courrier, messages, loading, error, currentUserId, onSelect, onBack, isRecherche = false, updateHistorique, hasMoreMessages, onLoadMore, loadingMore, onTransferSuccess }: Props) => {
   const { isMessageVisible, isLastRecipient,isLastMessage, isDestinataireOf } = useMessagePermissions(messages, currentUserId);
 
   // var isDestinataire = false;
@@ -92,7 +93,11 @@ export const MessageListView = ({ courrier, messages, loading, error, currentUse
   }
   const router = useRouter();
   const onSuccessTransfere = () => {
-    router.push('/message/courrier/send');
+    if (onTransferSuccess) {
+      onTransferSuccess();
+    } else {
+      router.push('/message/courrier/send');
+    }
   }
   const getStatusConfig = (status?: string) => {
     switch (status) {

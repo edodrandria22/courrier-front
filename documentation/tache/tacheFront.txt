@@ -151,6 +151,7 @@ GET http://localhost:3000/api/notifications/subscribe 404 (Not Found)
 21/08/2026    
     --en cas d'erreur afficher l'erreur --  ok -- 60mn
     --boite d'arrive par ordre d'arrive -- a faire -- 60 mn
+--dans le boite d'envoie il n'affiche pas le nouveau transfere -- a faire -- 60 mn
 --mercure tsy mande -- a faire -- 60 mn
 --quand on clique sur le boutton retour on doit revenir a la page precedente sans scroller -- ok -- 60 mn
 --sur la page de recherche le sroll doit avoir qu'une seule scroll -- a faire -- 60mn

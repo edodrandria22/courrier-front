@@ -49,6 +49,17 @@ export const CourrierTemplateSend = ({ initialCourrier, isRecherche }: CourrierT
       ? { level: 'messages', courrier: initialCourrier }
       : { level: 'courriers' }
   );
+
+  const handleTransferSuccess = useCallback(() => {
+    // Recharger la liste des courriers après un transfert réussi
+    const initCourriers = async () => {
+      const data = await fetchCourriersByUserSend();
+      if (data && data.length < nbLimitCourrier) setHasMoreCourriers(false);
+    };
+    initCourriers();
+    // Revenir à la liste des courriers
+    setStep({ level: 'courriers' });
+  }, [fetchCourriersByUserSend, nbLimitCourrier]);
   
   // États de pagination distincts
   const [hasMoreCourriers, setHasMoreCourriers] = useState(true);
@@ -291,6 +302,7 @@ const handleLocalCloturation = useCallback(async (id: number) => {
           hasMoreMessages={hasMoreMessages}
           onLoadMore={loadMoreMessages}
           loadingMore={loading}
+          onTransferSuccess={handleTransferSuccess}
         />
       </div>
     )
