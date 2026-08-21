@@ -148,8 +148,9 @@ GET http://localhost:3000/api/notifications/subscribe 404 (Not Found)
     --boutton retourner externe doit afficher seulement au dernier message -- ok -- 15 mn
     --css du boutton retourner externe -- ok -- 15 mn
     --page pour afficher le page not Found a faire -- 30 mn
-    
---en cas d'erreur afficher l'erreur --  a faire -- 60mn
+21/08/2026    
+    --en cas d'erreur afficher l'erreur --  ok -- 60mn
+    --boite d'arrive par ordre d'arrive -- a faire -- 60 mn
 --mercure tsy mande -- a faire -- 60 mn
 --quand on clique sur le boutton retour on doit revenir a la page precedente sans scroller -- ok -- 60 mn
 --sur la page de recherche le sroll doit avoir qu'une seule scroll -- a faire -- 60mn

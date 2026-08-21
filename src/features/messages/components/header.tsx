@@ -23,7 +23,7 @@ interface HeaderProps {
 
 export default function Header({user,loading ,onMenuToggle, showMenu }: HeaderProps) {
   const router = useRouter();
-  console.log(user)
+  // console.log(user)
   const handleLogout = async () => {
     try {
       await fetch('/api/auth/logout', { method: 'POST' })
