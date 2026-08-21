@@ -80,10 +80,14 @@ export const CourrierTemplate = ({ initialCourrier, isRecherche }: CourrierTempl
     if(isTraiterAt){
       lastDate = courriers[courriers.length - 1]?.isTraiterAt;
     }
-    if (lastDate) {
+    if(isRecu)
+    {
+      lastDate = courriers[courriers.length-1]?.isReadAt || undefined;
+    }
+    if (!lastDate) return;
       const newItems = await fetchCourriersByUser(lastDate,isTraiterAt,isRecu);
       if (!newItems || newItems.length < nbLimitCourrier) setHasMoreCourriers(false);
-    }
+    
   };
 
   // --- LOGIQUE MESSAGES ---
