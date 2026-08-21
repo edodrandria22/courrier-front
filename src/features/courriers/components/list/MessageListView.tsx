@@ -22,6 +22,7 @@ import { useState } from 'react'
 import { useMessages } from '@/features/messages/hooks/useMessages'
 import { TransfererDialog } from '@/features/messages/components/TransfererDialog'
 import { useRouter } from 'next/navigation'
+import { toast } from 'sonner'
 // ... (dans votre composant)
 interface Props {
   courrier: Courrier
@@ -56,11 +57,17 @@ export const MessageListView = ({ courrier, messages, loading, error, currentUse
   const isConfidentiel = courrier.isConfidentiel // Vérification de la confidentialité du courrier
   // console.log(courrier);
   // États pour la gestion du formulaire d'observation
-  const { marquerLu, loading: loadingMarquer } = useMessages();
+  const { marquerLu, loading: loadingMarquer , error: errorMarquer } = useMessages();
 
   const marquerLuMessage = async () => {
     if (!courrier.messageId) return;
-    await marquerLu(Number(courrier.messageId));
+    try {
+      await marquerLu(Number(courrier.messageId));
+    } catch (error) {
+      // console.error("Erreur lors du marquage comme lu", error);
+      const message = error instanceof Error ? error.message : String(error);
+      toast.error(message);
+    }
   };
 
   const [isEditingObs, setIsEditingObs] = useState(false)
@@ -76,8 +83,9 @@ export const MessageListView = ({ courrier, messages, loading, error, currentUse
       courrier.observation = courrierVaovao.observation;
       setIsEditingObs(false);
     } catch (error) {
-      console.error("Erreur lors de la mise à jour de l'observation", error);
-      // Gérer l'affichage de l'erreur si nécessaire (ex: toast)
+      // console.error("Erreur lors de la mise à jour de l'observation", error);
+      const message = error instanceof Error ? error.message : String(error);
+      toast.error(message);
     } finally {
       setIsUpdatingObs(false);
     }

@@ -30,7 +30,7 @@ export const useCourrier = () => {
 
       return data; // Important : retourner les données pour que le composant sache combien ont été reçues
     } catch (err: unknown) {
-      logger.exception('useCourrier.fetchCourriers', err);
+      // logger.exception('useCourrier.fetchCourriers', err);
       setError(err instanceof Error ? err.message : 'Impossible de charger les courriers');
     } finally {
       setLoading(false);
@@ -135,7 +135,8 @@ export const useCourrier = () => {
       logger.exception('useCourrier.createCourrier', err);
       const msg = err instanceof Error ? err.message : 'Erreur lors de la création';
       setError(msg);
-      return { success: false, error: msg };
+      // return { success: false, error: msg };
+      throw err;
     } finally {
       setLoading(false);
     }
@@ -148,10 +149,11 @@ export const useCourrier = () => {
       if (!result.success) setError(result.error ?? 'Erreur lors de la mise à jour');
       return result;
     } catch (err: unknown) {
-      logger.exception('useCourrier.updateCourrier', err);
+      // logger.exception('useCourrier.updateCourrier', err);
       const msg = err instanceof Error ? err.message : 'Erreur lors de la mise à jour';
       setError(msg);
-      return { success: false, error: msg };
+      // return { success: false, error: msg };
+      throw err;
     } finally {
       setLoading(false);
     }

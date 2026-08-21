@@ -66,10 +66,11 @@ export const useMessages = (folder: MessageFolder = 'inbox') => {
       }
       return result;
     } catch (err: unknown) {
-      logger.exception('useMessages.marquerLu', err);
-      const msg = err instanceof Error ? err.message : 'Erreur lors du marquage comme lu';
-      setError(msg);
-      return { success: false, error: msg };
+      // logger.exception('useMessages.marquerLu', err);
+      // const msg = err instanceof Error ? err.message : 'Erreur lors du marquage comme lu';
+      // setError(msg);
+      throw err;
+      // return { success: false, error: msg };
     } finally {
       setLoading(false);
     }

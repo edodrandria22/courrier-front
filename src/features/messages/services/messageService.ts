@@ -27,15 +27,17 @@ export const messageService = {
       });
       
       if (!res.ok) {
-        await logger.error('messageService.createMessage', res);
+        // await logger.error('messageService.createMessage', res);
         const json = await res.json();
-        return { success: false, error: json.error ?? json.message ?? 'Erreur lors de la création' };
+        // return { success: false, error: json.error ?? json.message ?? 'Erreur lors de la création' };
+        throw new Error(json.error ?? json.message ?? 'Erreur lors de la création');
       }
       
       return { success: true };
     } catch (error) {
       // Extrait le message de l'erreur interceptée
-      return { success: false, error: error instanceof Error ? error.message : String(error) };
+      // return { success: false, error: error instanceof Error ? error.message : String(error) };
+      throw error;
     }
   },
 
@@ -47,14 +49,16 @@ export const messageService = {
       });
       
       if (!res.ok) {
-        await logger.error('messageService.transfererMessage', res);
+        // await logger.error('messageService.transfererMessage', res);
         const json = await res.json();
-        return { success: false, error: json.error ?? json.message ?? 'Erreur lors du transfert' };
+        // return { success: false, error: json.error ?? json.message ?? 'Erreur lors du transfert' };
+        throw new Error(json.error ?? json.message ?? 'Erreur lors du transfert');
       }
       
       return { success: true };
     } catch (error) {
-      return { success: false, error: error instanceof Error ? error.message : String(error) };
+      // return { success: false, error: error instanceof Error ? error.message : String(error) };
+      throw error;
     }
   },
 
@@ -63,14 +67,16 @@ export const messageService = {
       const res = await fetch(`/api/messages/${id}/lire`, { method: 'PATCH' });
       
       if (!res.ok) {
-        await logger.error(`messageService.marquerLu(${id})`, res);
+        // await logger.error(`messageService.marquerLu(${id})`, res);
         const json = await res.json();
-        return { success: false, error: json.error ?? json.message ?? 'Erreur lors du marquage' };
+        // return { success: false, error: json.error ?? json.message ?? 'Erreur lors du marquage' };
+        throw new Error(json.error ?? json.message ?? 'Erreur lors du marquage');
       }
       
       return { success: true };
     } catch (error) {
-      return { success: false, error: error instanceof Error ? error.message : String(error) };
+      // return { success: false, error: error instanceof Error ? error.message : String(error) };
+      throw error;
     }
   },
 
@@ -79,14 +85,16 @@ export const messageService = {
       const res = await fetch(`/api/messages/${id}/non-lu`, { method: 'PATCH' });
       
       if (!res.ok) {
-        await logger.error(`messageService.marquerNonLu(${id})`, res);
+        // await logger.error(`messageService.marquerNonLu(${id})`, res);
         const json = await res.json();
-        return { success: false, error: json.error ?? json.message ?? 'Erreur lors du marquage' };
+        // return { success: false, error: json.error ?? json.message ?? 'Erreur lors du marquage' };
+        throw new Error(json.error ?? json.message ?? 'Erreur lors du marquage');
       }
       
       return { success: true };
     } catch (error) {
-      return { success: false, error: error instanceof Error ? error.message : String(error) };
+      // return { success: false, error: error instanceof Error ? error.message : String(error) };
+      throw error;
     }
   },
   recupererExterne: async (id: number): Promise<{ success: boolean; error?: string }> => {
@@ -101,14 +109,16 @@ export const messageService = {
       });
       
       if (!res.ok) {
-        await logger.error('messageService.recupererExterne', res);
+        // await logger.error('messageService.recupererExterne', res);
         const json = await res.json();
-        return { success: false, error: json.error ?? json.message ?? 'Erreur lors du transfert' };
+        // return { success: false, error: json.error ?? json.message ?? 'Erreur lors du transfert' };
+        throw new Error(json.error ?? json.message ?? 'Erreur lors du transfert');
       }
       
       return { success: true };
     } catch (error) {
-      return { success: false, error: error instanceof Error ? error.message : String(error) };
+      // return { success: false, error: error instanceof Error ? error.message : String(error) };
+      throw error;
     }
   },
 
