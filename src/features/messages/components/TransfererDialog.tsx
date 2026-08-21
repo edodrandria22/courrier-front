@@ -14,6 +14,7 @@ import { useUtilisateurs } from '@/features/utilisateurs/hooks/useUtilisateurs'
 import type { User as Utilisateur} from '@/features/auth/types/login'
 import { format } from 'date-fns';
 import { routerServerGlobal } from 'next/dist/server/lib/router-utils/router-server-context'
+import { toast } from 'sonner'
 
 // Si vous utilisiez le contexte pour autre chose, vous pouvez le garder, 
 // mais pour la recherche dynamique nous avons besoin du hook useUtilisateurs.
@@ -108,16 +109,23 @@ export const TransfererDialog = ({ messageId, onSuccess }: Props) => {
     if (!selectedUserId) return
 
     const files = attachments.map((att) => att.file)
-    const result = await transferer(messageId, selectedUserId, observation, files)
+    
+    try {
+      const result = await transferer(messageId, selectedUserId, observation, files)
 
-    if (result.success) {
-      setOpen(false)
-      
-      setSelectedUserId(null)
-      setObservation('')
-      setAttachments([])
-      setSearchQuery('')
-      onSuccess()
+      if (result.success) {
+        setOpen(false)
+        
+        setSelectedUserId(null)
+        setObservation('')
+        setAttachments([])
+        setSearchQuery('')
+        onSuccess()
+      }
+    } catch (error) {
+      // L'erreur est déjà gérée par le hook useTransferer et affichée dans transferError
+      console.error('Erreur lors du transfert:', error)
+      toast.error("Erreur lors de la tranfere")
     }
   }
 

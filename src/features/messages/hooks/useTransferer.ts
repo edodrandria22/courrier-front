@@ -26,15 +26,11 @@ export const useTransferer = () => {
         })
 
         const result = await messageService.transfererMessage(formData);
-        const success = result.success;
-        if (!success) {
-          setError(result.error || 'Erreur lors du transfert');
-        }
         return result
       } catch (err) {
         const errorMsg = err instanceof Error ? err.message : 'Erreur lors du transfert'
         setError(errorMsg)
-        return { success: false, error: errorMsg }
+        throw err; // Laisser l'erreur se propager pour que TransfererDialog puisse la gérer
       } finally {
         setLoading(false)
       }
