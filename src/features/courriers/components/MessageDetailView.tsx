@@ -55,6 +55,10 @@ export const MessageDetailView = ({ courrier, message, messages, currentUserId, 
   //   }
   // };
 
+  const [loadingCloturer, setLoadingCloturer] = useState(false);
+  const [loadingRecuperer, setLoadingRecuperer] = useState(false);
+  const [recupererSuccess, setRecupererSuccess] = useState(false);
+
   const recupererExterneCourrier = async () => {
     if (!message.id) return;
     
@@ -67,19 +71,17 @@ export const MessageDetailView = ({ courrier, message, messages, currentUserId, 
         return;
       }
       
+      setRecupererSuccess(true);
+      
       // Attendre 1 seconde avant de naviguer
       setTimeout(() => {
         router.push(`/message/courrier/receive`);
       }, 1000);
-      setLoadingRecuperer(false);
     } catch (error) {
       setLoadingRecuperer(false);
       toast.error("Erreur lors de la récupération");
     }
   };
-
-  const [loadingCloturer, setLoadingCloturer] = useState(false);
-  const [loadingRecuperer, setLoadingRecuperer] = useState(false);
   
   const cloturer = async () => {
     setLoadingCloturer(true);
@@ -245,7 +247,7 @@ export const MessageDetailView = ({ courrier, message, messages, currentUserId, 
           Retour aux transferts
         </Button>
         
-        {isValidExterne && (
+        {isValidExterne && !recupererSuccess && (
           <Button 
             onClick={recupererExterneCourrier} 
             disabled={loadingRecuperer} 
