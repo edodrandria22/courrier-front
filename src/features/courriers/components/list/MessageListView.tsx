@@ -97,10 +97,6 @@ export const MessageListView = ({ courrier, messages, loading, error, currentUse
     if (onTransferSuccess) {
       await onTransferSuccess();
     } 
-    
-    // 2. On dit à Next.js de rafraîchir les données en arrière-plan et de vider le cache
-    router.refresh();
-
     // 3. Ensuite SEULEMENT, on navigue vers la page d'envoi
     router.push('/message/courrier/send');
 }
