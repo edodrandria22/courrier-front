@@ -33,6 +33,7 @@ interface Props {
 export const TransfererDialog = ({ messageId, onSuccess }: Props) => {
   // États de la modale
   const [open, setOpen] = useState(false)
+  const [isClosing, setIsClosing] = useState(false)
   
   // États du formulaire
   const [selectedUserId, setSelectedUserId] = useState<number | null>(null)
@@ -114,14 +115,16 @@ export const TransfererDialog = ({ messageId, onSuccess }: Props) => {
       const result = await transferer(messageId, selectedUserId, observation, files)
 
       if (result.success) {
-         setTimeout(() => {
+        setIsClosing(true)
+        setTimeout(() => {
           setOpen(false)
+          setIsClosing(false)
           setSelectedUserId(null)
           setObservation('')
           setAttachments([])
           setSearchQuery('')
-          onSuccess() // On déclenche le succès avec un petit décalage
-        }, 1000); // 1000 ms = 1 seconde
+          onSuccess()
+        }, 1000);
       }
     } catch (error) {
       // L'erreur est déjà gérée par le hook useTransferer et affichée dans transferError
@@ -332,10 +335,10 @@ export const TransfererDialog = ({ messageId, onSuccess }: Props) => {
             type="button"
             style={{ color: '#ffffff' }}
             onClick={handleTransferer}
-            disabled={transferring || !selectedUserId || loadingUsers}
+            disabled={transferring || !selectedUserId || loadingUsers || isClosing}
             className="bg-primary hover:opacity-90 text-primary-foreground min-w-[140px] flex items-center gap-2"
           >
-            {transferring ? (
+            {transferring || isClosing ? (
               <>
                 <Loader2 className="w-4 h-4 animate-spin" />
                 Envoi...
