@@ -114,14 +114,14 @@ export const TransfererDialog = ({ messageId, onSuccess }: Props) => {
       const result = await transferer(messageId, selectedUserId, observation, files)
 
       if (result.success) {
-        setOpen(false)
-        
-        setSelectedUserId(null)
-        setObservation('')
-        setAttachments([])
-        setSearchQuery('')
-        
-        onSuccess()
+         setTimeout(() => {
+          setOpen(false)
+          setSelectedUserId(null)
+          setObservation('')
+          setAttachments([])
+          setSearchQuery('')
+          onSuccess() // On déclenche le succès avec un petit décalage
+        }, 1000); // 1000 ms = 1 seconde
       }
     } catch (error) {
       // L'erreur est déjà gérée par le hook useTransferer et affichée dans transferError

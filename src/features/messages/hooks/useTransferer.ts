@@ -25,10 +25,7 @@ export const useTransferer = () => {
           formData.append('fichiers[]', file)
         })
 
-        console.log("1. Début de l'envoi API...");
         const result = await messageService.transfererMessage(formData);
-        console.log("2. Fin de l'envoi API, résultat reçu :", result);
-        return result;
         return result
       } catch (err) {
         const errorMsg = err instanceof Error ? err.message : 'Erreur lors du transfert'
