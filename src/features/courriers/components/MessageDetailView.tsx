@@ -71,10 +71,10 @@ export const MessageDetailView = ({ courrier, message, messages, currentUserId, 
       setTimeout(() => {
         router.push(`/message/courrier/receive`);
       }, 1000);
-    } catch (error) {
-      toast.error("Erreur lors de la récupération");
-    } finally {
       setLoadingRecuperer(false);
+    } catch (error) {
+      setLoadingRecuperer(false);
+      toast.error("Erreur lors de la récupération");
     }
   };
 

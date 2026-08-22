@@ -155,7 +155,7 @@ GET http://localhost:3000/api/notifications/subscribe 404 (Not Found)
     --dans le boite d'envoie il n'affiche pas le nouveau transfere -- ok -- 60 mn
         --setTimeout 1 seconde
     --recuperer l'externe doit se loader -- a faire -- 60mn
+    --status courrier -- ok -- 30mn
 --mercure tsy mande -- a faire -- 60 mn
 --quand on clique sur le boutton retour on doit revenir a la page precedente sans scroller -- ok -- 60 mn
 --sur la page de recherche le sroll doit avoir qu'une seule scroll -- a faire -- 60m
---status courrier -- a faire -- 30mn
