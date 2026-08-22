@@ -92,15 +92,18 @@ export const MessageListView = ({ courrier, messages, loading, error, currentUse
     }
   }
   const router = useRouter();
-  const onSuccessTransfere = () => {
-    // Appeler d'abord le callback de succès pour recharger les données
+  const onSuccessTransfere = async () => {
+    // 1. On attend que le callback ait fini son travail (s'il est asynchrone)
     if (onTransferSuccess) {
-      onTransferSuccess();
+      await onTransferSuccess();
     } 
     
-    // Ensuite naviguer vers la page d'envoi
+    // 2. On dit à Next.js de rafraîchir les données en arrière-plan et de vider le cache
+    router.refresh();
+
+    // 3. Ensuite SEULEMENT, on navigue vers la page d'envoi
     router.push('/message/courrier/send');
-  }
+}
   const getStatusConfig = (status?: string) => {
     switch (status) {
       case 'non-lu':
