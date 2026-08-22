@@ -58,17 +58,28 @@ export const MessageDetailView = ({ courrier, message, messages, currentUserId, 
   const recupererExterneCourrier = async () => {
     if (!message.id) return;
     
-    const result = await recupererExterne(message.id); // Assurez-vous que cette méthode existe dans le service
-    if (!result.success) {
-      toast.error(result.error ?? 'Erreur lors du transfert');
-      return;
-    }
-    router.refresh();
-    router.push(`/message/courrier/receive`);
+    setLoadingRecuperer(true);
     
+    try {
+      const result = await recupererExterne(message.id);
+      if (!result.success) {
+        toast.error(result.error ?? 'Erreur lors du transfert');
+        return;
+      }
+      
+      // Attendre 1 seconde avant de naviguer
+      setTimeout(() => {
+        router.push(`/message/courrier/receive`);
+      }, 1000);
+    } catch (error) {
+      toast.error("Erreur lors de la récupération");
+    } finally {
+      setLoadingRecuperer(false);
+    }
   };
 
   const [loadingCloturer, setLoadingCloturer] = useState(false);
+  const [loadingRecuperer, setLoadingRecuperer] = useState(false);
   
   const cloturer = async () => {
     setLoadingCloturer(true);
@@ -237,11 +248,18 @@ export const MessageDetailView = ({ courrier, message, messages, currentUserId, 
         {isValidExterne && (
           <Button 
             onClick={recupererExterneCourrier} 
-            disabled={loading} 
+            disabled={loadingRecuperer} 
             variant="outline" 
-            className="border-border hover:bg-accent text-xs shrink-0 ml-auto"
+            className="border-border hover:bg-accent text-xs shrink-0 ml-auto flex items-center gap-2"
           >
-            Retourner l'externe
+            {loadingRecuperer ? (
+              <>
+                <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                Récupération...
+              </>
+            ) : (
+              'Retourner l\'externe'
+            )}
           </Button>
         )}
         <div className="flex flex-wrap items-center gap-2">
