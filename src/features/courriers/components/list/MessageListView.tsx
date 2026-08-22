@@ -97,8 +97,7 @@ export const MessageListView = ({ courrier, messages, loading, error, currentUse
     if (onTransferSuccess) {
       onTransferSuccess();
     } 
-    // Rafraîchir la page pour forcer le rechargement des données
-    router.refresh();
+    
     // Ensuite naviguer vers la page d'envoi
     router.push('/message/courrier/send');
   }
