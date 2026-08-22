@@ -15,6 +15,7 @@ import type { User as Utilisateur} from '@/features/auth/types/login'
 import { format } from 'date-fns';
 import { routerServerGlobal } from 'next/dist/server/lib/router-utils/router-server-context'
 import { toast } from 'sonner'
+import { useRouter } from 'next/navigation'; // 👈 1. Importer le routeur
 
 // Si vous utilisiez le contexte pour autre chose, vous pouvez le garder, 
 // mais pour la recherche dynamique nous avons besoin du hook useUtilisateurs.
@@ -33,7 +34,7 @@ interface Props {
 export const TransfererDialog = ({ messageId, onSuccess }: Props) => {
   // États de la modale
   const [open, setOpen] = useState(false)
-  
+  const router = useRouter(); // 👈 2. Initialise
   // États du formulaire
   const [selectedUserId, setSelectedUserId] = useState<number | null>(null)
   const [observation, setObservation] = useState('')
@@ -120,7 +121,9 @@ export const TransfererDialog = ({ messageId, onSuccess }: Props) => {
         setObservation('')
         setAttachments([])
         setSearchQuery('')
+
         onSuccess()
+        router.refresh();
       }
     } catch (error) {
       // L'erreur est déjà gérée par le hook useTransferer et affichée dans transferError
