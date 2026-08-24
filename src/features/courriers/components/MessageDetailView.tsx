@@ -98,7 +98,6 @@ export const MessageDetailView = ({ courrier, message, messages, currentUserId, 
     if (onTransferSuccess) {
       onTransferSuccess();
     } 
-    router.refresh();
     router.push('/message/courrier/send');
     
   }

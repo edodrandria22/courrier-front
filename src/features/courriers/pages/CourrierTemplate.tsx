@@ -252,9 +252,13 @@ const handleLocalCloturation = useCallback(async (id: number) => {
     try {
       // 3. Exécuter la fonction asynchrone
       const { success, courrier } = await cloturer(id);
+      
   
       // 4. (Optionnel mais recommandé) Vérifier le succès avant de mettre à jour l'état
       if (success && courrier) {
+        // Attendre 1 seconde pour laisser le temps au backend de charger les données
+        await new Promise(resolve => setTimeout(resolve, 1000));
+        
         setCourriers(prev => 
           prev.map(m => m.id === id ? { ...m, cloturePar: courrier.cloturePar , dateValidation: courrier.dateValidation } : m)
         );
