@@ -157,7 +157,8 @@ GET http://localhost:3000/api/notifications/subscribe 404 (Not Found)
     --recuperer l'externe doit se loader -- a faire -- 60mn
     --status courrier -- ok -- 30mn
 24/08/2026
-    --changer e-taratasy par e-courrier -- a faire 
+    --changer e-taratasy par e-courrier -- a faire --ok
+    --le champs prenon n'est pas obligatoire pour la creation ou modification d'un utilisateur -- a faire -- 30mn   
 --mercure tsy mande -- a faire -- 60 mn
 --quand on clique sur le boutton retour on doit revenir a la page precedente sans scroller -- ok -- 60 mn
 --sur la page de recherche le sroll doit avoir qu'une seule scroll -- a faire -- 60m
