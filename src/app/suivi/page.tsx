@@ -68,7 +68,7 @@ export default function TrackingPage() {
             
             <div className="space-y-2">
               <h1 className="text-3xl font-black tracking-tighter text-foreground italic">
-                e- <span className="text-primary not-italic tracking-normal">TARATASY</span>
+                e- <span className="text-primary not-italic tracking-normal">COURRIER</span>
               </h1>
               <p className="text-[12px] text-muted-foreground/80 font-semibold leading-relaxed max-w-[280px] mx-auto uppercase tracking-widest">
                 Suivre votre courrier en ligne.

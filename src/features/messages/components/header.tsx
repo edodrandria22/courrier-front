@@ -52,7 +52,7 @@ export default function Header({user,loading ,onMenuToggle, showMenu }: HeaderPr
   return (
     <header className="h-14 md:h-16 border-b border-border bg-card flex items-center justify-between px-4 md:px-6">
       <div className="flex items-center">
-        <p className="text-lg font-bold tracking-tight text-foreground"><span className="text-red-600">e-</span>TARATASY</p>
+        <p className="text-lg font-bold tracking-tight text-foreground"><span className="text-red-600">e-</span>COURRIER</p>
       </div>
       <div className="flex items-center gap-2">
         {showMenu && (

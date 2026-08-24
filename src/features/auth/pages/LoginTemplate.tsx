@@ -42,7 +42,7 @@ export const LoginTemplate = () => {
                             />
                         </div> */}
                         <h1 className="text-3xl font-black tracking-tighter text-foreground group-hover:text-primary transition-colors italic">
-                            <span className="text-red-600">e-</span>TARATASY
+                            <span className="text-red-600">e-</span>COURRIER
                         </h1>
                     </Link>
                 </div>

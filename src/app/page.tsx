@@ -15,15 +15,15 @@ const APP_CONFIG = {
   badge: "PLATEFORME OFFICIELLE",
   title: {
     depart:"e-",
-    normal: "TARATASY",
+    normal: "COURRIER",
     gradient: "Mesupres"
   },
-  description: "Bienvenue sur e-Taratasy, la plateforme numérique de suivi des courriers du MESUPRES. Consultez l'état d'avancement de vos courriers en temps réel, où que vous soyez.",
+  description: "Bienvenue sur e-Courrier, la plateforme numérique de suivi des courriers du MESUPRES. Consultez l'état d'avancement de vos courriers en temps réel, où que vous soyez.",
   contact: {
     email: "contact@espa-poly.mg",
     address: "Vontovorona, Antananarivo 101"
   },
-  copyright: `© ${new Date().getFullYear()}. e-TARATASY.`,
+  copyright: `© ${new Date().getFullYear()}. e-COURRIER.`,
   paths: {
     logo: "/mesupres.jpg",
     logoFooter: "/logo-edogsanmhr.png",
