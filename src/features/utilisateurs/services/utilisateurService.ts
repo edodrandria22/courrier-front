@@ -67,7 +67,7 @@ export const utilisateurService = {
             throw error;
         }
     },
-    updateUser: async (id: number, data: { email: string; nom: string; prenom: string; adresse: string; idRole: number; mdp?: string }): Promise<User> => {
+    updateUser: async (id: number, data: { email: string; nom: string; prenom?: string; adresse: string; idRole: number; mdp?: string }): Promise<User> => {
         try {
             const payload: any = {
                 email: data.email,

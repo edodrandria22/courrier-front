@@ -12,7 +12,7 @@ import toast from "react-hot-toast";
 const userEditSchema = z.object({
     email: z.string().email("Adresse email invalide"),
     nom: z.string().min(2, "Le nom doit faire au moins 2 caractères"),
-    prenom: z.string().min(2, "Le prénom doit faire au moins 2 caractères"),
+    prenom: z.string().optional(),
     idRole: z.string().min(1, "Veuillez choisir un rôle"),
     adresse: z.string().min(2, "L'adresse doit faire au moins 2 caractères"),
     mdp: z.string().optional(),
@@ -71,7 +71,7 @@ export const UserEditForm: React.FC<UserEditFormProps> = ({ user, users, setUser
             email: user.email,
             idRole: user.idRole?.toString() ?? "",
             nom: user.nom,
-            prenom: user.prenom,
+            prenom: user.prenom ?? "",
             adresse: user.adresse ?? "",
             mdp: "",
             conf_mdp: "",
@@ -89,7 +89,7 @@ export const UserEditForm: React.FC<UserEditFormProps> = ({ user, users, setUser
                 reset({
                     email: user.email,
                     nom: user.nom,
-                    prenom: user.prenom,
+                    prenom: user.prenom ?? "",
                     adresse: user.adresse ?? "",
                     idRole: user.idRole ? user.idRole.toString() : "",
                     mdp: "",

@@ -13,8 +13,12 @@ const userAdminSchema = z.object({
     prenom: z.string(),
     email: z.string().email("Adresse email invalide"),
     mdp: z.string().min(6, "6 caractères minimum"),
+    confirmMdp: z.string().min(6, "6 caractères minimum"),
     idRole: z.string().min(1, "Veuillez choisir un rôle"),
     adresse: z.string().min(2, "L'adresse doit faire au moins 2 caractères"),
+}).refine((data) => data.mdp === data.confirmMdp, {
+    message: "Les mots de passe ne correspondent pas",
+    path: ["confirmMdp"],
 });
 
 type UserAdminFormValues = z.infer<typeof userAdminSchema>;
@@ -106,8 +110,17 @@ export const UserAdminForm: React.FC<UserAdminFormProps> = ({ setUsers, users, o
                     {errors.email && <p className="text-[10px] text-red-600 font-bold">{errors.email.message}</p>}
                 </div>
 
-                <div className="grid grid-cols-2 gap-4">
-                    <div className="space-y-1">
+                <div className="space-y-1">
+                    <label className="text-xs font-bold text-slate-700 uppercase tracking-widest block">Adresse</label>
+                    <input
+                        {...register("adresse")}
+                        type="text"
+                        placeholder="Adresse"
+                            className={`w-full px-3 py-2 border rounded text-sm text-slate-900 placeholder-slate-400 transition-colors outline-none focus:ring-1 focus:ring-slate-900 ${errors.adresse ? "border-red-500" : "border-slate-300"}`}
+                        />
+                        {errors.adresse && <p className="text-[10px] text-red-600 font-bold">{errors.adresse.message}</p>}
+                </div>
+                <div className="space-y-1">
                         <label className="text-xs font-bold text-slate-700 uppercase tracking-widest block">Mot de passe</label>
                         <input
                             {...register("mdp")}
@@ -115,19 +128,18 @@ export const UserAdminForm: React.FC<UserAdminFormProps> = ({ setUsers, users, o
                             placeholder="••••••••"
                             className={`w-full px-3 py-2 border rounded text-sm text-slate-900 placeholder-slate-400 transition-colors outline-none focus:ring-1 focus:ring-slate-900 ${errors.mdp ? "border-red-500" : "border-slate-300"}`}
                         />
-                    </div>
-                    <div className="space-y-1">
-                        <label className="text-xs font-bold text-slate-700 uppercase tracking-widest block">Adresse</label>
-                        <input
-                            {...register("adresse")}
-                            type="text"
-                            placeholder="Adresse"
-                            className={`w-full px-3 py-2 border rounded text-sm text-slate-900 placeholder-slate-400 transition-colors outline-none focus:ring-1 focus:ring-slate-900 ${errors.adresse ? "border-red-500" : "border-slate-300"}`}
-                        />
-                        {errors.adresse && <p className="text-[10px] text-red-600 font-bold">{errors.adresse.message}</p>}
-                    </div>
+                        {errors.mdp && <p className="text-[10px] text-red-600 font-bold">{errors.mdp.message}</p>}
                 </div>
-
+                <div className="space-y-1">
+                        <label className="text-xs font-bold text-slate-700 uppercase tracking-widest block">Confirmer mot de passe</label>
+                        <input
+                            {...register("confirmMdp")}
+                            type="password"
+                            placeholder="••••••••"
+                            className={`w-full px-3 py-2 border rounded text-sm text-slate-900 placeholder-slate-400 transition-colors outline-none focus:ring-1 focus:ring-slate-900 ${errors.confirmMdp ? "border-red-500" : "border-slate-300"}`}
+                        />
+                        {errors.confirmMdp && <p className="text-[10px] text-red-600 font-bold">{errors.confirmMdp.message}</p>}
+                </div>
                 <div className="space-y-1">
                     <RoleSelect
                         value={watch("idRole")}

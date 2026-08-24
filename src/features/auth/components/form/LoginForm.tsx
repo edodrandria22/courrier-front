@@ -1,8 +1,6 @@
 'use client'
 
 import { useState } from 'react'
-import Link from 'next/link'
-import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Loader2 } from 'lucide-react'
@@ -12,8 +10,7 @@ export const LoginForm = () => {
   const { performLogin, loading, error } = useLogin()
   const [credentials, setCredentials] = useState({
     email: 'admin@gmail.com',
-    mdp: 'admin',
-    rememberMe: false
+    mdp: 'admin'
   })
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -42,7 +39,7 @@ export const LoginForm = () => {
             </label>
             <Input
               type="email"
-              placeholder="nom.prenom@espa-poly.mg"
+              placeholder="Entrer votre email"
               /* Retour au style original des inputs */
               className="h-12 bg-background/50 border-border focus:ring-primary/50 rounded-xl"
               value={credentials.email}
@@ -60,25 +57,13 @@ export const LoginForm = () => {
             </div>
             <Input
               type="password"
-              placeholder="••••••••"
+              placeholder="Entrer votre mot de passe"
               className="h-12 bg-background/50 border-border focus:ring-primary/50 rounded-xl"
               value={credentials.mdp}
               onChange={(e) => setCredentials({ ...credentials, mdp: e.target.value })}
               required
               disabled={loading}
             />
-          </div>
-
-          <div className="flex items-center justify-between text-sm">
-            <label className="flex items-center gap-2 cursor-pointer group">
-              <input
-                type="checkbox"
-                checked={credentials.rememberMe}
-                onChange={(e) => setCredentials({ ...credentials, rememberMe: e.target.checked })}
-                className="w-4 h-4 border border-border rounded accent-primary"
-              />
-              <span className="text-muted-foreground group-hover:text-foreground transition-colors">Remember me</span>
-            </label>
           </div>
 
           <button
