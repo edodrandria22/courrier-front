@@ -72,6 +72,9 @@ export const CourrierTemplate = ({ initialCourrier, isRecherche }: CourrierTempl
   // --- LOGIQUE COURRIERS ---
 
   useEffect(() => {
+    // Ne pas charger les courriers si c'est une recherche
+    if (isRecherche) return;
+
     const initCourriers = async () => {
       const data = await fetchCourriersByUser(undefined, isTraiterAt,isRecu);
       if (data && data.length < nbLimitCourrier) setHasMoreCourriers(false);
@@ -82,7 +85,7 @@ export const CourrierTemplate = ({ initialCourrier, isRecherche }: CourrierTempl
       setNbNonTraiteState(stat.nonTraite);
       setNbRecuState(stat.nonLu);
     });
-  }, [fetchCourriersByUser, isTraiterAt,isRecu]);
+  }, [fetchCourriersByUser, isTraiterAt, isRecu, isRecherche]);
  
 
   const loadMoreCourriers = async () => {
