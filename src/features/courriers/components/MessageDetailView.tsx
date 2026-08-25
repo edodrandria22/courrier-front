@@ -213,7 +213,7 @@ export const MessageDetailView = ({ courrier, message, messages, currentUserId, 
         </div>
 
         {/* Contenu du message */}
-        <div className="space-y-2">
+        {/* <div className="space-y-2">
           <label className="flex items-center gap-2 text-sm font-semibold text-foreground">
             <MessageSquare className="w-3.5 h-3.5 text-muted-foreground" />
             Observation
@@ -221,7 +221,7 @@ export const MessageDetailView = ({ courrier, message, messages, currentUserId, 
           <div className="p-4 bg-background/50 border border-border rounded-xl text-sm text-foreground/80 leading-relaxed whitespace-pre-wrap min-h-[100px]">
             {message.observation || <span className="text-muted-foreground/50 italic">Aucun commentaire</span>}
           </div>
-        </div>
+        </div> */}
 
         {/* Pièces jointes */}
         {message.fichiers.length > 0 && (
