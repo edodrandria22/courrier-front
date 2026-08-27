@@ -387,7 +387,7 @@ export const CourrierForm = ({ onSuccess, courrier, onClose }: Props) => {
                     type="email"
                     value={personne.email || ''}
                     onChange={(e) => handlePersonneChange(index, 'email', e.target.value)}
-                    placeholder="email du correspondant (optionnel)"
+                    placeholder="Mail du correspondant (optionnel)"
                     className="bg-background border-border disabled:opacity-50"
                     disabled={isFieldDisabled}
                   />
