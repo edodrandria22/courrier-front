@@ -23,7 +23,7 @@ const APP_CONFIG = {
     email: "contact@espa-poly.mg",
     address: "Vontovorona, Antananarivo 101"
   },
-  copyright: `© ${new Date().getFullYear()}. e-COURRIER.`,
+  copyright: `© ${new Date().getFullYear()}`,
   paths: {
     logo: "/mesupres.jpg",
     logoFooter: "/logo-edogsanmhr.png",
@@ -39,18 +39,6 @@ const APP_CONFIG = {
 // Liste des fonctionnalités
 const FEATURES_DATA = [
   {
-    icon: Mail,
-    color: "text-primary",
-    title: "Courriers",
-    description: "Envoyez et recevez des courriers instantanés."
-  },
-  {
-    icon: Search,
-    color: "text-secondary",
-    title: "Recherche",
-    description: "Recherchez facilement vos courriers selon vos critères."
-  },
-  {
     icon: Clock,
     color: "text-primary",
     title: "Temps Réel",
@@ -61,6 +49,12 @@ const FEATURES_DATA = [
     color: "text-secondary",
     title: "Sécurisé",
     description: "Vos échanges sont chiffrés et protégés."
+  },
+  {
+    icon: Search,
+    color: "text-secondary",
+    title: "Recherche",
+    description: "Recherchez facilement vos courriers selon vos critères."
   }
 ]
 
@@ -236,7 +230,7 @@ export default function Home() {
           <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-16 italic">
             Fonctionnalités Principales
           </h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 place-items-center mx-auto max-w-6xl">
             {FEATURES_DATA.map((feature, index) => (
               <FeatureCard 
                 key={index}
@@ -256,11 +250,10 @@ export default function Home() {
           
         {/* Barre Copyright */}
         <div className="relative max-w-6xl mx-auto">
-          <p className="text-center text-muted-foreground text-[10px] font-medium tracking-[0.2em] uppercase px-12">
-            {APP_CONFIG.copyright}
-          </p>
-          <p className="text-center text-amber-600 text-[10px] font-medium tracking-[0.2em] uppercase px-12">
-            {APP_CONFIG.developer.name}
+          <p className="text-center text-[10px] font-medium tracking-[0.2em] uppercase px-4">
+            <span className="text-muted-foreground">{APP_CONFIG.copyright}</span>
+            <span className="mx-2 text-muted-foreground">•</span>
+            <span className="text-amber-600">{APP_CONFIG.developer.name}</span>
           </p>
 
           <div className="absolute right-4 top-1/2 -translate-y-1/2">
