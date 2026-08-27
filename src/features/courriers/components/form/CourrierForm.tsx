@@ -254,7 +254,7 @@ export const CourrierForm = ({ onSuccess, courrier, onClose }: Props) => {
               value={formData.description}
               onChange={handleInputChange}
               rows={5}
-              placeholder="Détails supplémentaires..."
+              placeholder="Description du courrier (optionnel)"
               className="resize-none bg-background/50 border-border disabled:opacity-50"
               disabled={isFieldDisabled}
             />
@@ -269,7 +269,7 @@ export const CourrierForm = ({ onSuccess, courrier, onClose }: Props) => {
                 value={formData.observation}
                 onChange={handleInputChange}
                 rows={5}
-                placeholder="Détails supplémentaires..."
+                placeholder="Remarque sur le courrier (optionnel)"
                 className="resize-none bg-background/50 border-border disabled:opacity-50"
                 disabled={loading}
               />
@@ -387,7 +387,7 @@ export const CourrierForm = ({ onSuccess, courrier, onClose }: Props) => {
                     type="email"
                     value={personne.email || ''}
                     onChange={(e) => handlePersonneChange(index, 'email', e.target.value)}
-                    placeholder="adresse@mail.com"
+                    placeholder="email du correspondant (optionnel)"
                     className="bg-background border-border disabled:opacity-50"
                     disabled={isFieldDisabled}
                   />
