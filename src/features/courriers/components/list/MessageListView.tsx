@@ -270,9 +270,9 @@ export const MessageListView = ({ courrier, messages, loading, error, currentUse
                 <Tooltip>
                   <TooltipTrigger asChild>
                     <div className="flex items-center gap-2 cursor-pointer hover:bg-muted/40 p-1 rounded transition-colors">
-                      <div className="h-7 w-7 rounded-full bg-primary/10 flex items-center justify-center text-xs font-bold text-primary shrink-0">
+                      {/* <div className="h-7 w-7 rounded-full bg-primary/10 flex items-center justify-center text-xs font-bold text-primary shrink-0">
                         EX
-                      </div>
+                      </div> */}
                       <div className="min-w-0">
                         <p className="font-medium text-xs truncate">
                           {courrier.expediteur?.nom} {courrier.expediteur?.prenom}
@@ -298,9 +298,9 @@ export const MessageListView = ({ courrier, messages, loading, error, currentUse
                 <Tooltip>
                   <TooltipTrigger asChild>
                     <div className="flex items-center gap-2 cursor-pointer hover:bg-muted/40 p-1 rounded transition-colors">
-                      <div className="h-7 w-7 rounded-full bg-secondary/20 flex items-center justify-center text-xs font-bold text-secondary-foreground shrink-0">
+                      {/* <div className="h-7 w-7 rounded-full bg-secondary/20 flex items-center justify-center text-xs font-bold text-secondary-foreground shrink-0">
                         DE
-                      </div>
+                      </div> */}
                       <div className="min-w-0">
                         <p className="font-medium text-xs truncate">
                           {courrier.destinataire?.nom} {courrier.destinataire?.prenom}
