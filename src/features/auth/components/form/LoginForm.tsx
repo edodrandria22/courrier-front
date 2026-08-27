@@ -9,8 +9,8 @@ import { useLogin } from '../../hooks/useLogin'
 export const LoginForm = () => {
   const { performLogin, loading, error } = useLogin()
   const [credentials, setCredentials] = useState({
-    email: 'admin@gmail.com',
-    mdp: 'admin'
+    email: '',
+    mdp: ''
   })
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -35,7 +35,7 @@ export const LoginForm = () => {
 
           <div className="space-y-2">
             <label className="text-xs font-bold uppercase tracking-widest text-muted-foreground ml-1">
-              Email Institutionnel
+              Email
             </label>
             <Input
               type="email"
