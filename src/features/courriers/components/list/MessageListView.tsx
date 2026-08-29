@@ -418,6 +418,13 @@ export const MessageListView = ({ courrier, messages, loading, error, currentUse
                   </span>
                 </div>
               </div>
+              <div className="flex items-center gap-1.5">
+                <FileText className="w-3.5 h-3.5 text-muted-foreground" />
+                <div>
+                  <span className="block font-medium text-[10px] text-muted-foreground/80">Bordureau d'envoi</span>
+                  <span className="text-foreground">{courrier.bordureau || "—"}</span>
+                </div>
+              </div>
             </div>
             {/* Nouveau bloc pour l'Observation */}
             <div className="flex items-start gap-2 col-span-2 sm:col-span-3 border-t border-dashed pt-3 mt-2 group relative">
@@ -541,7 +548,7 @@ export const MessageListView = ({ courrier, messages, loading, error, currentUse
                         <th className="px-4 py-3 font-medium">Expéditeur</th>
                         <th className="px-4 py-3 font-medium">Destinataire</th>
                         <th className="px-4 py-3 font-medium">Statut</th>
-                        {/* <th className="px-4 py-3 font-medium max-w-[250px]">Observation</th> */}
+                        <th className="px-4 py-3 font-medium max-w-[250px]">Bordureau d'envoi</th>
                         <th className="px-4 py-3 font-medium">Numero depart</th>
                         <th className="px-4 py-3 font-medium">Numero arrivée</th>
                         <th className="px-4 py-3 font-medium">Date</th>
@@ -606,10 +613,10 @@ export const MessageListView = ({ courrier, messages, loading, error, currentUse
                             </td>
 
                             {/* 5. Observation / Commentaire */}
-                            {/* <td className="px-4 py-3 max-w-[200px] sm:max-w-[250px] truncate">
+                            <td className="px-4 py-3 max-w-[200px] sm:max-w-[250px] truncate">
                               {accessible ? (
                                 <span className={cn('text-sm truncate block', !isRead ? 'text-foreground/90 font-medium' : 'text-muted-foreground')}>
-                                  {message.observation || <span className="italic opacity-70">Aucun commentaire</span>}
+                                  {message.bordureau || <span className="italic opacity-70">Aucun bordereau</span>}
                                 </span>
                               ) : (
                                 <div className="flex items-center gap-1.5 text-muted-foreground/60">
@@ -617,7 +624,7 @@ export const MessageListView = ({ courrier, messages, loading, error, currentUse
                                   <span className="text-xs font-medium italic">Confidentiel</span>
                                 </div>
                               )}
-                            </td> */}
+                            </td>
                             <td className="px-4 py-3 whitespace-nowrap">
                               {message.numeroExpediteur}
                             </td>

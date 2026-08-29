@@ -38,6 +38,7 @@ export const TransfererDialog = ({ messageId, onSuccess }: Props) => {
   // États du formulaire
   const [selectedUserId, setSelectedUserId] = useState<number | null>(null)
   const [observation, setObservation] = useState('')
+  const [bordureau, setBordureau] = useState('')
   const [attachments, setAttachments] = useState<Attachment[]>([])
   const fileInputRef = useRef<HTMLInputElement>(null)
 
@@ -112,7 +113,7 @@ export const TransfererDialog = ({ messageId, onSuccess }: Props) => {
     const files = attachments.map((att) => att.file)
     
     try {
-      const result = await transferer(messageId, selectedUserId, observation, files)
+      const result = await transferer(messageId, selectedUserId, observation, bordureau ,files)
 
       if (result.success) {
         setIsClosing(true)
@@ -242,6 +243,19 @@ export const TransfererDialog = ({ messageId, onSuccess }: Props) => {
                 </Command>
               </PopoverContent>
             </Popover>
+          </div>
+          {/* Bordureau */}
+          <div className="space-y-2">
+            <label className="text-sm font-semibold text-foreground">
+              Bordureau d'envoi <span className="text-muted-foreground font-normal">(optionnel)</span>
+            </label>
+            <Textarea
+              placeholder="Entrer le bordureau d'envoi"
+              value={bordureau}
+              onChange={(e) => setBordureau(e.target.value)}
+              disabled={transferring}
+              className="resize-none bg-background/50 border-border text-foreground text-sm"
+            />
           </div>
 
           {/* Observation */}
