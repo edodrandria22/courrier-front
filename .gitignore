@@ -13,3 +13,4 @@ node_modules/
 zo-dossier/
 CLAUDE.md
 .claude/
+/hooks/useMercureSubscription.ts
