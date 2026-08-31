@@ -50,7 +50,8 @@ export const useMessages = (folder: MessageFolder = 'inbox') => {
       logger.exception('useMessages.transfererMessage', err);
       const msg = err instanceof Error ? err.message : 'Erreur lors du transfert';
       setError(msg);
-      return { success: false, error: msg };
+      throw err;
+      // return { success: false, error: msg };
     } finally {
       setLoading(false);
     }
