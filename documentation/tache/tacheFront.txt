@@ -164,6 +164,6 @@ GET http://localhost:3000/api/notifications/subscribe 404 (Not Found)
     --bordureau d'envoie -- ok -- 30 mn
 31/08/2026
     --marquer comme lu -- ok -- 30 mn
-    -- transfere message avec numero d'envoi -- a faire -- 30 mn 
+    -- transfere message avec numero d'envoi -- ok -- 30 mn 
 --quand on clique sur le boutton retour on doit revenir a la page precedente sans scroller -- ok -- 60 mn
 --sur la page de recherche le sroll doit avoir qu'une seule scroll -- a faire -- 60m
