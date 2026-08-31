@@ -48,7 +48,7 @@ export interface MessageCourrier {
   isReadAt: string | null;
   observation: string | null;
   dateValidation: string | null;
-  
+  bordureau: string| null;
   courrier: Courrier;
   
   // Relations utilisateurs
@@ -90,6 +90,7 @@ export interface Courrier {
   isTraiterAt?: string ;
   messageId?:string|null
   numeroExpediteur?: number;
+  bordureau: string|null;
 }
 
 export interface Statistique {

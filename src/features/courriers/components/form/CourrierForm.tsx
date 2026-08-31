@@ -30,6 +30,7 @@ export const CourrierForm = ({ onSuccess, courrier, onClose }: Props) => {
     : [];
 
   const [formData, setFormData] = useState({
+    numero: courrier?.numero || '',
     object: courrier?.object || '',
     description: courrier?.description || '',
     observation: courrier?.observation || '',
@@ -234,6 +235,20 @@ export const CourrierForm = ({ onSuccess, courrier, onClose }: Props) => {
         <div className="space-y-4 pt-4">
           <h3 className="text-sm font-bold uppercase tracking-wider text-muted-foreground">Détails du document</h3>
           
+          {!courrier && (
+            <div className="space-y-2">
+              <label className="text-sm font-semibold text-foreground">Numero d'arrivée</label>
+              <Input
+                type= "number"
+                name="numero"
+                value={formData.numero}
+                onChange={handleInputChange}
+                required
+                placeholder="Numero d'arrivée"
+                className="bg-background/50 border-border disabled:opacity-50 disabled:font-semibold disabled:text-amber-600"
+              />
+            </div>
+          )}
           <div className="space-y-2">
             <label className="text-sm font-semibold text-foreground">Objet</label>
             <Input

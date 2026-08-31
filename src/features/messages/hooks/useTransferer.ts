@@ -8,7 +8,7 @@ export const useTransferer = () => {
   const [error, setError] = useState<string | null>(null)
 
   const transferer = useCallback(
-    async (messageId: number, destId: number, observation: string = '', files: File[] = []) => {
+    async (messageId: number, destId: number, observation: string = '', bordureau: string = '' ,numeroDepart: string = '', files: File[] = []) => {
       setLoading(true)
       setError(null)
 
@@ -16,10 +16,16 @@ export const useTransferer = () => {
         const formData = new FormData()
         formData.append('id', String(messageId))
         formData.append('destId', String(destId))
+        formData.append('numeroDepart', Number(numeroDepart) ? String(numeroDepart) : '')
 
         if (observation.trim()) {
           formData.append('observation', observation)
         }
+        if (bordureau.trim()) {
+          formData.append('bordureau', bordureau)
+        }
+
+        
 
         files.forEach((file) => {
           formData.append('fichiers[]', file)

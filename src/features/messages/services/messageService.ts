@@ -62,9 +62,12 @@ export const messageService = {
     }
   },
 
-  marquerLu: async (id: number): Promise<{ success: boolean; error?: string }> => {
+  marquerLu: async (id: number, numeroArrivee: number): Promise<{ success: boolean; error?: string }> => {
     try {
-      const res = await fetch(`/api/messages/${id}/lire`, { method: 'PATCH' });
+      const res = await fetch(`/api/messages/${id}/lire`, { 
+        method: 'PATCH',
+        body: JSON.stringify({ numeroArrivee })
+      });
       
       if (!res.ok) {
         // await logger.error(`messageService.marquerLu(${id})`, res);

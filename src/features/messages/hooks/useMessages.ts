@@ -50,17 +50,18 @@ export const useMessages = (folder: MessageFolder = 'inbox') => {
       logger.exception('useMessages.transfererMessage', err);
       const msg = err instanceof Error ? err.message : 'Erreur lors du transfert';
       setError(msg);
-      return { success: false, error: msg };
+      throw err;
+      // return { success: false, error: msg };
     } finally {
       setLoading(false);
     }
   }, []);
 
-  const marquerLu = useCallback(async (id: number) => {
+  const marquerLu = useCallback(async (id: number,numeroArrivee: number) => {
     setLoading(true);
     setError(null);
     try {
-      const result = await messageService.marquerLu(id);
+      const result = await messageService.marquerLu(id, numeroArrivee);
       if (result.success) {
         setMessages(prev => prev.map(m => m.id === id ? { ...m, isReadAt: new Date().toISOString() } : m));
       }

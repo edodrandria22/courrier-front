@@ -62,8 +62,16 @@ export const MessageListView = ({ courrier, messages, loading, error, currentUse
 
   const marquerLuMessage = async () => {
     if (!courrier.messageId) return;
+    setIsShowingNumeroArrivee(true);
+  };
+
+  const handleMarquerLuWithNumero = async () => {
+    if (!courrier.messageId || !numeroArrivee) return;
     try {
-      await marquerLu(Number(courrier.messageId));
+      await marquerLu(Number(courrier.messageId), Number(numeroArrivee));
+      setIsShowingNumeroArrivee(false);
+      setNumeroArrivee('');
+      toast.success("Courrier marqué comme arrivé");
     } catch (error) {
       // console.error("Erreur lors du marquage comme lu", error);
       const message = error instanceof Error ? error.message : String(error);
@@ -74,6 +82,10 @@ export const MessageListView = ({ courrier, messages, loading, error, currentUse
   const [isEditingObs, setIsEditingObs] = useState(false)
   const [obsValue, setObsValue] = useState(courrier.observation || '')
   const [isUpdatingObs, setIsUpdatingObs] = useState(false)
+  
+  // États pour le formulaire de marquage comme lu
+  const [isShowingNumeroArrivee, setIsShowingNumeroArrivee] = useState(false)
+  const [numeroArrivee, setNumeroArrivee] = useState('')
 
   // Fonction de soumission de la nouvelle observation
   const handleUpdateObservation = async () => {
@@ -159,16 +171,49 @@ export const MessageListView = ({ courrier, messages, loading, error, currentUse
         <div className="p-4 md:p-6 pb-2">
           <div className="flex flex-col gap-4 p-4 sm:p-5 bg-card text-card-foreground rounded-xl border shadow-sm max-w-4xl mx-auto">
              {isButtonLu && (
-              <div className="flex items-center gap-1.5 col-span-2 sm:col-span-1">
-                <Button 
-                          size="sm" 
-                          style={{ color: '#ffffff' }}
-                          className="h-8 text-xs"
-                          onClick={marquerLuMessage}
-                          disabled={loadingMarquer}
-                >
-                        {loadingMarquer ? 'Enregistrement...' : 'Marquer comme arrivée'}
-                </Button>
+              <div className="flex flex-col gap-2 col-span-2 sm:grid-cols-1">
+                {!isShowingNumeroArrivee ? (
+                  <Button 
+                    size="sm" 
+                    style={{ color: '#ffffff' }}
+                    className="h-8 text-xs"
+                    onClick={marquerLuMessage}
+                    disabled={loadingMarquer}
+                  >
+                    {loadingMarquer ? 'Enregistrement...' : 'Marquer comme arrivée'}
+                  </Button>
+                ) : (
+                  <div className="flex items-center gap-2">
+                    <input
+                      type="number"
+                      value={numeroArrivee}
+                      onChange={(e) => setNumeroArrivee(e.target.value)}
+                      placeholder="Numéro d'arrivée"
+                      className="flex-1 px-3 py-2 border rounded text-sm text-foreground placeholder:text-muted-foreground transition-colors outline-none focus:ring-1 focus:ring-slate-900 border-slate-300"
+                    />
+                    <Button 
+                      size="sm" 
+                      style={{ color: '#ffffff' }}
+                      className="h-8 text-xs"
+                      onClick={handleMarquerLuWithNumero}
+                      disabled={loadingMarquer || !numeroArrivee}
+                    >
+                      {loadingMarquer ? 'Enregistrement...' : 'Valider'}
+                    </Button>
+                    <Button 
+                      variant="outline"
+                      size="sm" 
+                      className="h-8 text-xs"
+                      onClick={() => {
+                        setIsShowingNumeroArrivee(false);
+                        setNumeroArrivee('');
+                      }}
+                      disabled={loadingMarquer}
+                    >
+                      Annuler
+                    </Button>
+                  </div>
+                )}
               </div>
             )}
             {/* En-tête : Référence et Statuts */}
@@ -270,9 +315,9 @@ export const MessageListView = ({ courrier, messages, loading, error, currentUse
                 <Tooltip>
                   <TooltipTrigger asChild>
                     <div className="flex items-center gap-2 cursor-pointer hover:bg-muted/40 p-1 rounded transition-colors">
-                      <div className="h-7 w-7 rounded-full bg-primary/10 flex items-center justify-center text-xs font-bold text-primary shrink-0">
+                      {/* <div className="h-7 w-7 rounded-full bg-primary/10 flex items-center justify-center text-xs font-bold text-primary shrink-0">
                         EX
-                      </div>
+                      </div> */}
                       <div className="min-w-0">
                         <p className="font-medium text-xs truncate">
                           {courrier.expediteur?.nom} {courrier.expediteur?.prenom}
@@ -298,9 +343,9 @@ export const MessageListView = ({ courrier, messages, loading, error, currentUse
                 <Tooltip>
                   <TooltipTrigger asChild>
                     <div className="flex items-center gap-2 cursor-pointer hover:bg-muted/40 p-1 rounded transition-colors">
-                      <div className="h-7 w-7 rounded-full bg-secondary/20 flex items-center justify-center text-xs font-bold text-secondary-foreground shrink-0">
+                      {/* <div className="h-7 w-7 rounded-full bg-secondary/20 flex items-center justify-center text-xs font-bold text-secondary-foreground shrink-0">
                         DE
-                      </div>
+                      </div> */}
                       <div className="min-w-0">
                         <p className="font-medium text-xs truncate">
                           {courrier.destinataire?.nom} {courrier.destinataire?.prenom}
@@ -416,6 +461,13 @@ export const MessageListView = ({ courrier, messages, loading, error, currentUse
                   <span className={`text-foreground ${courrier.dateValidation ? "font-medium text-destructive" : ""}`}>
                     {courrier.dateValidation ? formatDateTime(courrier.dateValidation) : "Aucune"}
                   </span>
+                </div>
+              </div>
+              <div className="flex items-center gap-1.5">
+                <FileText className="w-3.5 h-3.5 text-muted-foreground" />
+                <div>
+                  <span className="block font-medium text-[10px] text-muted-foreground/80">Bordureau d'envoi</span>
+                  <span className="text-foreground">{courrier.bordureau || "—"}</span>
                 </div>
               </div>
             </div>
@@ -541,7 +593,7 @@ export const MessageListView = ({ courrier, messages, loading, error, currentUse
                         <th className="px-4 py-3 font-medium">Expéditeur</th>
                         <th className="px-4 py-3 font-medium">Destinataire</th>
                         <th className="px-4 py-3 font-medium">Statut</th>
-                        {/* <th className="px-4 py-3 font-medium max-w-[250px]">Observation</th> */}
+                        <th className="px-4 py-3 font-medium max-w-[250px]">Bordureau d'envoi</th>
                         <th className="px-4 py-3 font-medium">Numero depart</th>
                         <th className="px-4 py-3 font-medium">Numero arrivée</th>
                         <th className="px-4 py-3 font-medium">Date</th>
@@ -606,10 +658,10 @@ export const MessageListView = ({ courrier, messages, loading, error, currentUse
                             </td>
 
                             {/* 5. Observation / Commentaire */}
-                            {/* <td className="px-4 py-3 max-w-[200px] sm:max-w-[250px] truncate">
+                            <td className="px-4 py-3 max-w-[200px] sm:max-w-[250px] truncate">
                               {accessible ? (
                                 <span className={cn('text-sm truncate block', !isRead ? 'text-foreground/90 font-medium' : 'text-muted-foreground')}>
-                                  {message.observation || <span className="italic opacity-70">Aucun commentaire</span>}
+                                  {message.bordureau || <span className="italic opacity-70">Aucun bordereau</span>}
                                 </span>
                               ) : (
                                 <div className="flex items-center gap-1.5 text-muted-foreground/60">
@@ -617,7 +669,7 @@ export const MessageListView = ({ courrier, messages, loading, error, currentUse
                                   <span className="text-xs font-medium italic">Confidentiel</span>
                                 </div>
                               )}
-                            </td> */}
+                            </td>
                             <td className="px-4 py-3 whitespace-nowrap">
                               {message.numeroExpediteur}
                             </td>

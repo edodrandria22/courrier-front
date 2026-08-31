@@ -6,5 +6,5 @@ export async function PATCH(
   { params }: { params: Promise<{ id: string }> }
 ) {
   const { id } = await params;
-  return callApiPatch(request, `/messages/${id}/lire`);
+  return callApiPatch(request, `/messages/${id}/lire`, ["numeroArrivee"]);
 }

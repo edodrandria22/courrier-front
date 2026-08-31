@@ -15,6 +15,7 @@ import type { User as Utilisateur} from '@/features/auth/types/login'
 import { format } from 'date-fns';
 import { routerServerGlobal } from 'next/dist/server/lib/router-utils/router-server-context'
 import { toast } from 'sonner'
+import { Input } from '@/components/ui/input'
 
 // Si vous utilisiez le contexte pour autre chose, vous pouvez le garder, 
 // mais pour la recherche dynamique nous avons besoin du hook useUtilisateurs.
@@ -38,6 +39,7 @@ export const TransfererDialog = ({ messageId, onSuccess }: Props) => {
   // États du formulaire
   const [selectedUserId, setSelectedUserId] = useState<number | null>(null)
   const [observation, setObservation] = useState('')
+  const [bordureau, setBordureau] = useState('')
   const [attachments, setAttachments] = useState<Attachment[]>([])
   const fileInputRef = useRef<HTMLInputElement>(null)
 
@@ -49,6 +51,8 @@ export const TransfererDialog = ({ messageId, onSuccess }: Props) => {
   const dateActuelle = new Date();
   const dateString = format(dateActuelle, 'yyyy-MM-dd HH:mm:ss');
   const [dateFin, setDateFin] = useState(dateString);
+
+  const [numeroDepart, setNumeroDepart] = useState('');
 
   // Hooks métiers
   const { transferer, loading: transferring, error: transferError } = useTransferer();
@@ -112,7 +116,7 @@ export const TransfererDialog = ({ messageId, onSuccess }: Props) => {
     const files = attachments.map((att) => att.file)
     
     try {
-      const result = await transferer(messageId, selectedUserId, observation, files)
+      const result = await transferer(messageId, selectedUserId, observation, bordureau , numeroDepart, files)
 
       if (result.success) {
         setIsClosing(true)
@@ -128,8 +132,9 @@ export const TransfererDialog = ({ messageId, onSuccess }: Props) => {
       }
     } catch (error) {
       // L'erreur est déjà gérée par le hook useTransferer et affichée dans transferError
-      console.error('Erreur lors du transfert:', error)
-      toast.error("Erreur lors de la tranfere")
+      // console.error('Erreur lors du transfert:', error)
+      const message = error instanceof Error ? error.message : 'Erreur lors du transfert'
+      toast.error(message);
     }
   }
 
@@ -148,6 +153,19 @@ export const TransfererDialog = ({ messageId, onSuccess }: Props) => {
         </DialogHeader>
 
         <div className="py-4 space-y-4 max-h-[70vh] overflow-y-auto px-1">
+          <div className="space-y-2">
+            <label className="text-sm font-semibold text-foreground">
+              Numero de depart <span className="text-muted-foreground font-normal"></span>
+            </label>
+            <Input
+              placeholder="Entrer le numero de depart"
+              value={numeroDepart}
+              type="number"
+              onChange={(e) => setNumeroDepart(e.target.value)}
+              disabled={transferring}
+              className="resize-none bg-background/50 border-border text-foreground text-sm"
+            />
+          </div>
           {/* Utilisateurs avec Recherche */}
           <div className="space-y-3">
             <label className="text-sm font-semibold text-foreground">
@@ -242,6 +260,19 @@ export const TransfererDialog = ({ messageId, onSuccess }: Props) => {
                 </Command>
               </PopoverContent>
             </Popover>
+          </div>
+          {/* Bordureau */}
+          <div className="space-y-2">
+            <label className="text-sm font-semibold text-foreground">
+              Bordureau d'envoi <span className="text-muted-foreground font-normal">(optionnel)</span>
+            </label>
+            <Input
+              placeholder="Entrer le bordureau d'envoi"
+              value={bordureau}
+              onChange={(e) => setBordureau(e.target.value)}
+              disabled={transferring}
+              className="resize-none bg-background/50 border-border text-foreground text-sm"
+            />
           </div>
 
           {/* Observation */}
