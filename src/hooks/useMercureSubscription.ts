@@ -2,8 +2,8 @@
 
 import { useEffect, useRef } from "react";
 
-const MERCURE_HUB_URL = `http://${process.env.NEXT_PUBLIC_IP_BACKEND}:4000/.well-known/mercure`;
-// const MERCURE_HUB_URL = `${process.env.NEXT_PUBLIC_URL}/.well-known/mercure`;
+// const MERCURE_HUB_URL = `http://${process.env.NEXT_PUBLIC_IP_BACKEND}:4000/.well-known/mercure`;
+const MERCURE_HUB_URL = `${process.env.NEXT_PUBLIC_URL}/.well-known/mercure`;
 
 
 export function useMercureSubscription<T>(
