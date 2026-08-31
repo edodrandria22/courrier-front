@@ -19,5 +19,6 @@ export interface CourrierSearchCriteria {
   dateMessageFin?: string;
   dateReceptionDebut?: string;
   dateReceptionFin?: string;
+  bordureau?: string
 }
 

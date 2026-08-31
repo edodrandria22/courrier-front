@@ -41,7 +41,8 @@ const DEFAULT_CRITERIA: CourrierSearchCriteria = {
     dateReceptionDebut: '',
     dateReceptionFin: '',
     numeroExpediteur: undefined,
-    numeroDestinataire: undefined
+    numeroDestinataire: undefined,
+    bordureau:''
   }
 
   // 2. Fonction utilitaire pour assainir les critères reçus en props (remplace undefined par '')
@@ -63,7 +64,8 @@ const DEFAULT_CRITERIA: CourrierSearchCriteria = {
     dateReceptionDebut: criteria?.dateReceptionDebut ?? '',
     dateReceptionFin: criteria?.dateReceptionFin ?? '',
     numeroExpediteur: criteria?.numeroExpediteur,
-    numeroDestinataire: criteria?.numeroDestinataire
+    numeroDestinataire: criteria?.numeroDestinataire,
+    bordureau: criteria?.bordureau ?? ''
   })
   const [criteria, setCriteria] = useState<CourrierSearchCriteria>(() => 
   sanitizeCriteria(initialCriteria)
@@ -181,6 +183,17 @@ const DEFAULT_CRITERIA: CourrierSearchCriteria = {
               onChange={(e) => handleInputChange('telephone', e.target.value)}
               className="w-full px-3 py-2 text-sm bg-background border border-input rounded-md focus:outline-none focus:ring-2 focus:ring-primary/50 transition-all"
               placeholder="0340000000"
+            />
+          </div>
+          
+          <div>
+            <label className="block text-xs font-medium mb-1.5 text-foreground">Bordureau d'envoi</label>
+            <input
+              type="text"
+              value={criteria.bordureau}
+              onChange={(e) => handleInputChange('bordureau', e.target.value)}
+              className="w-full px-3 py-2 text-sm bg-background border border-input rounded-md focus:outline-none focus:ring-2 focus:ring-primary/50 transition-all"
+              placeholder="bordureau d'envoi"
             />
           </div>
         </div>
