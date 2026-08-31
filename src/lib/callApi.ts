@@ -150,27 +150,100 @@ export async function callApiPost(
 
 export async function callApiPatch(
   request: NextRequest,
-  url: string
-) {
+  url: string,
+  requiredFields: string[] = []
+  ) {
   try {
-    const api = getServerAxios(request);
-    const response = await api.patch(url);
-    return NextResponse.json(response.data);
-  } catch (err: unknown) {
-    if (axios.isAxiosError(err)) {
-      const msg =
-        err.response?.data?.error ||
-        err.response?.data?.message ||
-        err.message;
+  const api = getServerAxios(request);
+
+  // 🔍 Lire le body brut
+  const rawBody = await request.text();
+  // 📥 Convertir le body en JSON seulement s'il existe
+  let body: Record<string, any> = {};
+
+  if (rawBody.trim() !== "") {
+    try {
+      body = JSON.parse(rawBody);
+    } catch (error) {
       return NextResponse.json(
-        { error: msg },
-        { status: err.response?.status || 500 }
+        {
+          error: "Le body envoyé n'est pas un JSON valide",
+          rawBody,
+        },
+        { status: 400 }
       );
     }
+  }
+
+  // 🔍 Vérifier les champs requis
+  const missingFields: string[] = [];
+
+  for (const field of requiredFields) {
+    if (
+      body[field] === undefined ||
+      body[field] === null ||
+      body[field] === ""
+    ) {
+      missingFields.push(field);
+    }
+  }
+
+  // ❌ Champs requis manquants
+  if (missingFields.length > 0) {
     return NextResponse.json(
-      { error: "Erreur interne inconnue du serveur" },
-      { status: 500 }
+      {
+        status: "error",
+        message:
+          "Champs requis manquants ou vides : " +
+          missingFields.join(", "),
+        error:
+          "Champs requis manquants ou vides : " +
+          missingFields.join(", "),
+        missingFields,
+      },
+      { status: 400 }
     );
+  }
+
+  // 🚀 Envoyer le PATCH vers Symfony avec le body
+  const response = await api.patch(url, body, {
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+
+  return NextResponse.json(response.data);
+
+
+  } catch (err: unknown) {
+
+  if (axios.isAxiosError(err)) {
+    const msg =
+      err.response?.data?.error ||
+      err.response?.data?.message ||
+      err.message;
+
+    return NextResponse.json(
+      {
+        error: msg,
+        debug: err.response?.data,
+      },
+      { status: err.response?.status || 500 }
+    );
+  }
+
+  const errorMessage =
+    err instanceof Error
+      ? err.message
+      : String(err);
+
+  return NextResponse.json(
+    {
+      error: errorMessage,
+    },
+    { status: 500 }
+  );
+
   }
 }
 

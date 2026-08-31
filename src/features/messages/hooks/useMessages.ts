@@ -56,11 +56,11 @@ export const useMessages = (folder: MessageFolder = 'inbox') => {
     }
   }, []);
 
-  const marquerLu = useCallback(async (id: number) => {
+  const marquerLu = useCallback(async (id: number,numeroArrivee: number) => {
     setLoading(true);
     setError(null);
     try {
-      const result = await messageService.marquerLu(id);
+      const result = await messageService.marquerLu(id, numeroArrivee);
       if (result.success) {
         setMessages(prev => prev.map(m => m.id === id ? { ...m, isReadAt: new Date().toISOString() } : m));
       }
