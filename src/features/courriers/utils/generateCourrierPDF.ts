@@ -29,12 +29,11 @@ export function generateCourrierPDF(
   doc.setFont('helvetica', 'bold')
   doc.setFontSize(18)
   doc.setTextColor(255, 255, 255)
-  doc.text('ESPA COURIER', marginX, 16)
+  doc.text('E-COURIER', marginX, 16)
 
   doc.setFont('helvetica', 'normal')
   doc.setFontSize(9)
   doc.setTextColor(148, 163, 184) // slate-400
-  doc.text('École Polytechnique de Vontovorona', marginX, 23)
   doc.text('Fiche de suivi de courrier', marginX, 29)
 
   if (courrier.reference) {
@@ -101,12 +100,8 @@ export function generateCourrierPDF(
     drawRow('Description', courrier.description)
   }
   
-  const dateCreation = courrier.createdAt ? new Date(courrier.createdAt).toLocaleDateString('fr-FR') : '—'
-  drawRow('Date de creation', dateCreation)
-  
-  if (courrier.dateFin) {
-    drawRow('Date limite', new Date(courrier.dateFin).toLocaleDateString('fr-FR'))
-  }
+  const dateCreation = courrier.isReadAt ? new Date(courrier.isReadAt).toLocaleDateString('fr-FR') : '—'
+  drawRow("Date d'arrivée", dateCreation);
 
   // ── Demandeur ─────────────────────────────────────────────────────────────
   drawSection('Informations du demandeur');
@@ -172,7 +167,7 @@ export function generateCourrierPDF(
     marginX,
     pageH - 8
   )
-  doc.text('ESPA — Confidentiel', pageW - marginX, pageH - 8, { align: 'right' })
+  doc.text('MESUPRES — Confidentiel', pageW - marginX, pageH - 8, { align: 'right' })
 
   // ── Sortie du document ───────────────────────────────────────────────────
   if (action === 'view') {

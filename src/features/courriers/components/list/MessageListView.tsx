@@ -3,7 +3,8 @@
 import { 
   ArrowLeft, ArrowRight, CheckCircle2, AlertCircle, Plus, Lock, 
   UserIcon, Mail, Phone, Calendar, Clock, FileText, 
-  Edit2
+  Edit2,
+  Loader2
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
@@ -38,9 +39,10 @@ interface Props {
   onLoadMore?: () => void
   loadingMore?: boolean
   onTransferSuccess?: () => void
+  onCloture: (id: number) => Promise<void>
 }
 
-export const MessageListView = ({ courrier, messages, loading, error, currentUserId, onSelect, onBack, isRecherche = false, updateHistorique, hasMoreMessages, onLoadMore, loadingMore, onTransferSuccess }: Props) => {
+export const MessageListView = ({ courrier, messages, loading, error, currentUserId, onSelect, onBack, isRecherche = false, updateHistorique, hasMoreMessages, onLoadMore, loadingMore, onTransferSuccess, onCloture }: Props) => {
   const { isMessageVisible, isLastRecipient,isLastMessage, isDestinataireOf } = useMessagePermissions(messages, currentUserId);
 
   // var isDestinataire = false;
@@ -52,17 +54,31 @@ export const MessageListView = ({ courrier, messages, loading, error, currentUse
 
   const statusLu = courrier.isReadAt ? 'arrivée' : 'non arrivée'
   const status = courrier.cloturePar ? 'finalise' : statusLu;
-  const nomClotureComplet = courrier.cloturePar?.nom && courrier.cloturePar?.prenom 
-    ? `${courrier.cloturePar.nom} ${courrier.cloturePar.prenom}`
+  const nomClotureComplet = courrier.cloturePar?.nom || courrier.cloturePar?.prenom 
+    ? `${courrier.cloturePar?.nom ?? ''} ${courrier.cloturePar?.prenom ?? ''}`.trim()
     : 'un utilisateur';
   const isConfidentiel = courrier.isConfidentiel // Vérification de la confidentialité du courrier
   // console.log(courrier);
   // États pour la gestion du formulaire d'observation
   const { marquerLu, loading: loadingMarquer , error: errorMarquer } = useMessages();
 
+  const [loadingCloturer, setLoadingCloturer] = useState(false);
   const marquerLuMessage = async () => {
     if (!courrier.messageId) return;
     setIsShowingNumeroArrivee(true);
+  };
+  const cloturer = async () => {
+    setLoadingCloturer(true);
+    
+    try {
+      await onCloture(courrier.id || 0);
+    } catch (err) {
+      // console.error("Erreur lors de la clôture", error);
+      const message = err instanceof Error ? err.message : "Erreur lors de la clôture";
+      toast.error(message);
+    } finally {
+      setLoadingCloturer(false);
+    }
   };
 
   const handleMarquerLuWithNumero = async () => {
@@ -72,9 +88,9 @@ export const MessageListView = ({ courrier, messages, loading, error, currentUse
       setIsShowingNumeroArrivee(false);
       setNumeroArrivee('');
       toast.success("Courrier marqué comme arrivé");
-    } catch (error) {
+    } catch (err) {
       // console.error("Erreur lors du marquage comme lu", error);
-      const message = error instanceof Error ? error.message : String(error);
+      const message = err instanceof Error ? err.message : String(err);
       toast.error(message);
     }
   };
@@ -95,9 +111,9 @@ export const MessageListView = ({ courrier, messages, loading, error, currentUse
       const courrierVaovao = await updateHistorique(courrier.historiqueId, obsValue);
       courrier.observation = courrierVaovao.observation;
       setIsEditingObs(false);
-    } catch (error) {
+    } catch (err) {
       // console.error("Erreur lors de la mise à jour de l'observation", error);
-      const message = error instanceof Error ? error.message : String(error);
+      const message = err instanceof Error ? err.message : String(err);
       toast.error(message);
     } finally {
       setIsUpdatingObs(false);
@@ -160,7 +176,28 @@ export const MessageListView = ({ courrier, messages, loading, error, currentUse
         </div>
 
         {isLastRecipient && !courrier.cloturePar && courrier.isReadAt && (
-          <TransfererDialog messageId={Number(courrier.messageId)} onSuccess={onSuccessTransfere} />
+          <div className="flex items-center gap-2">
+            <TransfererDialog messageId={Number(courrier.messageId)} onSuccess={onSuccessTransfere} />
+            <Button
+                            variant="outline"
+                            size="sm"
+                            onClick={cloturer}
+                            disabled={loadingCloturer}
+                            className="text-xs border-amber-500/30 text-amber-600 hover:bg-amber-500/10 gap-1.5"
+                          >
+                            {loadingCloturer ? (
+                              <>
+                                <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                                Clôture en cours...
+                              </>
+                            ) : (
+                              <>
+                                <Lock className="w-3.5 h-3.5" />
+                                Clôturer
+                              </>
+                            )}
+            </Button>
+          </div>
         )}
       </div>
 
@@ -659,16 +696,9 @@ export const MessageListView = ({ courrier, messages, loading, error, currentUse
 
                             {/* 5. Observation / Commentaire */}
                             <td className="px-4 py-3 max-w-[200px] sm:max-w-[250px] truncate">
-                              {accessible ? (
                                 <span className={cn('text-sm truncate block', !isRead ? 'text-foreground/90 font-medium' : 'text-muted-foreground')}>
                                   {message.bordureau || <span className="italic opacity-70">Aucun bordereau</span>}
                                 </span>
-                              ) : (
-                                <div className="flex items-center gap-1.5 text-muted-foreground/60">
-                                  <Lock className="w-3 h-3" />
-                                  <span className="text-xs font-medium italic">Confidentiel</span>
-                                </div>
-                              )}
                             </td>
                             <td className="px-4 py-3 whitespace-nowrap">
                               {message.numeroExpediteur}

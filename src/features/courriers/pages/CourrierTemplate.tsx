@@ -346,6 +346,7 @@ const handleLocalCloturation = useCallback(async (id: number) => {
           hasMoreMessages={hasMoreMessages}
           onLoadMore={loadMoreMessages}
           loadingMore={loading}
+          onCloture={handleLocalCloturation}
         />
       </div>
     )

@@ -47,7 +47,7 @@ type SearchField = 'nom' | 'reference' | 'description'
 
 const SEARCH_FIELDS: { value: SearchField; label: string; icon: React.ElementType; placeholder: string }[] = [
   { value: 'description', label: 'Contenu',   icon: FileText, placeholder: 'Rechercher dans l\'objet ou description...' },
-  { value: 'reference',   label: 'Référence', icon: Hash,     placeholder: 'Ex: ESPA-2026-001' },
+  { value: 'reference',   label: 'Référence', icon: Hash,     placeholder: 'Entrer le reference' },
   { value: 'nom',         label: 'Nom',       icon: User,     placeholder: 'Rechercher par nom ou prénom...' },
 ]
 
