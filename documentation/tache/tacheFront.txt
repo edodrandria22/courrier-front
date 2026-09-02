@@ -165,5 +165,9 @@ GET http://localhost:3000/api/notifications/subscribe 404 (Not Found)
 31/08/2026
     --marquer comme lu -- ok -- 30 mn
     -- transfere message avec numero d'envoi -- ok -- 30 mn 
+01/09/2026
+    --mettre une boutton cloturer sur le message list -- ok --30 mn
+    --changer espa en e-courrier pendant la generation pdf -- ok -- 15 mn
+    --afficher le bordureau meme si ce n'est pas sont bordureau -- ok --15 mn
 --quand on clique sur le boutton retour on doit revenir a la page precedente sans scroller -- ok -- 60 mn
 --sur la page de recherche le sroll doit avoir qu'une seule scroll -- a faire -- 60m

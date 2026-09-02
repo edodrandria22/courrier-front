@@ -230,7 +230,7 @@ export default function Home() {
           <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-16 italic">
             Fonctionnalités Principales
           </h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 place-items-center mx-auto max-w-6xl">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mx-auto max-w-6xl">
             {FEATURES_DATA.map((feature, index) => (
               <FeatureCard 
                 key={index}
