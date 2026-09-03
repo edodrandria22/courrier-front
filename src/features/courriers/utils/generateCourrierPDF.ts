@@ -29,7 +29,7 @@ export function generateCourrierPDF(
   doc.setFont('helvetica', 'bold')
   doc.setFontSize(18)
   doc.setTextColor(255, 255, 255)
-  doc.text('E-COURIER', marginX, 16)
+  doc.text('E-COURRIER', marginX, 16)
 
   doc.setFont('helvetica', 'normal')
   doc.setFontSize(9)
