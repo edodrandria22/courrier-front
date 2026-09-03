@@ -105,14 +105,14 @@ export default function Header({user,loading ,onMenuToggle, showMenu }: HeaderPr
             <DropdownMenuSeparator />
             <DropdownMenuItem className="cursor-pointer" onClick={() => router.push('/message/profile/security')}>
               <Settings className="w-4 h-4 mr-2" />
-              <span>Parametres</span>
+              <span>Changer mot de passe</span>
             </DropdownMenuItem>
-            {user?.role!="Admin" && (
+            {/* {user?.role!="Admin" && (
               <DropdownMenuItem className="cursor-pointer" onClick={() => router.push('/message/profile/numeroDepart')}>
                 <Hash className="w-4 h-4 mr-2" />
                 <span>Numéro de départ</span>
               </DropdownMenuItem>
-            )}
+            )} */}
 
             <DropdownMenuItem
               className="cursor-pointer text-destructive focus:text-destructive"
