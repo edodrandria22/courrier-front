@@ -265,6 +265,9 @@ const handleLocalCloturation = useCallback(async (id: number) => {
         setCourriers(prev => 
           prev.map(m => m.id === id ? { ...m, cloturePar: courrier.cloturePar , dateValidation: courrier.dateValidation } : m)
         );
+        if(isRecherche){
+          return;
+        }
         setIsTraiterAt(true);
         setIsRecu(null);
         setStep({ level: 'courriers' });
