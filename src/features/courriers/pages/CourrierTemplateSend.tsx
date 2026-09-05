@@ -14,7 +14,7 @@ import { useNotifications } from '@/hooks/useNotifications'
 import { useCloturer } from '../hooks/useCloturer'
 import { User } from '@/features/auth/types/login'
 import { useCurrentUser } from '@/features/auth/hooks/useCurrentUser'
-import toast from "react-hot-toast";
+import { toast } from 'sonner'
 type Step =
   | { level: 'courriers' }
   | { level: 'messages'; courrier: Courrier }
