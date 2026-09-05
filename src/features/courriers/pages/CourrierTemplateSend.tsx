@@ -303,6 +303,7 @@ const handleLocalCloturation = useCallback(async (id: number) => {
           onLoadMore={loadMoreMessages}
           loadingMore={loading}
           onTransferSuccess={handleTransferSuccess}
+          onCloture={handleLocalCloturation}
         />
       </div>
     )
