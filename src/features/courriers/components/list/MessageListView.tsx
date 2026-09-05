@@ -175,7 +175,7 @@ export const MessageListView = ({ courrier, messages, loading, error, currentUse
           <h1 className="text-sm font-semibold hidden sm:block">Détails du courrier</h1>
         </div>
 
-        {isLastRecipient && !courrier.cloturePar && courrier.isReadAt && (
+        {isLastRecipient && !courrier.cloturePar && courrier.isReadAt && courrier.isTraiterAt && (
           <div className="flex items-center gap-2">
             <TransfererDialog messageId={Number(courrier.messageId)} onSuccess={onSuccessTransfere} />
             <Button

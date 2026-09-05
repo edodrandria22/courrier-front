@@ -92,7 +92,7 @@ export const CourrierTemplate = ({ initialCourrier, isRecherche }: CourrierTempl
     if (loading || !hasMoreCourriers) return;
     let lastDate = courriers[courriers.length - 1]?.dateMessage;
     if(isTraiterAt){
-      lastDate = courriers[courriers.length - 1]?.isTraiterAt;
+      lastDate = courriers[courriers.length - 1]?.isTraiterAt || undefined;
     }
     if(isRecu)
     {
