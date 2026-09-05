@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import { profileService } from "@/features/profile/services/profileService";
-import toast from "sonner";
+import toast from "react-hot-toast";
 
 export default function SecurityPage() {
     const [password, setPassword] = useState("");
