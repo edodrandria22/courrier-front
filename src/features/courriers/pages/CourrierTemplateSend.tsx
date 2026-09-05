@@ -241,7 +241,7 @@ const handleLocalCloturation = useCallback(async (id: number) => {
                     // Message de secours si l'erreur a un format inattendu
         toast.error("Une erreur inconnue est survenue.");
       }
-      console.error("Erreur lors de la clôture :", error);
+      // console.error("Erreur lors de la clôture :", error);
     }
     
   // 5. Ne pas oublier d'ajouter 'cloturer' dans le tableau des dépendances
