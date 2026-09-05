@@ -222,7 +222,8 @@ export const courrierService = {
       });
       if (!res.ok) {
         await logger.error(`courrierService.cloturerCourrier(${id})`, res);
-        throw new Error('Impossible de clôturer le courrier');
+        const json = await res.json();
+        throw new Error(json.error ?? json.message ?? 'Impossible de clôturer le courrier');
       }
       const json = await res.json();
       return json.data as Courrier;

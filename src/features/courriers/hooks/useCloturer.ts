@@ -17,7 +17,7 @@ export const useCloturer = () => {
     } catch (err) {
       const errorMsg = err instanceof Error ? err.message : 'Erreur lors de la clôture'
       setError(errorMsg)
-      return { success: false, error: errorMsg }
+      throw err;
     } finally {
       setLoading(false)
     }
