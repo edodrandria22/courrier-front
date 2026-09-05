@@ -14,7 +14,7 @@ import { useNotifications } from '@/hooks/useNotifications'
 import { useCloturer } from '../hooks/useCloturer'
 import { User } from '@/features/auth/types/login'
 import { useCurrentUser } from '@/features/auth/hooks/useCurrentUser'
-
+import toast from "react-hot-toast";
 type Step =
   | { level: 'courriers' }
   | { level: 'messages'; courrier: Courrier }
@@ -234,8 +234,14 @@ const handleLocalCloturation = useCallback(async (id: number) => {
         
       }
      
-    } catch (err) {
-      console.error("Erreur lors de la clôture :", err);
+    } catch (error) {
+      if (error instanceof Error) {
+        toast.error(error.message); // Affiche le vrai message d'erreur
+      } else {
+                    // Message de secours si l'erreur a un format inattendu
+        toast.error("Une erreur inconnue est survenue.");
+      }
+      console.error("Erreur lors de la clôture :", error);
     }
     
   // 5. Ne pas oublier d'ajouter 'cloturer' dans le tableau des dépendances
