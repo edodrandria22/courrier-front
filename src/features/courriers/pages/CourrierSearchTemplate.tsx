@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useCallback } from 'react'
 import { Courrier } from '../types/courrier'
 import { CourrierSearchCriteria } from '../types/recherche'
 import { CourrierSearchForm } from '../components/search/CourrierSearchForm'
@@ -8,6 +8,8 @@ import { CourrierListView } from '../components/list/CourrierListView'
 import { CourrierTemplate } from './CourrierTemplate'
 import { courrierService } from '../services/courrierService'
 import { toast } from 'sonner'
+import { useMercureSubscription } from '@/hooks/useMercureSubscription'
+import { User } from '@/features/auth/types/login'
 
 interface CourrierSearchTemplateProps {
   onCourrierSelect?: (courrier: Courrier) => void
@@ -23,6 +25,20 @@ export const CourrierSearchTemplate = ({ onCourrierSelect }: CourrierSearchTempl
   const [searchCriteria, setSearchCriteria] = useState<CourrierSearchCriteria | null>(null)
   const [hasMore, setHasMore] = useState(true)
   const nbLimitCourrier = process.env.NEXT_PUBLIC_NB_LIMIT_COURRIERS ? parseInt(process.env.NEXT_PUBLIC_NB_LIMIT_COURRIERS) : 2;
+
+  // Handler pour les mises à jour de lecture via Mercure
+  const handleLecture = useCallback((data: { id: number; courrier: Courrier; isReadAt: string | null; numeroExpediteur: number; numeroDestinataire: number }) => {
+    setSearchResults(prev => prev.map(m => Number(m.messageId) === data.id ? { ...m, isReadAt: data.isReadAt, numero: data.numeroDestinataire, numRef: data.numeroExpediteur } : m));
+  }, []);
+
+  // Handler pour les clôtures via Mercure
+  const handleCloturer = useCallback((data: { id: number; cloturePar: User | null; dateValidation: string }) => {
+    setSearchResults(prev => prev.map(m => m.id === data.id ? { ...m, cloturePar: data.cloturePar, dateValidation: data.dateValidation } : m));
+  }, []);
+
+  // Abonnement aux topics Mercure
+  useMercureSubscription<{ id: number; courrier: Courrier; isReadAt: string | null; numeroExpediteur: number; numeroDestinataire: number }>('lectureMessage', handleLecture);
+  useMercureSubscription<{ id: number; cloturePar: User | null; dateValidation: string }>('clotureCourrier', handleCloturer);
   const handleSearch = async (criteria: CourrierSearchCriteria) => {
     setLoading(true)
     setError(null)
