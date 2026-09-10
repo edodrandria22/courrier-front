@@ -376,7 +376,7 @@ export const MessageListView = ({ courrier, messages, loading, error, currentUse
 
               {/* Section Destinataire */}
               <div className="border-t sm:border-t-0 sm:border-l pt-2 sm:pt-0 sm:pl-3 flex flex-col justify-center">
-                <span className="text-xs font-medium text-muted-foreground block mb-1">Destinataire initial :</span>
+                <span className="text-xs font-medium text-muted-foreground block mb-1">Destinataire :</span>
                 <Tooltip>
                   <TooltipTrigger asChild>
                     <div className="flex items-center gap-2 cursor-pointer hover:bg-muted/40 p-1 rounded transition-colors">
