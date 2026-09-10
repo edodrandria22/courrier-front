@@ -289,7 +289,7 @@ const DEFAULT_CRITERIA: CourrierSearchCriteria = {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 p-4 bg-muted/30 rounded-lg border border-border/50">
           {/* Période générale */}
           <div className="p-3 bg-background/60 rounded-md border border-border/60 space-y-2">
-            <span className="text-xs font-medium text-muted-foreground block border-b pb-1">Date de création du courrier</span>
+            <span className="text-xs font-medium text-muted-foreground block border-b pb-1">Date de création</span>
             <div className="grid grid-cols-2 gap-2">
               <div>
                 <label className="block text-[11px] text-muted-foreground mb-1">Du</label>
@@ -314,7 +314,7 @@ const DEFAULT_CRITERIA: CourrierSearchCriteria = {
 
           {/* Date Message */}
           <div className="p-3 bg-background/60 rounded-md border border-border/60 space-y-2">
-            <span className="text-xs font-medium text-muted-foreground block border-b pb-1">Date du message</span>
+            <span className="text-xs font-medium text-muted-foreground block border-b pb-1">Date d'envoi</span>
             <div className="grid grid-cols-2 gap-2">
               <div>
                 <label className="block text-[11px] text-muted-foreground mb-1">Du</label>
@@ -339,7 +339,7 @@ const DEFAULT_CRITERIA: CourrierSearchCriteria = {
 
           {/* Date Réception */}
           <div className="p-3 bg-background/60 rounded-md border border-border/60 space-y-2">
-            <span className="text-xs font-medium text-muted-foreground block border-b pb-1">Date de réception</span>
+            <span className="text-xs font-medium text-muted-foreground block border-b pb-1">Date d'arrivée</span>
             <div className="grid grid-cols-2 gap-2">
               <div>
                 <label className="block text-[11px] text-muted-foreground mb-1">Du</label>
