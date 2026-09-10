@@ -264,10 +264,10 @@ export const TransfererDialog = ({ messageId, onSuccess }: Props) => {
           {/* Bordureau */}
           <div className="space-y-2">
             <label className="text-sm font-semibold text-foreground">
-              Bordureau d'envoi <span className="text-muted-foreground font-normal">(optionnel)</span>
+              Bordereau d'envoi <span className="text-muted-foreground font-normal">(optionnel)</span>
             </label>
             <Input
-              placeholder="Entrer le bordureau d'envoi"
+              placeholder="Entrer le bordereau d'envoi"
               value={bordureau}
               onChange={(e) => setBordureau(e.target.value)}
               disabled={transferring}

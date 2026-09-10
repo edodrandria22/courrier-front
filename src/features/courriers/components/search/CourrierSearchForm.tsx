@@ -187,7 +187,7 @@ const DEFAULT_CRITERIA: CourrierSearchCriteria = {
           </div>
           
           <div>
-            <label className="block text-xs font-medium mb-1.5 text-foreground">Bordureau d'envoi</label>
+            <label className="block text-xs font-medium mb-1.5 text-foreground">Bordereau d'envoi</label>
             <input
               type="text"
               value={criteria.bordureau}

@@ -289,8 +289,8 @@ export const CourrierForm = ({ onSuccess, courrier, onClose }: Props) => {
                 disabled={loading}
               />
             </div>
-            <div className="space-y-2">
-                <label className="text-sm font-semibold text-foreground">
+            {/* <div className="space-y-2"> */}
+                {/* <label className="text-sm font-semibold text-foreground">
                   Documents <span className="text-muted-foreground font-normal">(optionnel)</span>
                 </label>
                 <div
@@ -313,8 +313,9 @@ export const CourrierForm = ({ onSuccess, courrier, onClose }: Props) => {
                     Cliquez pour ajouter des fichiers
                   </p>
                 </div>
+              */}
 
-                {attachments.length > 0 && (
+              {/* {attachments.length > 0 && (
                   <div className="space-y-2">
                     {attachments.map((att) => (
                       <div
@@ -338,8 +339,8 @@ export const CourrierForm = ({ onSuccess, courrier, onClose }: Props) => {
                       </div>
                     ))}
                   </div>
-                )}
-            </div>
+                )} */}
+            {/* </div> */}
           </div>
         )}
         {/* 4. Boucle sur la liste des demandeurs */}
