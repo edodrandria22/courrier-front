@@ -314,7 +314,7 @@ const DEFAULT_CRITERIA: CourrierSearchCriteria = {
 
           {/* Date Message */}
           <div className="p-3 bg-background/60 rounded-md border border-border/60 space-y-2">
-            <span className="text-xs font-medium text-muted-foreground block border-b pb-1">Date d'envoi</span>
+            <span className="text-xs font-medium text-muted-foreground block border-b pb-1">Date de départ</span>
             <div className="grid grid-cols-2 gap-2">
               <div>
                 <label className="block text-[11px] text-muted-foreground mb-1">Du</label>
