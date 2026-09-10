@@ -62,11 +62,20 @@ export const messageService = {
     }
   },
 
-  marquerLu: async (id: number, numeroArrivee: number): Promise<{ success: boolean; error?: string }> => {
+  marquerLu: async (id: number, numeroArrivee: number | null): Promise<{ success: boolean; error?: string }> => {
     try {
-      const res = await fetch(`/api/messages/${id}/lire`, { 
+      const body: { numeroArrivee?: number } = {};
+
+      if (numeroArrivee !== null && numeroArrivee !== undefined) {
+        body.numeroArrivee = numeroArrivee;
+      }
+
+      const res = await fetch(`/api/messages/${id}/lire`, {
         method: 'PATCH',
-        body: JSON.stringify({ numeroArrivee })
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(body),
       });
       
       if (!res.ok) {

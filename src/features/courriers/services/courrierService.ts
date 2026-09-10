@@ -131,7 +131,9 @@ export const courrierService = {
       const formData = new FormData();
 
       // 1. Champs simples
-      formData.append('numeroArrive', data.numero?.toString() || '');
+      if(data.numero) {
+        formData.append('numeroArrive', data.numero.toString());
+      }
       formData.append('object', data.object);
       formData.append('description', data.description || '');
       formData.append('isConfidentiel', (data.isConfidentiel ?? false).toString());

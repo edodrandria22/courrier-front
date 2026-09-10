@@ -243,7 +243,7 @@ export const CourrierForm = ({ onSuccess, courrier, onClose }: Props) => {
                 name="numero"
                 value={formData.numero}
                 onChange={handleInputChange}
-                required
+                // required
                 placeholder="Numero d'arrivée"
                 className="bg-background/50 border-border disabled:opacity-50 disabled:font-semibold disabled:text-amber-600"
               />

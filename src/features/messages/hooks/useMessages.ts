@@ -57,7 +57,7 @@ export const useMessages = (folder: MessageFolder = 'inbox') => {
     }
   }, []);
 
-  const marquerLu = useCallback(async (id: number,numeroArrivee: number) => {
+  const marquerLu = useCallback(async (id: number,numeroArrivee: number|null) => {
     setLoading(true);
     setError(null);
     try {

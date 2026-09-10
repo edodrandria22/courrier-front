@@ -82,9 +82,9 @@ export const MessageListView = ({ courrier, messages, loading, error, currentUse
   };
 
   const handleMarquerLuWithNumero = async () => {
-    if (!courrier.messageId || !numeroArrivee) return;
+    if (!courrier.messageId) return;
     try {
-      await marquerLu(Number(courrier.messageId), Number(numeroArrivee));
+      await marquerLu(Number(courrier.messageId), numeroArrivee ? Number(numeroArrivee) : null);
       setIsShowingNumeroArrivee(false);
       setNumeroArrivee('');
       toast.success("Courrier marqué comme arrivé");
@@ -233,7 +233,7 @@ export const MessageListView = ({ courrier, messages, loading, error, currentUse
                       style={{ color: '#ffffff' }}
                       className="h-8 text-xs"
                       onClick={handleMarquerLuWithNumero}
-                      disabled={loadingMarquer || !numeroArrivee}
+                      disabled={loadingMarquer}
                     >
                       {loadingMarquer ? 'Enregistrement...' : 'Valider'}
                     </Button>
@@ -369,7 +369,7 @@ export const MessageListView = ({ courrier, messages, loading, error, currentUse
                     <p className="font-semibold text-xs text-primary">Détails de l'expéditeur</p>
                     <p className="text-xs"><strong>Nom :</strong> {courrier.expediteur?.nom} {courrier.expediteur?.prenom}</p>
                     {courrier.expediteur?.email && <p className="text-xs"><strong>Email :</strong> {courrier.expediteur?.email}</p>}
-                    <p className="text-xs"><strong>Adresse :</strong> {courrier.expediteur?.adresse}</p>
+                    {/* <p className="text-xs"><strong>Adresse :</strong> {courrier.expediteur?.adresse}</p> */}
                   </TooltipContent>
                 </Tooltip>
               </div>
@@ -387,9 +387,9 @@ export const MessageListView = ({ courrier, messages, loading, error, currentUse
                         <p className="font-medium text-xs truncate">
                           {courrier.destinataire?.nom} {courrier.destinataire?.prenom}
                         </p>
-                        <p className="text-[11px] text-muted-foreground truncate">
+                        {/* <p className="text-[11px] text-muted-foreground truncate">
                           {courrier.destinataire?.adresse}
-                        </p>
+                        </p> */}
                       </div>
                     </div>
                   </TooltipTrigger>
