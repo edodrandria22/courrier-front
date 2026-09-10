@@ -469,7 +469,7 @@ export const CourrierListView = ({ courriers, loading, error, onSelect,  onEdit,
 
                     {/* Actions au survol */}
                     <div className="absolute right-0 opacity-0 group-hover:opacity-100 flex items-center gap-1 transition-opacity">
-                      <Button
+                      {/* <Button
                         variant="ghost"
                         size="icon"
                         title="Afficher le PDF"
@@ -480,7 +480,7 @@ export const CourrierListView = ({ courriers, loading, error, onSelect,  onEdit,
                         }}
                       >
                         <Eye className="w-4 h-4" />
-                      </Button>
+                      </Button> */}
                       {isUpdate && (
                         <Button
                           variant="ghost"

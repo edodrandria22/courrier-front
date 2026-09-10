@@ -175,3 +175,5 @@ GET http://localhost:3000/api/notifications/subscribe 404 (Not Found)
     --on doit cloturer seulement le dernier message -- ok -- 30 mn
 --quand on clique sur le boutton retour on doit revenir a la page precedente sans scroller -- ok -- 60 mn
 --sur la page de recherche le sroll doit avoir qu'une seule scroll -- a faire -- 60m
+--une page avant la recherche -- pour afficher l'object et reference
+--seulement sigle pour afficher l'expediteur et recepteur sigle pour l'historique de transfere

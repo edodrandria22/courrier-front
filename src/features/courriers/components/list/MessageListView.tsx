@@ -503,7 +503,7 @@ export const MessageListView = ({ courrier, messages, loading, error, currentUse
               <div className="flex items-center gap-1.5">
                 <FileText className="w-3.5 h-3.5 text-muted-foreground" />
                 <div>
-                  <span className="block font-medium text-[10px] text-muted-foreground/80">Bordureau d'envoi</span>
+                  <span className="block font-medium text-[10px] text-muted-foreground/80">Bordereau d'envoi</span>
                   <span className="text-foreground">{courrier.bordureau || "—"}</span>
                 </div>
               </div>
