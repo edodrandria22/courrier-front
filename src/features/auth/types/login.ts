@@ -11,10 +11,11 @@ export interface User {
   id: number;
   email: string;
   nom: string;
-  prenom: string;
+  prenom: string|null;
   role: string;
   idRole?: number;
   avatar?: string;
   adresse: string;
   createdAt?: string;
+  sigle: string|null;
 }

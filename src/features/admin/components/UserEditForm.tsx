@@ -15,6 +15,7 @@ const userEditSchema = z.object({
     prenom: z.string().optional(),
     idRole: z.string().min(1, "Veuillez choisir un rôle"),
     adresse: z.string().min(2, "L'adresse doit faire au moins 2 caractères"),
+    sigle: z.string().optional(),
     mdp: z.string().optional(),
     conf_mdp: z.string().optional(),
 }).superRefine((data, ctx) => {
@@ -73,6 +74,7 @@ export const UserEditForm: React.FC<UserEditFormProps> = ({ user, users, setUser
             nom: user.nom,
             prenom: user.prenom ?? "",
             adresse: user.adresse ?? "",
+            sigle: user.sigle ?? "",
             mdp: "",
             conf_mdp: "",
         }
@@ -91,6 +93,7 @@ export const UserEditForm: React.FC<UserEditFormProps> = ({ user, users, setUser
                     nom: user.nom,
                     prenom: user.prenom ?? "",
                     adresse: user.adresse ?? "",
+                    sigle: user.sigle ?? "",
                     idRole: user.idRole ? user.idRole.toString() : "",
                     mdp: "",
                     conf_mdp: "",
@@ -119,6 +122,7 @@ export const UserEditForm: React.FC<UserEditFormProps> = ({ user, users, setUser
                 nom: data.nom,
                 prenom: data.prenom,
                 adresse: data.adresse,
+                sigle: data.sigle,
                 idRole: Number(data.idRole),
                 mdp: mdpFilled ? data.mdp : undefined,
             });
@@ -188,6 +192,18 @@ export const UserEditForm: React.FC<UserEditFormProps> = ({ user, users, setUser
                     />
                     {errors.prenom && <p className="text-[10px] text-red-600 font-bold">{errors.prenom.message}</p>}
                 </div>
+                
+                <div className="space-y-1">
+                    <label className="text-xs font-bold text-slate-700 uppercase tracking-widest block">Sigle</label>
+                    <input
+                        {...register("sigle")}
+                        type="text"
+                        placeholder="Entrer votre sigle"
+                        className={`w-full px-3 py-2 border rounded text-sm text-slate-900 placeholder-slate-400 outline-none focus:ring-1 focus:ring-slate-900 ${errors.sigle ? "border-red-500" : "border-slate-300"}`}
+                    />
+                    {errors.sigle && <p className="text-[10px] text-red-600 font-bold">{errors.sigle.message}</p>}
+                </div>
+                
                 <div className="space-y-1">
                     <label className="text-xs font-bold text-slate-700 uppercase tracking-widest block">Adresse</label>
                     <input

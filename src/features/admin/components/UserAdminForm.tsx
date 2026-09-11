@@ -15,6 +15,7 @@ const userAdminSchema = z.object({
     mdp: z.string().min(6, "6 caractères minimum"),
     confirmMdp: z.string().min(6, "6 caractères minimum"),
     idRole: z.string().min(1, "Veuillez choisir un rôle"),
+     sigle: z.string().optional(),
     adresse: z.string().min(2, "L'adresse doit faire au moins 2 caractères"),
 }).refine((data) => data.mdp === data.confirmMdp, {
     message: "Les mots de passe ne correspondent pas",
@@ -97,6 +98,16 @@ export const UserAdminForm: React.FC<UserAdminFormProps> = ({ setUsers, users, o
                         className={`w-full px-3 py-2 border rounded text-sm text-slate-900 placeholder-slate-400 transition-colors outline-none focus:ring-1 focus:ring-slate-900 ${errors.prenom ? "border-red-500" : "border-slate-300"}`}
                     />
                     {errors.prenom && <p className="text-[10px] text-red-600 font-bold">{errors.prenom.message}</p>}
+                </div>
+                <div className="space-y-1">
+                    <label className="text-xs font-bold text-slate-700 uppercase tracking-widest block">Sigle</label>
+                    <input
+                        {...register("sigle")}
+                        type="text"
+                        placeholder="Entrer le sigle"
+                        className={`w-full px-3 py-2 border rounded text-sm text-slate-900 placeholder-slate-400 transition-colors outline-none focus:ring-1 focus:ring-slate-900 ${errors.sigle ? "border-red-500" : "border-slate-300"}`}
+                    />
+                    {errors.sigle && <p className="text-[10px] text-red-600 font-bold">{errors.sigle.message}</p>}
                 </div>
 
                 <div className="space-y-1">

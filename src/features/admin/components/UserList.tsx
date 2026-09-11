@@ -45,6 +45,7 @@ export const UserList: React.FC<UserListProps> = ({ users, isLoading, fetchUsers
                         <thead className="sticky top-0 z-10 bg-muted/50 border-b border-border">
                             <tr>
                                 <th className="px-6 py-4 font-bold text-foreground uppercase tracking-widest text-[10px]">Nom & Prénom</th>
+                                <th className="px-6 py-4 font-bold text-foreground uppercase tracking-widest text-[10px]">Sigle</th>
                                 <th className="px-6 py-4 font-bold text-foreground uppercase tracking-widest text-[10px]">Email</th>
                                 <th className="px-6 py-4 font-bold text-foreground uppercase tracking-widest text-[10px]">Adresse</th>
                                 <th className="px-6 py-4 font-bold text-foreground uppercase tracking-widest text-[10px]">Rôle</th>
@@ -65,6 +66,9 @@ export const UserList: React.FC<UserListProps> = ({ users, isLoading, fetchUsers
                                             <span className="font-semibold text-foreground">
                                                 {user.nom} {user.prenom}
                                             </span>
+                                        </td>
+                                        <td className="px-6 py-4 text-muted-foreground font-medium">
+                                            {user.sigle}
                                         </td>
                                         <td className="px-6 py-4 text-muted-foreground font-medium">
                                             {user.email}

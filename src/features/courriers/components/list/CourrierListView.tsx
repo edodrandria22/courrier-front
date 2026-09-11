@@ -321,7 +321,8 @@ export const CourrierListView = ({ courriers, loading, error, onSelect,  onEdit,
 
 
               // On génère le nom complet proprement sans risquer d'afficher "undefined"
-              const nomComplet = cible ? `${cible.nom || ''} ${cible.prenom || ''}`.trim() : '';
+              const nomComplet = cible ? (cible.sigle || `${cible.nom || ''} ${cible.prenom || ''}`.trim()) : '';
+              const nomCompletAffichage = `${cible?.nom || ''} ${cible?.prenom || ''}`.trim();
 
               return (
                 <div
@@ -380,9 +381,8 @@ export const CourrierListView = ({ courriers, loading, error, onSelect,  onEdit,
                                   <p className="font-semibold">
                                     {isSend ? "Destinataire" : "Expéditeur"}
                                   </p>
-
-                                  <p>{nomComplet}</p>
-
+                                  <p><strong>Nom :</strong> {nomCompletAffichage}</p>
+                                  {cible?.sigle && <p><strong>Sigle :</strong> {cible.sigle}</p>}
                                   {/* L'email ne s'affiche QUE s'il existe et n'est pas undefined */}
                                   {cible.email && (
                                     <p className="text-muted-foreground">

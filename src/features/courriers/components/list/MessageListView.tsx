@@ -311,7 +311,7 @@ export const MessageListView = ({ courrier, messages, loading, error, currentUse
                       </div> */}
                       <div className="min-w-0">
                         <p className="font-medium text-xs truncate">
-                          {courrier.expediteur?.nom} {courrier.expediteur?.prenom}
+                          {courrier.expediteur?.sigle || `${courrier.expediteur?.nom || ''} ${courrier.expediteur?.prenom || ''}` || ''}
                         </p>
                         {/* <p className="text-[11px] text-muted-foreground truncate">
                           {courrier.expediteur?.adresse}
@@ -322,6 +322,7 @@ export const MessageListView = ({ courrier, messages, loading, error, currentUse
                   <TooltipContent side="top" className="p-3 max-w-xs space-y-1">
                     <p className="font-semibold text-xs text-primary">Détails de l'expéditeur</p>
                     <p className="text-xs"><strong>Nom :</strong> {courrier.expediteur?.nom} {courrier.expediteur?.prenom}</p>
+                    {courrier.expediteur?.sigle && <p className="text-xs"><strong>Sigle :</strong> {courrier.expediteur?.sigle}</p>}
                     {courrier.expediteur?.email && <p className="text-xs"><strong>Email :</strong> {courrier.expediteur?.email}</p>}
                     <p className="text-xs"><strong>Adresse :</strong> {courrier.expediteur?.adresse}</p>
                   </TooltipContent>
@@ -339,7 +340,7 @@ export const MessageListView = ({ courrier, messages, loading, error, currentUse
                       </div> */}
                       <div className="min-w-0">
                         <p className="font-medium text-xs truncate">
-                          {courrier.destinataire?.nom} {courrier.destinataire?.prenom}
+                          {courrier.destinataire?.sigle || `${courrier.destinataire?.nom} ${courrier.destinataire?.prenom}`}
                         </p>
                         {/* <p className="text-[11px] text-muted-foreground truncate">
                           {courrier.destinataire?.adresse}
@@ -350,6 +351,7 @@ export const MessageListView = ({ courrier, messages, loading, error, currentUse
                   <TooltipContent side="top" className="p-3 max-w-xs space-y-1">
                     <p className="font-semibold text-xs text-secondary-foreground">Détails du destinataire</p>
                     <p className="text-xs"><strong>Nom :</strong> {courrier.destinataire?.nom} {courrier.destinataire?.prenom}</p>
+                    {courrier.destinataire?.sigle && <p className="text-xs"><strong>Sigle :</strong> {courrier.destinataire?.sigle}</p>}
                     {courrier.destinataire?.email && <p className="text-xs"><strong>Email :</strong> {courrier.destinataire?.email}</p>}
                     <p className="text-xs"><strong>Adresse :</strong> {courrier.destinataire?.adresse}</p>
                   </TooltipContent>
@@ -670,16 +672,45 @@ export const MessageListView = ({ courrier, messages, loading, error, currentUse
 
                             {/* 2. Expéditeur */}
                             <td className="px-4 py-3 whitespace-nowrap">
-                              <span className={cn('text-sm', !isRead ? 'font-bold text-foreground' : 'font-medium text-foreground/80')}>
-                                {message.expediteur?.nom} {message.expediteur?.prenom}
-                              </span>
+                              <TooltipProvider>
+                                <Tooltip>
+                                  <TooltipTrigger asChild>
+                                    <span className={cn('text-sm cursor-pointer', !isRead ? 'font-bold text-foreground' : 'font-medium text-foreground/80')}>
+                                      {message.expediteur?.sigle || `${message.expediteur?.nom || ''} ${message.expediteur?.prenom || ''}` || ''}
+                                    </span>
+                                  </TooltipTrigger>
+                                  <TooltipContent className="max-w-xs">
+                                    <div className="space-y-1">
+                                      <p><strong>Nom :</strong> {message.expediteur?.nom || ''} {message.expediteur?.prenom || ''}</p>
+                                    </div>
+                                    <div className="space-y-1">
+                                      <p><strong>Adresse :</strong> {message.expediteur?.adresse || ''}</p>
+                                    </div>
+                                    
+                                  </TooltipContent>
+                                </Tooltip>
+                              </TooltipProvider>
                             </td>
 
                             {/* 3. Destinataire */}
                             <td className="px-4 py-3 whitespace-nowrap">
-                              <span className={cn('text-sm', !isRead ? 'font-bold text-primary' : 'font-medium text-primary/80')}>
-                                {message.destinataire.nom} {message.destinataire.prenom}
-                              </span>
+                              <TooltipProvider>
+                                <Tooltip>
+                                  <TooltipTrigger asChild>
+                                    <span className={cn('text-sm cursor-pointer', !isRead ? 'font-bold text-primary' : 'font-medium text-primary/80')}>
+                                      {message.destinataire?.sigle || `${message.destinataire?.nom || ''} ${message.destinataire?.prenom || ''}` || ''}
+                                    </span>
+                                  </TooltipTrigger>
+                                  <TooltipContent className="max-w-xs">
+                                    <div className="space-y-1">
+                                      <p><strong>Nom :</strong> {message.destinataire?.nom || ''} {message.destinataire?.prenom || ''}</p>
+                                    </div>
+                                    <div className="space-y-1">
+                                      <p><strong>Adresse :</strong> {message.destinataire?.adresse || ''}</p>
+                                    </div>
+                                  </TooltipContent>
+                                </Tooltip>
+                              </TooltipProvider>
                             </td>
 
                             {/* 4. Statut */}

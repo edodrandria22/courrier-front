@@ -173,8 +173,13 @@ GET http://localhost:3000/api/notifications/subscribe 404 (Not Found)
     --toast message d'erreur lors de la cloturation -- ok --60 mn
     --mercure pour le page de recherche -- ok -- 60 mn
     --on doit cloturer seulement le dernier message -- ok -- 30 mn
+11/09/2026
+    --boutton marquer lu doit etre en bas de l'observation -- ok -- 15 mn
+    --numero depart et arrivee optionel -- ok -- 60 mn
+    --destinataire et expediteur, pas addresse mais nom seulement -- ok -- 15 mn 
+    --seulement sigle pour afficher l'expediteur et recepteur sigle pour l'historique de transfere -- a faire -- 30 mn
+    --recherche pour afficher seulement une seule reference -- a faire -- 90 mn
+        --page pour afficher l'objet et reference -- a faire -- 60 mn
+        --une page pour afficher tous les historique qui lui conserne -- a faire -- 30 mn
 --quand on clique sur le boutton retour on doit revenir a la page precedente sans scroller -- ok -- 60 mn
 --sur la page de recherche le sroll doit avoir qu'une seule scroll -- a faire -- 60m
---une page avant la recherche -- pour afficher l'object et reference
---seulement sigle pour afficher l'expediteur et recepteur sigle pour l'historique de transfere
---numero depart et arrivee optionel
