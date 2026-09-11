@@ -17,11 +17,12 @@ interface CourrierSearchFormProps {
   onSearch: (criteria: CourrierSearchCriteria) => void
   loading?: boolean
   reinitialiser?: () => void,
-  initialCriteria?: CourrierSearchCriteria | null // 👈 1. Ajouter la prop optionnelle
+  initialCriteria?: CourrierSearchCriteria | null
+  onCancel?: () => void
 }
 
 
-export const CourrierSearchForm = ({ onSearch, loading = false, reinitialiser,initialCriteria }: CourrierSearchFormProps) => {
+export const CourrierSearchForm = ({ onSearch, loading = false, reinitialiser, initialCriteria, onCancel }: CourrierSearchFormProps) => {
   // 1. Définir les valeurs vides par défaut
 const DEFAULT_CRITERIA: CourrierSearchCriteria = {
     reference: '',
@@ -366,6 +367,16 @@ const DEFAULT_CRITERIA: CourrierSearchCriteria = {
 
       {/* Actions */}
       <div className="flex items-center justify-end gap-3 pt-4 border-t border-border">
+        {onCancel && (
+          <Button
+            type="button"
+            variant="ghost"
+            onClick={onCancel}
+            className="flex items-center gap-2"
+          >
+            Afficher la liste
+          </Button>
+        )}
         <Button
           type="button"
           variant="outline"

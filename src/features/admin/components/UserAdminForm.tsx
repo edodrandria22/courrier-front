@@ -15,7 +15,7 @@ const userAdminSchema = z.object({
     mdp: z.string().min(6, "6 caractères minimum"),
     confirmMdp: z.string().min(6, "6 caractères minimum"),
     idRole: z.string().min(1, "Veuillez choisir un rôle"),
-     sigle: z.string().optional(),
+    sigle: z.string().optional(),
     adresse: z.string().min(2, "L'adresse doit faire au moins 2 caractères"),
 }).refine((data) => data.mdp === data.confirmMdp, {
     message: "Les mots de passe ne correspondent pas",

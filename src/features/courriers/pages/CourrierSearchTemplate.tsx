@@ -10,6 +10,8 @@ import { courrierService } from '../services/courrierService'
 import { toast } from 'sonner'
 import { useMercureSubscription } from '@/hooks/useMercureSubscription'
 import { User } from '@/features/auth/types/login'
+import { Button } from '@/components/ui/button'
+import { Search } from 'lucide-react'
 
 interface CourrierSearchTemplateProps {
   onCourrierSelect?: (courrier: Courrier) => void
@@ -24,6 +26,7 @@ export const CourrierSearchTemplate = ({ onCourrierSelect }: CourrierSearchTempl
   const [selectedCourrier, setSelectedCourrier] = useState<Courrier | null>(null)
   const [searchCriteria, setSearchCriteria] = useState<CourrierSearchCriteria | null>(null)
   const [hasMore, setHasMore] = useState(true)
+  const [showForm, setShowForm] = useState(true)
   const nbLimitCourrier = process.env.NEXT_PUBLIC_NB_LIMIT_COURRIERS ? parseInt(process.env.NEXT_PUBLIC_NB_LIMIT_COURRIERS) : 2;
 
   // Handler pour les mises à jour de lecture via Mercure
@@ -53,6 +56,8 @@ export const CourrierSearchTemplate = ({ onCourrierSelect }: CourrierSearchTempl
       if (results.length < nbLimitCourrier) {
         setHasMore(false)
       }
+      // Masquer le formulaire après une recherche réussie
+      setShowForm(false)
     } catch (err) {
       // setError('Erreur lors de la recherche')
       // console.error('Search error:', err)
@@ -125,14 +130,32 @@ export const CourrierSearchTemplate = ({ onCourrierSelect }: CourrierSearchTempl
   return (
     <div className="max-w-7xl mx-auto space-y-6">
       {/* Formulaire de recherche */}
-      <CourrierSearchForm onSearch={handleSearch} loading={loading} reinitialiser={handleReset} initialCriteria={searchCriteria} />
+      {showForm && (
+        <CourrierSearchForm 
+          onSearch={handleSearch} 
+          loading={loading} 
+          reinitialiser={handleReset} 
+          initialCriteria={searchCriteria}
+          onCancel={() => setShowForm(false)}
+        />
+      )}
 
       {/* Résultats de recherche */}
-      {hasSearched && (
+      {!showForm && hasSearched && (
         <div className="space-y-4">
-          <h3 className="text-lg font-semibold">
-            Résultats ({searchResults.length})
-          </h3>
+          <div className="flex items-center justify-between">
+            <h3 className="text-lg font-semibold">
+              Résultats ({searchResults.length})
+            </h3>
+            <Button
+              variant="outline"
+              onClick={() => setShowForm(true)}
+              className="flex items-center gap-2"
+            >
+              <Search className="w-4 h-4" />
+              Modifier la recherche
+            </Button>
+          </div>
 
           {error && (
             <div className="p-4 bg-destructive/10 text-destructive rounded-md">

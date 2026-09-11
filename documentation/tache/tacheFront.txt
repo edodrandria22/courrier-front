@@ -177,7 +177,7 @@ GET http://localhost:3000/api/notifications/subscribe 404 (Not Found)
     --boutton marquer lu doit etre en bas de l'observation -- ok -- 15 mn
     --numero depart et arrivee optionel -- ok -- 60 mn
     --destinataire et expediteur, pas addresse mais nom seulement -- ok -- 15 mn 
-    --seulement sigle pour afficher l'expediteur et recepteur sigle pour l'historique de transfere -- a faire -- 30 mn
+    --seulement sigle pour afficher l'expediteur et recepteur sigle pour l'historique de transfere -- ok -- 30 mn
     --recherche pour afficher seulement une seule reference -- a faire -- 90 mn
         --page pour afficher l'objet et reference -- a faire -- 60 mn
         --une page pour afficher tous les historique qui lui conserne -- a faire -- 30 mn

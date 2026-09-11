@@ -266,6 +266,35 @@ export const courrierService = {
       throw error;
     }
   },
+  searchCourriersReference: async (criteria: CourrierSearchCriteria, date?: string): Promise<Courrier[]> => {
+    try {
+      const fetchWithAuth = useFetchAuth();
+      
+      // Ajouter la date du jour par défaut si aucune date n'est fournie
+      const searchCriteria = {
+        ...criteria,
+        date: date || null // Ajouter la date de pagination dans le DTO
+      };
+      const params = new URLSearchParams();
+      
+      params.set("limit", process.env.NEXT_PUBLIC_NB_LIMIT_COURRIERS || "10");
+      const res = await fetchWithAuth('/api/courriers/rechercheReference?' + params.toString(), {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(searchCriteria),
+      });
+
+      if (!res.ok) {
+        // await logger.error('courrierService.searchCourriers', res);
+        throw new Error('Impossible de rechercher les courriers');
+      }
+      const json = await res.json();
+      return json.data as Courrier[];
+    } catch (error) {
+      // logger.exception('courrierService.searchCourriers - Exception', error);
+      throw error;
+    }
+  },
   updateCourrier: async (id: number, data: Courrier): Promise<{ success: boolean; error?: string; courrier?: Courrier }> => {
    try {
       const fetchWithAuth = useFetchAuth();
