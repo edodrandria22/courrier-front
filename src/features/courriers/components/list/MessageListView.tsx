@@ -207,52 +207,6 @@ export const MessageListView = ({ courrier, messages, loading, error, currentUse
         {/* 2. Détails complets du courrier */}
         <div className="p-4 md:p-6 pb-2">
           <div className="flex flex-col gap-4 p-4 sm:p-5 bg-card text-card-foreground rounded-xl border shadow-sm max-w-4xl mx-auto">
-             {isButtonLu && (
-              <div className="flex flex-col gap-2 col-span-2 sm:grid-cols-1">
-                {!isShowingNumeroArrivee ? (
-                  <Button 
-                    size="sm" 
-                    style={{ color: '#ffffff' }}
-                    className="h-8 text-xs"
-                    onClick={marquerLuMessage}
-                    disabled={loadingMarquer}
-                  >
-                    {loadingMarquer ? 'Enregistrement...' : 'Marquer comme arrivée'}
-                  </Button>
-                ) : (
-                  <div className="flex items-center gap-2">
-                    <input
-                      type="number"
-                      value={numeroArrivee}
-                      onChange={(e) => setNumeroArrivee(e.target.value)}
-                      placeholder="Numéro d'arrivée"
-                      className="flex-1 px-3 py-2 border rounded text-sm text-foreground placeholder:text-muted-foreground transition-colors outline-none focus:ring-1 focus:ring-slate-900 border-slate-300"
-                    />
-                    <Button 
-                      size="sm" 
-                      style={{ color: '#ffffff' }}
-                      className="h-8 text-xs"
-                      onClick={handleMarquerLuWithNumero}
-                      disabled={loadingMarquer}
-                    >
-                      {loadingMarquer ? 'Enregistrement...' : 'Valider'}
-                    </Button>
-                    <Button 
-                      variant="outline"
-                      size="sm" 
-                      className="h-8 text-xs"
-                      onClick={() => {
-                        setIsShowingNumeroArrivee(false);
-                        setNumeroArrivee('');
-                      }}
-                      disabled={loadingMarquer}
-                    >
-                      Annuler
-                    </Button>
-                  </div>
-                )}
-              </div>
-            )}
             {/* En-tête : Référence et Statuts */}
             <div className="flex flex-wrap items-center justify-between gap-2 border-b pb-3">
               <div className="space-y-1">
@@ -359,9 +313,9 @@ export const MessageListView = ({ courrier, messages, loading, error, currentUse
                         <p className="font-medium text-xs truncate">
                           {courrier.expediteur?.nom} {courrier.expediteur?.prenom}
                         </p>
-                        <p className="text-[11px] text-muted-foreground truncate">
+                        {/* <p className="text-[11px] text-muted-foreground truncate">
                           {courrier.expediteur?.adresse}
-                        </p>
+                        </p> */}
                       </div>
                     </div>
                   </TooltipTrigger>
@@ -369,7 +323,7 @@ export const MessageListView = ({ courrier, messages, loading, error, currentUse
                     <p className="font-semibold text-xs text-primary">Détails de l'expéditeur</p>
                     <p className="text-xs"><strong>Nom :</strong> {courrier.expediteur?.nom} {courrier.expediteur?.prenom}</p>
                     {courrier.expediteur?.email && <p className="text-xs"><strong>Email :</strong> {courrier.expediteur?.email}</p>}
-                    {/* <p className="text-xs"><strong>Adresse :</strong> {courrier.expediteur?.adresse}</p> */}
+                    <p className="text-xs"><strong>Adresse :</strong> {courrier.expediteur?.adresse}</p>
                   </TooltipContent>
                 </Tooltip>
               </div>
@@ -567,6 +521,53 @@ export const MessageListView = ({ courrier, messages, loading, error, currentUse
                 )}
               </div>
             </div>
+            
+            {isButtonLu && (
+              <div className="flex flex-col gap-2">
+                {!isShowingNumeroArrivee ? (
+                  <Button 
+                    size="sm" 
+                    style={{ color: '#ffffff' }}
+                    className="h-8 text-xs"
+                    onClick={marquerLuMessage}
+                    disabled={loadingMarquer}
+                  >
+                    {loadingMarquer ? 'Enregistrement...' : 'Marquer comme arrivée'}
+                  </Button>
+                ) : (
+                  <div className="flex items-center gap-2">
+                    <input
+                      type="number"
+                      value={numeroArrivee}
+                      onChange={(e) => setNumeroArrivee(e.target.value)}
+                      placeholder="Numéro d'arrivée"
+                      className="flex-1 px-3 py-2 border rounded text-sm text-foreground placeholder:text-muted-foreground transition-colors outline-none focus:ring-1 focus:ring-slate-900 border-slate-300"
+                    />
+                    <Button 
+                      size="sm" 
+                      style={{ color: '#ffffff' }}
+                      className="h-8 text-xs"
+                      onClick={handleMarquerLuWithNumero}
+                      disabled={loadingMarquer}
+                    >
+                      {loadingMarquer ? 'Enregistrement...' : 'Valider'}
+                    </Button>
+                    <Button 
+                      variant="outline"
+                      size="sm" 
+                      className="h-8 text-xs"
+                      onClick={() => {
+                        setIsShowingNumeroArrivee(false);
+                        setNumeroArrivee('');
+                      }}
+                      disabled={loadingMarquer}
+                    >
+                      Annuler
+                    </Button>
+                  </div>
+                )}
+              </div>
+            )}
             
             {/* ------------------------------------------- */}
 
