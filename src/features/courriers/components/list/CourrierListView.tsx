@@ -346,9 +346,9 @@ export const CourrierListView = ({ courriers, loading, error, onSelect,  onEdit,
                   <div className="flex flex-col items-start sm:flex-row sm:items-center w-full min-w-0 gap-3 sm:gap-4">
 
                       {/* Statut */}
-                      {!isRerchercheReferenceUnique && (
-                        <div className="flex-none flex items-center justify-start sm:justify-center w-8">
-                          <StatutIcon
+                      
+                      <div className="flex-none flex items-center justify-start sm:justify-center w-8">
+                        <StatutIcon
                             className={cn(
                               "w-4 h-4",
                               courrier.cloturePar
@@ -356,10 +356,9 @@ export const CourrierListView = ({ courriers, loading, error, onSelect,  onEdit,
                                 : "text-muted-foreground/40"
                             )}
                             title={statut.label}
-                          />
-                        </div>
-                      )}
-
+                        />
+                      </div>
+                      
                       {/* Expéditeur / Destinataire (w-full sur mobile, w-52 sur grand écran) */}
                       {cible && nomComplet && !isRerchercheReferenceUnique && (
                         <div className="flex-none w-full sm:w-52 min-w-0">
