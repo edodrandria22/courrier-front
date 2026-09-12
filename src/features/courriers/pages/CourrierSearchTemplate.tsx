@@ -41,11 +41,14 @@ export const CourrierSearchTemplate = ({ onCourrierSelect }: CourrierSearchTempl
   // Handler pour les mises à jour de lecture via Mercure
   const handleLecture = useCallback((data: { id: number; courrier: Courrier; isReadAt: string | null; numeroExpediteur: number; numeroDestinataire: number }) => {
     setSearchResults(prev => prev.map(m => Number(m.messageId) === data.id ? { ...m, isReadAt: data.isReadAt, numero: data.numeroDestinataire, numRef: data.numeroExpediteur } : m));
+    setReferenceUniqueResults(prev => prev.map(m => Number(m.messageId) === data.id ? { ...m, isReadAt: data.isReadAt, numero: data.numeroDestinataire, numRef: data.numeroExpediteur } : m));
   }, []);
+  
 
   // Handler pour les clôtures via Mercure
   const handleCloturer = useCallback((data: { id: number; cloturePar: User | null; dateValidation: string }) => {
     setSearchResults(prev => prev.map(m => m.id === data.id ? { ...m, cloturePar: data.cloturePar, dateValidation: data.dateValidation } : m));
+    setReferenceUniqueResults(prev => prev.map(m => m.id === data.id ? { ...m, cloturePar: data.cloturePar, dateValidation: data.dateValidation } : m));    
   }, []);
 
   // Abonnement aux topics Mercure
