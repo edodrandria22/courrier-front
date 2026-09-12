@@ -308,7 +308,7 @@ export const CourrierListView = ({ courriers, loading, error, onSelect,  onEdit,
               {/* Colonne Date (Alignée sur w-24 tout à droite) */}
               
               <div className="flex-none w-24 text-right">
-                  Date
+                  Date {isRerchercheReferenceUnique ? ' de création' : ''}
               </div>
               
             </div>
