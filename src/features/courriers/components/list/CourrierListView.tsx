@@ -306,11 +306,11 @@ export const CourrierListView = ({ courriers, loading, error, onSelect,  onEdit,
               </div>
 
               {/* Colonne Date (Alignée sur w-24 tout à droite) */}
-              {!isRerchercheReferenceUnique && (
-                <div className="flex-none w-24 text-right">
+              
+              <div className="flex-none w-24 text-right">
                   Date
-                </div>
-              )}
+              </div>
+              
             </div>
             {filtered.map((courrier) => {
               const statut = STATUT_CONFIG[courrier.cloturePar ? 'finalise' : 'en_cours']
