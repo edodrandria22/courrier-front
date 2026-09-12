@@ -465,47 +465,49 @@ export const CourrierListView = ({ courriers, loading, error, onSelect,  onEdit,
                   </div>
 
                   {/* Date ET Actions au survol */}
-                  {!isRerchercheReferenceUnique && (
-                    <div className="flex-none w-24 flex items-center justify-end relative h-8">
-                      {/* Date */}
-                      <span className={cn(
-                        "text-xs absolute right-0 group-hover:opacity-0 transition-opacity",
-                        isLu ? "font-normal text-muted-foreground" : "font-bold text-foreground"
-                      )}>
-                        {formatDateTime(courrier.dateMessage ||courrier.createdAt || new Date().toISOString())}
-                      </span>
+                  <div className="flex-none w-24 flex items-center justify-end relative h-8">
+                    {/* Date */}
+                    <span className={cn(
+                      "text-xs absolute right-0 group-hover:opacity-0 transition-opacity",
+                      isLu ? "font-normal text-muted-foreground" : "font-bold text-foreground"
+                    )}>
+                      {formatDateTime(
+                        isRerchercheReferenceUnique
+                          ? (courrier.createdAt || new Date().toISOString())
+                          : (courrier.dateMessage || courrier.createdAt || new Date().toISOString())
+                      )}
+                    </span>
 
-                      {/* Actions au survol */}
-                      <div className="absolute right-0 opacity-0 group-hover:opacity-100 flex items-center gap-1 transition-opacity">
-                        {/* <Button
+                    {/* Actions au survol */}
+                    <div className="absolute right-0 opacity-0 group-hover:opacity-100 flex items-center gap-1 transition-opacity">
+                      {/* <Button
+                        variant="ghost"
+                        size="icon"
+                        title="Afficher le PDF"
+                        className="h-8 w-8 rounded-full text-muted-foreground hover:text-foreground hover:bg-muted"
+                        onClick={(e) => { 
+                          e.stopPropagation() 
+                          generateCourrierPDF(courrier, 'view') 
+                        }}
+                      >
+                        <Eye className="w-4 h-4" />
+                      </Button> */}
+                      {isUpdate && (
+                        <Button
                           variant="ghost"
                           size="icon"
-                          title="Afficher le PDF"
+                          title="Modifier"
                           className="h-8 w-8 rounded-full text-muted-foreground hover:text-foreground hover:bg-muted"
-                          onClick={(e) => { 
-                            e.stopPropagation() 
-                            generateCourrierPDF(courrier, 'view') 
+                          onClick={(e) => {
+                            e.stopPropagation()
+                            onEdit?.(courrier)
                           }}
                         >
-                          <Eye className="w-4 h-4" />
-                        </Button> */}
-                        {isUpdate && (
-                          <Button
-                            variant="ghost"
-                            size="icon"
-                            title="Modifier"
-                            className="h-8 w-8 rounded-full text-muted-foreground hover:text-foreground hover:bg-muted"
-                            onClick={(e) => {
-                              e.stopPropagation()
-                              onEdit?.(courrier)
-                            }}
-                          >
-                            <Pencil className="w-4 h-4" />
-                          </Button>
-                        )}
-                      </div>
+                          <Pencil className="w-4 h-4" />
+                        </Button>
+                      )}
                     </div>
-                  )}
+                  </div>
 
                 </div>
               )

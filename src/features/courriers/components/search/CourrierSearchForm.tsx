@@ -18,11 +18,12 @@ interface CourrierSearchFormProps {
   loading?: boolean
   reinitialiser?: () => void,
   initialCriteria?: CourrierSearchCriteria | null
-  onCancel?: () => void
+  onCancel?: () => void;
+  isListeVide?  : boolean
 }
 
 
-export const CourrierSearchForm = ({ onSearch, loading = false, reinitialiser, initialCriteria, onCancel }: CourrierSearchFormProps) => {
+export const CourrierSearchForm = ({ onSearch, loading = false, reinitialiser, initialCriteria, onCancel, isListeVide = false }: CourrierSearchFormProps) => {
   // 1. Définir les valeurs vides par défaut
 const DEFAULT_CRITERIA: CourrierSearchCriteria = {
     reference: '',
@@ -367,7 +368,7 @@ const DEFAULT_CRITERIA: CourrierSearchCriteria = {
 
       {/* Actions */}
       <div className="flex items-center justify-end gap-3 pt-4 border-t border-border">
-        {onCancel && (
+        {onCancel && !isListeVide && (
           <Button
             type="button"
             variant="ghost"

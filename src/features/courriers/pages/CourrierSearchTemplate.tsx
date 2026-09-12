@@ -207,6 +207,7 @@ export const CourrierSearchTemplate = ({ onCourrierSelect }: CourrierSearchTempl
           reinitialiser={handleReset} 
           initialCriteria={searchCriteria}
           onCancel={() => setShowForm(false)}
+          isListeVide={searchResults.length === 0}
         />
       )}
 
