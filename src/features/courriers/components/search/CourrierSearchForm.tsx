@@ -210,7 +210,7 @@ const DEFAULT_CRITERIA: CourrierSearchCriteria = {
             <span>Numérotation</span>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-3 p-4 bg-muted/30 rounded-lg border border-border/50">
-            <div>
+            {/* <div>
               <label className="block text-xs font-medium mb-1.5 text-foreground">N° Général</label>
               <input
                 type="number"
@@ -219,7 +219,7 @@ const DEFAULT_CRITERIA: CourrierSearchCriteria = {
                 className="w-full px-3 py-2 text-sm bg-background border border-input rounded-md focus:outline-none focus:ring-2 focus:ring-primary/50"
                 placeholder="10"
               />
-            </div>
+            </div> */}
             <div>
               <label className="block text-xs font-medium mb-1.5 text-foreground">N° Départ</label>
               <input
