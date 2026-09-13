@@ -129,7 +129,7 @@ const DEFAULT_CRITERIA: CourrierSearchCriteria = {
               value={criteria.reference}
               onChange={(e) => handleInputChange('reference', e.target.value)}
               className="w-full px-3 py-2 text-sm bg-background border border-input rounded-md focus:outline-none focus:ring-2 focus:ring-primary/50 transition-all"
-              placeholder="votre référence"
+              placeholder="Votre référence"
             />
           </div>
 
@@ -173,7 +173,7 @@ const DEFAULT_CRITERIA: CourrierSearchCriteria = {
               value={criteria.email}
               onChange={(e) => handleInputChange('email', e.target.value)}
               className="w-full px-3 py-2 text-sm bg-background border border-input rounded-md focus:outline-none focus:ring-2 focus:ring-primary/50 transition-all"
-              placeholder="votre mail"
+              placeholder="Votre mail"
             />
           </div>
 
@@ -184,7 +184,7 @@ const DEFAULT_CRITERIA: CourrierSearchCriteria = {
               value={criteria.telephone}
               onChange={(e) => handleInputChange('telephone', e.target.value)}
               className="w-full px-3 py-2 text-sm bg-background border border-input rounded-md focus:outline-none focus:ring-2 focus:ring-primary/50 transition-all"
-              placeholder="votre numéro de téléphone"
+              placeholder="Votre numéro de téléphone"
             />
           </div>
           
@@ -195,7 +195,7 @@ const DEFAULT_CRITERIA: CourrierSearchCriteria = {
               value={criteria.bordureau}
               onChange={(e) => handleInputChange('bordureau', e.target.value)}
               className="w-full px-3 py-2 text-sm bg-background border border-input rounded-md focus:outline-none focus:ring-2 focus:ring-primary/50 transition-all"
-              placeholder="bordureau d'envoi"
+              placeholder="Bordereau d'envoi"
             />
           </div>
         </div>
@@ -227,7 +227,7 @@ const DEFAULT_CRITERIA: CourrierSearchCriteria = {
                 value={criteria.numeroExpediteur || ''}
                 onChange={(e) => handleInputChange('numeroExpediteur', e.target.value ? parseInt(e.target.value) : undefined)}
                 className="w-full px-3 py-2 text-sm bg-background border border-input rounded-md focus:outline-none focus:ring-2 focus:ring-primary/50"
-                placeholder="10"
+                placeholder="Numéro de départ"
               />
             </div>
             <div>
@@ -237,7 +237,7 @@ const DEFAULT_CRITERIA: CourrierSearchCriteria = {
                 value={criteria.numeroDestinataire || ''}
                 onChange={(e) => handleInputChange('numeroDestinataire', e.target.value ? parseInt(e.target.value) : undefined)}
                 className="w-full px-3 py-2 text-sm bg-background border border-input rounded-md focus:outline-none focus:ring-2 focus:ring-primary/50"
-                placeholder="10"
+                placeholder="Numéro d'arrivée"
               />
             </div>
           </div>
