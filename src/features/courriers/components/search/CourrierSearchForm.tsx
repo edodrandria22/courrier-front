@@ -129,7 +129,7 @@ const DEFAULT_CRITERIA: CourrierSearchCriteria = {
               value={criteria.reference}
               onChange={(e) => handleInputChange('reference', e.target.value)}
               className="w-full px-3 py-2 text-sm bg-background border border-input rounded-md focus:outline-none focus:ring-2 focus:ring-primary/50 transition-all"
-              placeholder="ex: REF2024"
+              placeholder="votre référence"
             />
           </div>
 
@@ -151,7 +151,7 @@ const DEFAULT_CRITERIA: CourrierSearchCriteria = {
               value={criteria.nom}
               onChange={(e) => handleInputChange('nom', e.target.value)}
               className="w-full px-3 py-2 text-sm bg-background border border-input rounded-md focus:outline-none focus:ring-2 focus:ring-primary/50 transition-all"
-              placeholder="ex: MUPASA"
+              placeholder="ex: RAKOTO"
             />
           </div>
 
@@ -173,7 +173,7 @@ const DEFAULT_CRITERIA: CourrierSearchCriteria = {
               value={criteria.email}
               onChange={(e) => handleInputChange('email', e.target.value)}
               className="w-full px-3 py-2 text-sm bg-background border border-input rounded-md focus:outline-none focus:ring-2 focus:ring-primary/50 transition-all"
-              placeholder="exemple@mail.com"
+              placeholder="votre mail"
             />
           </div>
 
@@ -184,7 +184,7 @@ const DEFAULT_CRITERIA: CourrierSearchCriteria = {
               value={criteria.telephone}
               onChange={(e) => handleInputChange('telephone', e.target.value)}
               className="w-full px-3 py-2 text-sm bg-background border border-input rounded-md focus:outline-none focus:ring-2 focus:ring-primary/50 transition-all"
-              placeholder="0340000000"
+              placeholder="votre numéro de téléphone"
             />
           </div>
           
