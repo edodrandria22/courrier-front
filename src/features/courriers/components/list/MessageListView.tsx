@@ -2,7 +2,7 @@
 
 import { 
   ArrowLeft, ArrowRight, CheckCircle2, AlertCircle, Plus, Lock, 
-  UserIcon, Mail, Phone, Calendar, Clock, FileText, 
+  UserIcon, Mail, Phone, Calendar, Clock, FileText, Hash, Building,
   Edit2,
   Loader2
 } from 'lucide-react'
@@ -408,6 +408,24 @@ export const MessageListView = ({ courrier, messages, loading, error, currentUse
                           <a href={`tel:${personne.telephone}`} className="text-primary hover:underline">
                             {personne.telephone}
                           </a>
+                        </p>
+                      )}
+
+                      {/* Matricule (Affiché uniquement s'il existe) */}
+                      {personne.matricule && (
+                        <p className="flex items-center gap-2 text-foreground sm:col-span-2 border-t pt-2">
+                          <Hash className="w-3.5 h-3.5 text-muted-foreground shrink-0" />
+                          <span className="font-medium">Matricule :</span> 
+                          <span className="text-foreground">{personne.matricule}</span>
+                        </p>
+                      )}
+
+                      {/* Employeur (Affiché uniquement s'il existe) */}
+                      {personne.employeur && (
+                        <p className="flex items-center gap-2 text-foreground sm:col-span-2 border-t pt-2">
+                          <Building className="w-3.5 h-3.5 text-muted-foreground shrink-0" />
+                          <span className="font-medium">Employeur :</span> 
+                          <span className="text-foreground">{personne.employeur}</span>
                         </p>
                       )}
                     </div>

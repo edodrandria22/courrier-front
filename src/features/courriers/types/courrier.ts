@@ -64,6 +64,8 @@ export interface DetailPersonne {
   prenom: string|null;
   email: string|null;
   telephone: string|null;
+  matricule:number|null;
+  employeur:string|null;
 }
 // Kept for backward compatibility with CourrierForm
 export interface Courrier {

@@ -24,7 +24,7 @@ export const CourrierForm = ({ onSuccess, courrier, onClose }: Props) => {
   const [isCopied, setIsCopied] = useState(false)
 
   // 1. Initialisation avec une liste au lieu de champs simples
-  const defaultPersonne: DetailPersonne = { name: '', prenom: '', email: '', telephone: '' };
+  const defaultPersonne: DetailPersonne = { name: '', prenom: '', email: '', telephone: '', matricule: null, employeur: ''};
   const initialPersonnes = courrier?.detailPersonnes?.length 
     ? courrier.detailPersonnes 
     : [];
@@ -63,7 +63,11 @@ export const CourrierForm = ({ onSuccess, courrier, onClose }: Props) => {
   // 2. Fonctions pour gérer le tableau de personnes
   const handlePersonneChange = (index: number, field: keyof DetailPersonne, value: string) => {
     const updatedPersonnes = [...formData.detailPersonnes]
-    updatedPersonnes[index] = { ...updatedPersonnes[index], [field]: value }
+    // Convertir matricule en nombre si le champ est matricule
+    const processedValue = field === 'matricule' 
+      ? (value ? parseInt(value, 10) : null)
+      : value
+    updatedPersonnes[index] = { ...updatedPersonnes[index], [field]: processedValue }
     setFormData((prev) => ({ ...prev, detailPersonnes: updatedPersonnes }))
   }
 
@@ -117,10 +121,17 @@ export const CourrierForm = ({ onSuccess, courrier, onClose }: Props) => {
   const handleFormSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
 
+    // Convertir les matricules en nombres avant l'envoi
+    const processedDetailPersonnes = formData.detailPersonnes.map(personne => ({
+      ...personne,
+      matricule: personne.matricule ? (typeof personne.matricule === 'string' ? parseInt(personne.matricule, 10) : personne.matricule) : null
+    }))
+
     // Adapté pour correspondre à votre type Courrier
     const courrierData = {
       ...formData,
-      detailPersones: formData.detailPersonnes // Assurez-vous que la clé API correspond
+      detailPersonnes: processedDetailPersonnes,
+      detailPersones: processedDetailPersonnes // Assurez-vous que la clé API correspond
     } as unknown as Courrier; 
 
     let result;
@@ -414,6 +425,27 @@ export const CourrierForm = ({ onSuccess, courrier, onClose }: Props) => {
                     value={personne.telephone || ''}
                     onChange={(e) => handlePersonneChange(index, 'telephone', e.target.value)}
                     placeholder="Téléphone (optionnel)"
+                    className="bg-background border-border disabled:opacity-50"
+                    disabled={isFieldDisabled}
+                  />
+                </div>
+                <div className="space-y-2">
+                  <label className="text-sm font-semibold text-foreground">Matricule</label>
+                  <Input
+                    type="number"
+                    value={personne.matricule || ''}
+                    onChange={(e) => handlePersonneChange(index, 'matricule', e.target.value)}
+                    placeholder="Matricule (optionnel)"
+                    className="bg-background border-border disabled:opacity-50"
+                    disabled={isFieldDisabled}
+                  />
+                </div>
+                <div className="space-y-2">
+                  <label className="text-sm font-semibold text-foreground">Employeur</label>
+                  <Input
+                    value={personne.employeur || ''}
+                    onChange={(e) => handlePersonneChange(index, 'employeur', e.target.value)}
+                    placeholder="Employeur (optionnel)"
                     className="bg-background border-border disabled:opacity-50"
                     disabled={isFieldDisabled}
                   />

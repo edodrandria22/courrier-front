@@ -32,6 +32,8 @@ const DEFAULT_CRITERIA: CourrierSearchCriteria = {
     prenom: '',
     email: '',
     telephone: '',
+    matricule: undefined,
+    employeur: '',
     utilisateurId: undefined,
     numero: undefined,
     dateDebut: '',
@@ -55,6 +57,8 @@ const DEFAULT_CRITERIA: CourrierSearchCriteria = {
     prenom: criteria?.prenom ?? '',
     email: criteria?.email ?? '',
     telephone: criteria?.telephone ?? '',
+    matricule: criteria?.matricule ,
+    employeur: criteria?.employeur ?? '',
     utilisateurId: criteria?.utilisateurId,
     numero: criteria?.numero,
     dateDebut: criteria?.dateDebut ?? '',
@@ -80,11 +84,16 @@ const DEFAULT_CRITERIA: CourrierSearchCriteria = {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
     const filteredCriteria = Object.fromEntries(
-      Object.entries(criteria).filter(([_, value]) => 
+      Object.entries(criteria).filter(([_, value]) =>
         value !== '' && value !== undefined && value !== null
       )
     ) as CourrierSearchCriteria
-    
+
+    // Convertir matricule en nombre si c'est une string
+    if (typeof filteredCriteria.matricule === 'string') {
+      filteredCriteria.matricule = parseInt(filteredCriteria.matricule, 10) as any
+    }
+
     onSearch(filteredCriteria)
   }
 
@@ -196,6 +205,28 @@ const DEFAULT_CRITERIA: CourrierSearchCriteria = {
               onChange={(e) => handleInputChange('bordureau', e.target.value)}
               className="w-full px-3 py-2 text-sm bg-background border border-input rounded-md focus:outline-none focus:ring-2 focus:ring-primary/50 transition-all"
               placeholder="Bordereau d'envoi"
+            />
+          </div>
+
+          <div>
+            <label className="block text-xs font-medium mb-1.5 text-foreground">Matricule</label>
+            <input
+              type="number"
+              value={criteria.matricule || ''}
+              onChange={(e) => handleInputChange('matricule', e.target.value ? parseInt(e.target.value) : undefined)}
+              className="w-full px-3 py-2 text-sm bg-background border border-input rounded-md focus:outline-none focus:ring-2 focus:ring-primary/50 transition-all"
+              placeholder="Matricule"
+            />
+          </div>
+
+          <div>
+            <label className="block text-xs font-medium mb-1.5 text-foreground">Employeur</label>
+            <input
+              type="text"
+              value={criteria.employeur}
+              onChange={(e) => handleInputChange('employeur', e.target.value)}
+              className="w-full px-3 py-2 text-sm bg-background border border-input rounded-md focus:outline-none focus:ring-2 focus:ring-primary/50 transition-all"
+              placeholder="Employeur"
             />
           </div>
         </div>

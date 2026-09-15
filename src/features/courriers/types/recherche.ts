@@ -5,6 +5,8 @@ export interface CourrierSearchCriteria {
   prenom?: string;
   email?: string;
   telephone?: string;
+  matricule?: number;
+  employeur?: string;
   utilisateurId?: number;
   isSend?: boolean;
   numero?: number;
