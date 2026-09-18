@@ -301,7 +301,56 @@ export async function callApiPut(
       );
     }
 
-    // console.error("Erreur inconnue sur l'api put:", err);
+    console.error("Erreur inconnue sur l'api put:", err);
+    return NextResponse.json(
+      { error: "Erreur interne inconnue du serveur" },
+      { status: 500 }
+    );
+  }
+  
+}
+export async function callApiDelete(
+  request: NextRequest,
+  url: string,
+  allowedParams: string[] = []
+) {
+  try {
+    const api = getServerAxios(request);
+
+    const { searchParams } = new URL(request.url);
+    const queryParams: Record<string, string> = {};
+
+    // Générer automatiquement les paramètres autorisés
+    allowedParams.forEach((key) => {
+      const value = searchParams.get(key);
+      if (value) queryParams[key] = value;
+    });
+
+    const response = await api.delete(url, { params: queryParams });
+
+    return NextResponse.json(response.data, { status: response.status || 200 });
+  } catch (err: unknown) {
+    if (axios.isAxiosError(err)) {
+      if (err.response) {
+        const status = err.response.status || 500;
+        const data = err.response.data || {};
+
+        const msg =
+          data.message ||
+          data.error ||
+          (typeof data === "string" ? data : JSON.stringify(data)) ||
+          "Erreur interne lors de l'appel au service";
+
+        return NextResponse.json({ error: msg }, { status });
+      }
+
+      return NextResponse.json(
+        { error: err.message || "Erreur de connexion au service backend." },
+        { status: 503 }
+      );
+    }
+
+    // console.error("Erreur inconnue :", err);
     return NextResponse.json(
       { error: "Erreur interne inconnue du serveur" },
       { status: 500 }

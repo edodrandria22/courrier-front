@@ -82,7 +82,7 @@ export const utilisateurService = {
                 payload.mdp = data.mdp;
             }
 
-            const response = await fetchAuth(`/api/utilisateurs?id=${id}`, {
+            const response = await fetchAuth(`/api/utilisateurs/${id}`, {
                 method: "PUT",
                 headers: {
                     "Content-Type": "application/json",
@@ -97,6 +97,47 @@ export const utilisateurService = {
 
             const responseData = await response.json();
             return responseData.data || responseData;
+        } catch (error) {
+            throw error;
+        }
+    },
+    deactivateUser: async (id: number): Promise<User> => {
+        try {
+            const response = await fetchAuth(`/api/utilisateurs/${id}/inactif`, {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({}), // ✅ body vide mais valide
+            });
+
+            if (!response.ok) {
+                const errorData = await response.json().catch(() => ({}));
+                throw new Error(errorData.message || errorData.error || `Erreur serveur: ${response.status}`);
+            }
+
+            const responseData = await response.json();
+            return responseData.data || responseData;
+        } catch (error) {
+            throw error;
+        }
+    },
+    suprrimerAdmin: async(id: number): Promise<boolean> => {
+        try {
+            const response = await fetchAuth(`/api/utilisateurs/${id}`, {
+                method: "DELETE",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+            });
+
+            if (!response.ok) {
+                const errorData = await response.json().catch(() => ({}));
+                throw new Error(errorData.message || errorData.error || `Erreur serveur: ${response.status}`);
+            }
+
+
+            return true;
         } catch (error) {
             throw error;
         }

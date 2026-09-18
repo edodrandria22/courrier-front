@@ -2,6 +2,8 @@
 
 import { User } from "@/features/auth/types/login";
 import { AppTableSkeleton } from "@/features/common/components/ui/AppTableSkeleton";
+import { ConfirmDialog } from "@/features/common/components/ui/ConfirmDialog";
+import { useState } from "react";
 
 interface UserListProps {
     users: User[];
@@ -10,27 +12,58 @@ interface UserListProps {
     hasMore: boolean;
     onAddUser: () => void;
     onEditUser: (user: User) => void;
+    onDelete: (id: number) => void;
+    deletingId: number | null;
+    onToggleStatus: (id: number) => void;
+    togglingId: number | null;
 }
 
-export const UserList: React.FC<UserListProps> = ({ users, isLoading, fetchUsersPlus, hasMore, onAddUser, onEditUser }) => {
- 
+export const UserList: React.FC<UserListProps> = ({
+    users,
+    isLoading,
+    fetchUsersPlus,
+    hasMore,
+    onAddUser,
+    onEditUser,
+    onDelete,
+    deletingId,
+    onToggleStatus,
+    togglingId,
+}) => {
+    const [userToDelete, setUserToDelete] = useState<User | null>(null);
+    const [userToToggle, setUserToToggle] = useState<User | null>(null);
+
+    const handleConfirmDelete = () => {
+        if (userToDelete) {
+            onDelete(userToDelete.id);
+            setUserToDelete(null);
+        }
+    };
+
+    const handleConfirmToggle = () => {
+        if (userToToggle) {
+            onToggleStatus(userToToggle.id);
+            setUserToToggle(null);
+        }
+    };
+    const getFullName = (user: User) => `${user.nom}${user.prenom ? ` ${user.prenom}` : ""}`;
 
     return (
         <div className="space-y-6">
             <div className="flex items-center justify-between">
                 <div>
                     <h2 className="text-xl font-bold text-foreground">
-                    Comptes Utilisateurs
+                        Comptes Utilisateurs
                     </h2>
 
                     <p className="text-sm text-muted-foreground mt-1">
-                    Liste des agents et administrateurs enregistrés.
+                        Liste des agents et administrateurs enregistrés.
                     </p>
                 </div>
                 <button
-                onClick={onAddUser}
-                style={{ color: "#ffffff" }}
-                className="px-4 py-2 bg-primary hover:bg-primary/90 text-primary-foreground text-xs font-bold uppercase tracking-widest rounded transition-all shadow-sm flex items-center gap-2"
+                    onClick={onAddUser}
+                    style={{ color: "#ffffff" }}
+                    className="px-4 py-2 bg-primary hover:bg-primary/90 text-primary-foreground text-xs font-bold uppercase tracking-widest rounded transition-all shadow-sm flex items-center gap-2"
                 >
                     <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
@@ -49,14 +82,15 @@ export const UserList: React.FC<UserListProps> = ({ users, isLoading, fetchUsers
                                 <th className="px-6 py-4 font-bold text-foreground uppercase tracking-widest text-[10px]">Email</th>
                                 <th className="px-6 py-4 font-bold text-foreground uppercase tracking-widest text-[10px]">Adresse</th>
                                 <th className="px-6 py-4 font-bold text-foreground uppercase tracking-widest text-[10px]">Rôle</th>
+                                <th className="px-6 py-4 font-bold text-foreground uppercase tracking-widest text-[10px]">Statut</th>
                                 <th className="px-6 py-4 font-bold text-slate-900 uppercase tracking-widest text-[10px] text-right">Actions</th>
                             </tr>
                         </thead>
                         <tbody className="divide-y divide-slate-100">
                             {isLoading && users.length === 0 ? (
                                 <tr>
-                                    <td colSpan={4} className="p-0">
-                                        <AppTableSkeleton rows={8} cols={4} className="border-0 shadow-none rounded-none" />
+                                    <td colSpan={7} className="p-0">
+                                        <AppTableSkeleton rows={8} cols={7} className="border-0 shadow-none rounded-none" />
                                     </td>
                                 </tr>
                             ) : (
@@ -78,27 +112,88 @@ export const UserList: React.FC<UserListProps> = ({ users, isLoading, fetchUsers
                                         </td>
                                         <td className="px-6 py-4">
                                             <span
-                                            className={`px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider ${
-                                                user.role === "Utilisateur"
-                                                ? "bg-secondary text-secondary-foreground"
-                                                : user.role === "Admin"
-                                                ? "bg-primary/10 text-primary"
-                                                : "bg-muted text-muted-foreground"
-                                            }`}
+                                                className={`px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider ${
+                                                    user.role === "Utilisateur"
+                                                        ? "bg-secondary text-secondary-foreground"
+                                                        : user.role === "Admin"
+                                                        ? "bg-primary/10 text-primary"
+                                                        : "bg-muted text-muted-foreground"
+                                                }`}
                                             >
-                                            {user.role}
+                                                {user.role}
+                                            </span>
+                                        </td>
+                                        <td className="px-6 py-4">
+                                            <span
+                                                className={`px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider ${
+                                                    user.dateInactif === null
+                                                        ? "bg-green-100 text-green-700"
+                                                        : "bg-red-100 text-red-700"
+                                                }`}
+                                            >
+                                                {user.dateInactif === null ? "Actif" : "Inactif"}
                                             </span>
                                         </td>
                                         <td className="px-6 py-4 text-right">
-                                            <button
-                                                onClick={() => onEditUser(user)}
-                                                className="text-slate-400 hover:text-blue-600 transition-colors p-1"
-                                                title="Modifier l'utilisateur"
-                                            >
-                                                <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
-                                                </svg>
-                                            </button>
+                                            <div className="flex items-center justify-end gap-1">
+                                                <button
+                                                    onClick={() => onEditUser(user)}
+                                                    className="text-slate-400 hover:text-blue-600 transition-colors p-1"
+                                                    title="Modifier l'utilisateur"
+                                                >
+                                                    <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
+                                                    </svg>
+                                                </button>
+
+                                                {user.role === "Utilisateur" && (
+                                                    <button
+                                                        onClick={() => setUserToToggle(user)}
+                                                        disabled={togglingId === user.id}
+                                                        className={`transition-colors p-1 disabled:opacity-50 disabled:cursor-not-allowed ${
+                                                            user.dateInactif === null
+                                                                ? "text-slate-400 hover:text-orange-600"
+                                                                : "text-slate-400 hover:text-green-600"
+                                                        }`}
+                                                        title={user.dateInactif === null ? "Désactiver l'utilisateur" : "Activer l'utilisateur"}
+                                                    >
+                                                        {togglingId === user.id ? (
+                                                            <svg className="animate-spin h-4 w-4" viewBox="0 0 24 24">
+                                                                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
+                                                                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
+                                                            </svg>
+                                                        ) : user.dateInactif === null ? (
+                                                            <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636" />
+                                                            </svg>
+                                                        ) : (
+                                                            <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                                            </svg>
+                                                        )}
+                                                    </button>
+                                                )}
+
+                                                {user.role === "Admin" && (
+                                                    <button
+                                                        onClick={() => setUserToDelete(user)}
+                                                        disabled={deletingId === user.id}
+                                                        className="text-slate-400 hover:text-red-600 transition-colors p-1 disabled:opacity-50 disabled:cursor-not-allowed"
+                                                        title="Supprimer l'administrateur"
+                                                    >
+                                                        {deletingId === user.id ? (
+                                                            <svg className="animate-spin h-4 w-4 text-red-600" viewBox="0 0 24 24">
+                                                                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
+                                                                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
+                                                            </svg>
+                                                        ) : (
+                                                            <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                                            </svg>
+                                                        )}
+                                                    </button>
+                                                )}
+                                            </div>
                                         </td>
                                     </tr>
                                 ))
@@ -106,33 +201,65 @@ export const UserList: React.FC<UserListProps> = ({ users, isLoading, fetchUsers
                         </tbody>
                     </table>
                     {hasMore && (
-                <div className="flex justify-center px-4 pb-4 pt-2">
-                  <button
-                    onClick={fetchUsersPlus}
-                    disabled={isLoading}
-                    className={[
-                      'group relative w-full sm:w-auto px-5 py-2.5 sm:py-2 rounded-lg text-sm font-medium transition-all flex items-center justify-center gap-2 border',
-                      isLoading
-                        ? 'bg-muted text-muted-foreground border-border cursor-not-allowed'
-                        : 'bg-card text-primary border-primary/30 hover:border-primary hover:bg-primary/5 hover:shadow-sm active:scale-95'
-                    ].join(' ')}
-                  >
-                    {isLoading ? (
-                      <svg className="animate-spin h-4 w-4 text-muted-foreground" viewBox="0 0 24 24">
-                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
-                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
-                      </svg>
-                    ) : (
-                      <svg className="w-4 h-4 text-primary/50 group-hover:text-primary transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
-                      </svg>
+                        <div className="flex justify-center px-4 pb-4 pt-2">
+                            <button
+                                onClick={fetchUsersPlus}
+                                disabled={isLoading}
+                                className={[
+                                    'group relative w-full sm:w-auto px-5 py-2.5 sm:py-2 rounded-lg text-sm font-medium transition-all flex items-center justify-center gap-2 border',
+                                    isLoading
+                                        ? 'bg-muted text-muted-foreground border-border cursor-not-allowed'
+                                        : 'bg-card text-primary border-primary/30 hover:border-primary hover:bg-primary/5 hover:shadow-sm active:scale-95'
+                                ].join(' ')}
+                            >
+                                {isLoading ? (
+                                    <svg className="animate-spin h-4 w-4 text-muted-foreground" viewBox="0 0 24 24">
+                                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
+                                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
+                                    </svg>
+                                ) : (
+                                    <svg className="w-4 h-4 text-primary/50 group-hover:text-primary transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
+                                    </svg>
+                                )}
+                                <span>{isLoading ? 'Chargement...' : 'Afficher plus de résultats'}</span>
+                            </button>
+                        </div>
                     )}
-                    <span>{isLoading ? 'Chargement...' : 'Afficher plus de résultats'}</span>
-                  </button>
-                </div>
-              )}
                 </div>
             </div>
+
+            <ConfirmDialog
+                open={!!userToDelete}
+                title="Supprimer l'administrateur"
+                description={
+                    userToDelete
+                        ? `Voulez-vous vraiment supprimer ${getFullName(userToDelete)} ? Cette action est irréversible.`
+                        : ""
+                }
+                confirmLabel="Supprimer"
+                cancelLabel="Annuler"
+                isLoading={deletingId === userToDelete?.id}
+                onConfirm={handleConfirmDelete}
+                onCancel={() => setUserToDelete(null)}
+            />
+
+            <ConfirmDialog
+                open={!!userToToggle}
+                title={userToToggle?.dateInactif === null ? "Désactiver l'utilisateur" : "Activer l'utilisateur"}
+                description={
+                    userToToggle
+                        ? userToToggle.dateInactif === null
+                            ? `Voulez-vous vraiment désactiver ${getFullName(userToToggle)} ? Il ne pourra plus se connecter.`
+                            : `Voulez-vous réactiver ${getFullName(userToToggle)} ?`
+                        : ""
+                }
+                confirmLabel={userToToggle?.dateInactif === null ? "Désactiver" : "Activer"}
+                cancelLabel="Annuler"
+                isLoading={togglingId === userToToggle?.id}
+                onConfirm={handleConfirmToggle}
+                onCancel={() => setUserToToggle(null)}
+            />
         </div>
     );
 };

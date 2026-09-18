@@ -46,7 +46,8 @@ const DEFAULT_CRITERIA: CourrierSearchCriteria = {
     dateReceptionFin: '',
     numeroExpediteur: undefined,
     numeroDestinataire: undefined,
-    bordureau:''
+    bordureau:'',
+    entiteId: undefined
   }
 
   // 2. Fonction utilitaire pour assainir les critères reçus en props (remplace undefined par '')
@@ -71,7 +72,8 @@ const DEFAULT_CRITERIA: CourrierSearchCriteria = {
     dateReceptionFin: criteria?.dateReceptionFin ?? '',
     numeroExpediteur: criteria?.numeroExpediteur,
     numeroDestinataire: criteria?.numeroDestinataire,
-    bordureau: criteria?.bordureau ?? ''
+    bordureau: criteria?.bordureau ?? '',
+    entiteId: criteria?.entiteId
   })
   const [criteria, setCriteria] = useState<CourrierSearchCriteria>(() => 
   sanitizeCriteria(initialCriteria)
@@ -92,6 +94,10 @@ const DEFAULT_CRITERIA: CourrierSearchCriteria = {
     // Convertir matricule en nombre si c'est une string
     if (typeof filteredCriteria.matricule === 'string') {
       filteredCriteria.matricule = parseInt(filteredCriteria.matricule, 10) as any
+    }
+    // Convertir entiteId en nombre si c'est une string
+    if (typeof filteredCriteria.entiteId === 'string') {
+      filteredCriteria.entiteId = parseInt(filteredCriteria.entiteId, 10) as any
     }
 
     onSearch(filteredCriteria)
@@ -152,7 +158,21 @@ const DEFAULT_CRITERIA: CourrierSearchCriteria = {
               placeholder="Objet de la demande..."
             />
           </div>
-
+          <div className="space-y-2">
+                  <label className="text-sm font-semibold text-foreground">Type d'entité</label>
+                  <select
+                    value={criteria.entiteId || ''}
+                    onChange={(e) => handleInputChange('entiteId', e.target.value)}
+                    className="w-full px-3 py-2 text-sm bg-background border border-input rounded-md focus:outline-none focus:ring-2 focus:ring-primary/50 disabled:opacity-50"
+                    disabled={false}
+                  >
+                    <option value="">Tous</option>
+                    <option value="1">Enseignant-chercheur</option>
+                    <option value="2">Chercheur-enseignant</option>
+                    <option value="3">PAT</option>
+                    <option value="4">Autre</option>
+                  </select>
+          </div>
           <div>
             <label className="block text-xs font-medium mb-1.5 text-foreground">Nom</label>
             <input

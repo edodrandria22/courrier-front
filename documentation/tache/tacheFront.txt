@@ -181,5 +181,19 @@ GET http://localhost:3000/api/notifications/subscribe 404 (Not Found)
     --recherche pour afficher seulement une seule reference -- a faire -- 90 mn
         --page pour afficher l'objet et reference -- a faire -- 60 mn
         --une page pour afficher tous les historique qui lui conserne -- a faire -- 30 mn
+15/09/2026
+    --ajouter une champs matricule et employeur au creation du courrier -- ok -- 30mn
+    -- page de recherche -- ok
+    --message list --ok
+    --supprimer l'admin et inactiver une compte utilisateur -- ok -- 90mn
+        --api pour supprimer une compte et inactiver une compte -- ok -- 30 mn
+        --fonction-- ok mn 
+        --affichage -- ok mn
+18/09/2026
+    --ajouter type entite sur la formulaire de la detailPersonne -- a faire -- 60 mn
+    --ajouter type entite sur la page de recherche -- a faire -- 30 mn 
+
 --quand on clique sur le boutton retour on doit revenir a la page precedente sans scroller -- ok -- 60 mn
---sur la page de recherche le sroll doit avoir qu'une seule scroll -- a faire -- 60m
+--status , nom , prenom , matricule, employeur, email, telephone
+--status liste deroulante,
+-- cloturer , suivi mail cloturer si deja cloturer 

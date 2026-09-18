@@ -18,4 +18,5 @@ export interface User {
   adresse: string;
   createdAt?: string;
   sigle: string|null;
+  dateInactif: string|null;
 }

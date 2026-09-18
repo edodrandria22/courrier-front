@@ -24,7 +24,7 @@ export const CourrierForm = ({ onSuccess, courrier, onClose }: Props) => {
   const [isCopied, setIsCopied] = useState(false)
 
   // 1. Initialisation avec une liste au lieu de champs simples
-  const defaultPersonne: DetailPersonne = { name: '', prenom: '', email: '', telephone: '', matricule: null, employeur: ''};
+  const defaultPersonne: DetailPersonne = { name: '', prenom: '', email: '', telephone: '', matricule: null, employeur: '', entiteId: null};
   const initialPersonnes = courrier?.detailPersonnes?.length 
     ? courrier.detailPersonnes 
     : [];
@@ -61,12 +61,15 @@ export const CourrierForm = ({ onSuccess, courrier, onClose }: Props) => {
   }
 
   // 2. Fonctions pour gérer le tableau de personnes
-  const handlePersonneChange = (index: number, field: keyof DetailPersonne, value: string) => {
+  const handlePersonneChange = (index: number, field: keyof DetailPersonne, value: string | number | null) => {
     const updatedPersonnes = [...formData.detailPersonnes]
-    // Convertir matricule en nombre si le champ est matricule
-    const processedValue = field === 'matricule' 
-      ? (value ? parseInt(value, 10) : null)
-      : value
+    // Convertir matricule et entiteId en nombres si ce sont ces champs
+    let processedValue = value
+    if (field === 'matricule') {
+      processedValue = typeof value === 'string' ? (value ? parseInt(value, 10) : null) : value
+    } else if (field === 'entiteId') {
+      processedValue = typeof value === 'string' ? (value ? parseInt(value, 10) : null) : value
+    }
     updatedPersonnes[index] = { ...updatedPersonnes[index], [field]: processedValue }
     setFormData((prev) => ({ ...prev, detailPersonnes: updatedPersonnes }))
   }
@@ -387,6 +390,22 @@ export const CourrierForm = ({ onSuccess, courrier, onClose }: Props) => {
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="space-y-2">
+                  <label className="text-sm font-semibold text-foreground">Type d'entité</label>
+                  <select
+                    value={personne.entiteId || ''}
+                    onChange={(e) => handlePersonneChange(index, 'entiteId', e.target.value)}
+                    required
+                    className="w-full px-3 py-2 text-sm bg-background border border-input rounded-md focus:outline-none focus:ring-2 focus:ring-primary/50 disabled:opacity-50"
+                    disabled={isFieldDisabled}
+                  >
+                    <option value="">Sélectionner...</option>
+                    <option value="1">Enseignant-chercheur</option>
+                    <option value="2">Chercheur-enseignant</option>
+                    <option value="3">PAT</option>
+                    <option value="4">Autre</option>
+                  </select>
+                </div>
+                <div className="space-y-2">
                   <label className="text-sm font-semibold flex items-center gap-2 text-foreground">
                     <User className="w-3 h-3" /> Nom
                   </label>
@@ -409,27 +428,6 @@ export const CourrierForm = ({ onSuccess, courrier, onClose }: Props) => {
                   />
                 </div>
                 <div className="space-y-2">
-                  <label className="text-sm font-semibold text-foreground">Email</label>
-                  <Input
-                    type="email"
-                    value={personne.email || ''}
-                    onChange={(e) => handlePersonneChange(index, 'email', e.target.value)}
-                    placeholder="Mail du correspondant (optionnel)"
-                    className="bg-background border-border disabled:opacity-50"
-                    disabled={isFieldDisabled}
-                  />
-                </div>
-                <div className="space-y-2">
-                  <label className="text-sm font-semibold text-foreground">Téléphone</label>
-                  <Input
-                    value={personne.telephone || ''}
-                    onChange={(e) => handlePersonneChange(index, 'telephone', e.target.value)}
-                    placeholder="Téléphone (optionnel)"
-                    className="bg-background border-border disabled:opacity-50"
-                    disabled={isFieldDisabled}
-                  />
-                </div>
-                <div className="space-y-2">
                   <label className="text-sm font-semibold text-foreground">Matricule</label>
                   <Input
                     type="number"
@@ -446,6 +444,27 @@ export const CourrierForm = ({ onSuccess, courrier, onClose }: Props) => {
                     value={personne.employeur || ''}
                     onChange={(e) => handlePersonneChange(index, 'employeur', e.target.value)}
                     placeholder="Employeur (optionnel)"
+                    className="bg-background border-border disabled:opacity-50"
+                    disabled={isFieldDisabled}
+                  />
+                </div>
+                <div className="space-y-2">
+                  <label className="text-sm font-semibold text-foreground">Email</label>
+                  <Input
+                    type="email"
+                    value={personne.email || ''}
+                    onChange={(e) => handlePersonneChange(index, 'email', e.target.value)}
+                    placeholder="Mail du correspondant (optionnel)"
+                    className="bg-background border-border disabled:opacity-50"
+                    disabled={isFieldDisabled}
+                  />
+                </div>
+                <div className="space-y-2">
+                  <label className="text-sm font-semibold text-foreground">Téléphone</label>
+                  <Input
+                    value={personne.telephone || ''}
+                    onChange={(e) => handlePersonneChange(index, 'telephone', e.target.value)}
+                    placeholder="Téléphone (optionnel)"
                     className="bg-background border-border disabled:opacity-50"
                     disabled={isFieldDisabled}
                   />

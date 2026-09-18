@@ -66,6 +66,8 @@ export interface DetailPersonne {
   telephone: string|null;
   matricule:number|null;
   employeur:string|null;
+  entiteId:number|null;
+  entite?:string|null;
 }
 // Kept for backward compatibility with CourrierForm
 export interface Courrier {

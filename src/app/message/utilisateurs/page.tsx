@@ -73,6 +73,43 @@ export default function AdminUsersPage() {
         checkAuth();
         fetchUsers();
     }, []);
+    const [deletingId, setDeletingId] = useState<number | null>(null);
+    const handleDeleteUser = async (id: number) => {
+        setDeletingId(id);
+        try {
+            await utilisateurService.suprrimerAdmin(id);
+            setUsers((prev) => prev.filter((u) => u.id !== id));
+            toast.success("Administrateur supprimé avec succès.");
+        } catch (error) {
+            if (error instanceof Error) {
+                toast.error(error.message);
+            } else {
+                toast.error("Une erreur inconnue est survenue lors de la suppression.");
+            }
+        } finally {
+            setDeletingId(null);
+        }
+    };
+    const [togglingId, setTogglingId] = useState<number | null>(null);
+
+    const handleToggleStatus = async (id: number) => {
+        setTogglingId(id);
+        try {
+            const updatedUser = await utilisateurService.deactivateUser(id);
+            setUsers((prev) =>
+                prev.map((u) => (u.id === id ? { ...u, dateInactif: updatedUser.dateInactif } : u))
+            );
+            toast.success("Statut mis à jour avec succès.");
+        } catch (error) {
+            if (error instanceof Error) {
+                toast.error(error.message);
+            } else {
+                toast.error("Une erreur inconnue est survenue.");
+            }
+        } finally {
+            setTogglingId(null);
+        }
+    };
 
     const checkAuth = async () => {
         try {
@@ -157,6 +194,10 @@ export default function AdminUsersPage() {
                     hasMore={hasMore}
                     onAddUser={() => setShowForm(true)}
                     onEditUser={(u) => setUserToEdit(u)}
+                    onDelete={handleDeleteUser}
+                    deletingId={deletingId}
+                    onToggleStatus={handleToggleStatus}
+                    togglingId={togglingId}
                 />
             )}
         </div>
