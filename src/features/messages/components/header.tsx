@@ -13,6 +13,7 @@ import {
 import { LogOut, Settings, Menu, Palette, User as UserIcon, Hash } from 'lucide-react'
 import { User } from '@/features/auth/types/login'
 import { ThemePicker } from '@/features/theme/components/ThemePicker'
+import { authService } from '@/features/auth/services/authService'
 
 interface HeaderProps {
   user: User | null,
@@ -26,7 +27,7 @@ export default function Header({user,loading ,onMenuToggle, showMenu }: HeaderPr
   // console.log(user)
   const handleLogout = async () => {
     try {
-      await fetch('/api/auth/logout', { method: 'POST' })
+      await authService.logout();
       router.push("/")
     } catch (error) {
       // console.error('Logout error:', error)

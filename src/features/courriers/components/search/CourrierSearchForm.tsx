@@ -1,6 +1,7 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import { useEntites } from '@/features/courriers/contexts/EntitesContext'
 import { CourrierSearchCriteria } from '../../types/recherche'
 import { Button } from '@/components/ui/button'
 import { 
@@ -24,6 +25,8 @@ interface CourrierSearchFormProps {
 
 
 export const CourrierSearchForm = ({ onSearch, loading = false, reinitialiser, initialCriteria, onCancel, isListeVide = false }: CourrierSearchFormProps) => {
+  const { entites, loading: loadingEntites } = useEntites()
+
   // 1. Définir les valeurs vides par défaut
 const DEFAULT_CRITERIA: CourrierSearchCriteria = {
     reference: '',
@@ -162,15 +165,20 @@ const DEFAULT_CRITERIA: CourrierSearchCriteria = {
                   <label className="text-sm font-semibold text-foreground">Type d'entité</label>
                   <select
                     value={criteria.entiteId || ''}
-                    onChange={(e) => handleInputChange('entiteId', e.target.value)}
+                    onChange={(e) => handleInputChange('entiteId', e.target.value ? parseInt(e.target.value) : undefined)}
                     className="w-full px-3 py-2 text-sm bg-background border border-input rounded-md focus:outline-none focus:ring-2 focus:ring-primary/50 disabled:opacity-50"
-                    disabled={false}
+                    disabled={loadingEntites}
                   >
                     <option value="">Tous</option>
-                    <option value="1">Enseignant-chercheur</option>
-                    <option value="2">Chercheur-enseignant</option>
-                    <option value="3">PAT</option>
-                    <option value="4">Autre</option>
+                    {loadingEntites ? (
+                      <option value="" disabled>Chargement...</option>
+                    ) : (
+                      entites.map((entite) => (
+                        <option key={entite.id} value={entite.id}>
+                          {entite.name}
+                        </option>
+                      ))
+                    )}
                   </select>
           </div>
           <div>

@@ -106,4 +106,7 @@ export interface Statistique {
     nonLu: number;
     
 }
-
+export interface Entites{
+  id: number,
+  name: string
+}

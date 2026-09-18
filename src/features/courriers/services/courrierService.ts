@@ -1,5 +1,5 @@
 import { User } from '@/features/auth/types/login';
-import { MessageCourrier, Courrier, Statistique } from '../types/courrier';
+import { MessageCourrier, Courrier, Statistique, Entites } from '../types/courrier';
 import { CourrierSearchCriteria } from '../types/recherche';
 import { logger } from '@/lib/logger';
 import { useFetchAuth } from '@/hooks/useFetchAuth';
@@ -371,6 +371,22 @@ export const courrierService = {
       return json.data;
     } catch (error) {
       logger.exception('courrierService.getNonTraite - Exception', error);
+      throw error;
+    }
+  },
+  getAllEntites: async (): Promise<Entites> =>{
+    try {
+      const fetchWithAuth = useFetchAuth();
+      const res = await fetchWithAuth(`/api/entites`);
+      if (!res.ok) {
+        const json = await res.json();
+        throw new Error(json.error ?? json.message ?? 'Erreur lors de la récupération des entités');
+      }
+      
+      const json = await res.json();
+      return json.data;
+    } catch (error) {
+      logger.exception('courrierService.getAllEntites - Exception', error);
       throw error;
     }
   }

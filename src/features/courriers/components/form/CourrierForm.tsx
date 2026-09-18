@@ -6,8 +6,9 @@ import { Textarea } from '@/components/ui/textarea'
 import { Card } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Send, X, User, Lock, CheckCircle, ArrowRight, Copy, Check, Plus, Trash2, Paperclip, FileText } from 'lucide-react'
-import { useCourrier } from '../../hooks/useCourrier'
-import { Courrier, DetailPersonne } from '../../types/courrier'
+import { useCourrier } from '@/features/courriers/hooks/useCourrier'
+import { DetailPersonne, Courrier } from '@/features/courriers/types/courrier'
+import { useEntites } from '@/features/courriers/contexts/EntitesContext'
 import { Attachment } from '@/features/messages/types/compose'
 import { cn } from '@/lib/utils'
 
@@ -19,6 +20,7 @@ interface Props {
 
 export const CourrierForm = ({ onSuccess, courrier, onClose }: Props) => {
   const { createCourrier, updateCourrier, loading, error } = useCourrier()
+  const { entites, loading: loadingEntites } = useEntites()
   const [backupData, setBackupData] = useState<Partial<Courrier> | null>(null)
   const [createdReference, setCreatedReference] = useState<string | null>(null)
   const [isCopied, setIsCopied] = useState(false)
@@ -396,13 +398,18 @@ export const CourrierForm = ({ onSuccess, courrier, onClose }: Props) => {
                     onChange={(e) => handlePersonneChange(index, 'entiteId', e.target.value)}
                     required
                     className="w-full px-3 py-2 text-sm bg-background border border-input rounded-md focus:outline-none focus:ring-2 focus:ring-primary/50 disabled:opacity-50"
-                    disabled={isFieldDisabled}
+                    disabled={isFieldDisabled || loadingEntites}
                   >
                     <option value="">Sélectionner...</option>
-                    <option value="1">Enseignant-chercheur</option>
-                    <option value="2">Chercheur-enseignant</option>
-                    <option value="3">PAT</option>
-                    <option value="4">Autre</option>
+                    {loadingEntites ? (
+                      <option value="" disabled>Chargement...</option>
+                    ) : (
+                      entites.map((entite) => (
+                        <option key={entite.id} value={entite.id}>
+                          {entite.name}
+                        </option>
+                      ))
+                    )}
                   </select>
                 </div>
                 <div className="space-y-2">

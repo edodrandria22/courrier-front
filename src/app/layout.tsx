@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from 'next/font/google'
 import { ThemeProvider } from '@/components/theme-provider'
 import { NotificationDisplay } from '@/features/notifications/components/NotificationDisplay'
 import { ThemePresetProvider } from '@/features/theme/components/ThemePresetProvider'
+import { EntitesProvider } from '@/features/courriers/contexts/EntitesContext'
 import './globals.css'
 
 const geist = Geist({ 
@@ -85,13 +86,15 @@ export default function RootLayout({
   return (
     <html lang="fr" suppressHydrationWarning>
       <body className={`${geist.variable} ${geistMono.variable} font-sans antialiased`}>
-        <ThemePresetProvider>
-          <ThemeProvider attribute="class" defaultTheme="light" enableSystem={false}>
-            {children}
-            <NotificationWrapper />
-            <Toaster position="top-right" richColors />
-          </ThemeProvider>
-        </ThemePresetProvider>
+        <EntitesProvider>
+          <ThemePresetProvider>
+            <ThemeProvider attribute="class" defaultTheme="light" enableSystem={false}>
+              {children}
+              <NotificationWrapper />
+              <Toaster position="top-right" richColors />
+            </ThemeProvider>
+          </ThemePresetProvider>
+        </EntitesProvider>
       </body>
     </html>
   )
