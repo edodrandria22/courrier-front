@@ -383,13 +383,13 @@ export const MessageListView = ({ courrier, messages, loading, error, currentUse
                         </span>
                       )}
                       {/* Nom & Prénom */}
-                      {personne.entite && (
+                      {/* {personne.entite && (
                         <p className="flex items-center gap-2 text-foreground sm:col-span-2">
                           <Hash className="w-3.5 h-3.5 text-muted-foreground shrink-0" />
                           <span className="font-medium">Entité :</span> 
                           <span className="text-foreground">{personne.entite}</span>
                         </p>
-                      )}
+                      )} */}
 
                       {/* Nom & Prénom */}
                       <p className="flex items-center gap-2 text-foreground sm:col-span-2 border-t pt-2">
@@ -406,13 +406,13 @@ export const MessageListView = ({ courrier, messages, loading, error, currentUse
                       )}
 
                       {/* Employeur (Affiché uniquement s'il existe) */}
-                      {personne.employeur && (
+                      {/* {personne.employeur && (
                         <p className="flex items-center gap-2 text-foreground sm:col-span-2 border-t pt-2">
                           <Building className="w-3.5 h-3.5 text-muted-foreground shrink-0" />
                           <span className="font-medium">Employeur :</span> 
                           <span className="text-foreground">{personne.employeur}</span>
                         </p>
-                      )}
+                      )} */}
 
                       {/* Email */}
                       <p className="flex items-center gap-2 text-foreground sm:col-span-2 border-t pt-2 mt-1">
