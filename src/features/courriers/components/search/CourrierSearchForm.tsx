@@ -162,7 +162,7 @@ const DEFAULT_CRITERIA: CourrierSearchCriteria = {
             />
           </div>
           <div className="space-y-2">
-                  <label className="text-sm font-semibold text-foreground">Type d'entité</label>
+                  <label className="text-sm font-semibold text-foreground">Entité</label>
                   <select
                     value={criteria.entiteId || ''}
                     onChange={(e) => handleInputChange('entiteId', e.target.value ? parseInt(e.target.value) : undefined)}

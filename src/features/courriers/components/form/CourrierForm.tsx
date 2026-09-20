@@ -392,7 +392,7 @@ export const CourrierForm = ({ onSuccess, courrier, onClose }: Props) => {
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="space-y-2">
-                  <label className="text-sm font-semibold text-foreground">Type d'entité</label>
+                  <label className="text-sm font-semibold text-foreground">Entité</label>
                   <select
                     value={personne.entiteId || ''}
                     onChange={(e) => handlePersonneChange(index, 'entiteId', e.target.value)}
