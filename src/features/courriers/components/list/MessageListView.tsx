@@ -434,7 +434,7 @@ export const MessageListView = ({ courrier, messages, loading, error, currentUse
                             {personne.telephone}
                           </a>
                         ) : (
-                          <span className="text-muted-foreground">--</span>
+                          <span className="text-muted-foreground">—</span>
                         )}
                       </p>
                     </div>
