@@ -1,8 +1,7 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
-import { roleService, Role } from "../services/roleService";
-import toast from "react-hot-toast";
+import React from "react";
+import { useRoles } from "../contexts/RoleContext";
 
 interface RoleSelectProps {
     value?: string | number;
@@ -11,23 +10,7 @@ interface RoleSelectProps {
 }
 
 export const RoleSelect: React.FC<RoleSelectProps> = ({ value, onChange, error }) => {
-    const [roles, setRoles] = useState<Role[]>([]);
-    const [isLoading, setIsLoading] = useState(true);
-
-    useEffect(() => {
-        const fetchRoles = async () => {
-            try {
-                const data = await roleService.getAllRoles();
-                setRoles(data);
-            } catch (err) {
-                toast.error("Erreur chargement rôles");
-                // console.error("Erreur chargement rôles", err);
-            } finally {
-                setIsLoading(false);
-            }
-        };
-        fetchRoles();
-    }, []);
+    const { roles, isLoading } = useRoles();
 
     return (
         <div className="space-y-1">

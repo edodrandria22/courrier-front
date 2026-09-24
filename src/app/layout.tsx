@@ -4,6 +4,7 @@ import { ThemeProvider } from '@/components/theme-provider'
 import { NotificationDisplay } from '@/features/notifications/components/NotificationDisplay'
 import { ThemePresetProvider } from '@/features/theme/components/ThemePresetProvider'
 import { EntitesProvider } from '@/features/courriers/contexts/EntitesContext'
+import { RoleProvider } from '@/features/config/contexts/RoleContext'
 import './globals.css'
 
 const geist = Geist({ 
@@ -86,15 +87,17 @@ export default function RootLayout({
   return (
     <html lang="fr" suppressHydrationWarning>
       <body className={`${geist.variable} ${geistMono.variable} font-sans antialiased`}>
-        <EntitesProvider>
-          <ThemePresetProvider>
-            <ThemeProvider attribute="class" defaultTheme="light" enableSystem={false}>
-              {children}
-              <NotificationWrapper />
-              <Toaster position="top-right" richColors />
-            </ThemeProvider>
-          </ThemePresetProvider>
-        </EntitesProvider>
+        <RoleProvider>
+          <EntitesProvider>
+            <ThemePresetProvider>
+              <ThemeProvider attribute="class" defaultTheme="light" enableSystem={false}>
+                {children}
+                <NotificationWrapper />
+                <Toaster position="top-right" richColors />
+              </ThemeProvider>
+            </ThemePresetProvider>
+          </EntitesProvider>
+        </RoleProvider>
       </body>
     </html>
   )
