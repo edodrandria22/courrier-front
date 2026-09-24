@@ -7,7 +7,7 @@ import * as z from "zod";
 import { utilisateurService } from "@/features/utilisateurs/services/utilisateurService";
 import { RoleSelect } from "../../config/components/RoleSelect";
 import { User } from "@/features/auth/types/login";
-import toast from "react-hot-toast";
+import { toast } from "sonner";
 
 const userEditSchema = z.object({
     email: z.string().email("Adresse email invalide"),
