@@ -192,7 +192,9 @@ GET http://localhost:3000/api/notifications/subscribe 404 (Not Found)
 18/09/2026
     --ajouter type entite sur la formulaire de la detailPersonne -- a faire -- 60 mn
     --ajouter type entite sur la page de recherche -- a faire -- 30 mn 
-
+24/09/2026
+    --mettre le role dans une context -- ok -- 30 mn
+    --ameliorer design insertion et modifacation utilisateur 
 --quand on clique sur le boutton retour on doit revenir a la page precedente sans scroller -- ok -- 60 mn
 --entite , nom , prenom , matricule, employeur, email, telephone
 --status liste deroulante,
