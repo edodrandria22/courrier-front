@@ -418,7 +418,7 @@ export const CourrierForm = ({ onSuccess, courrier, onClose }: Props) => {
                     <User className="w-3 h-3" /> Nom
                   </label>
                   <Input
-                    value={personne.name}
+                    value={personne.name || ''}
                     onChange={(e) => handlePersonneChange(index, 'name', e.target.value)}
                     placeholder="Nom du correspondant (optionnel)"
                     className="bg-background border-border disabled:opacity-50"

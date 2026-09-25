@@ -195,6 +195,9 @@ GET http://localhost:3000/api/notifications/subscribe 404 (Not Found)
 24/09/2026
     --mettre le role dans une context -- ok -- 30 mn
     --ameliorer design insertion et modifacation utilisateur 
+25/09/2026
+    --ajouter employeur select a l'insertion courrier et recherche courrier -- ok -- 30mn
+    --recherche par nom et prenom courrier -- ok -- 30 mn
 --quand on clique sur le boutton retour on doit revenir a la page precedente sans scroller -- ok -- 60 mn
 --entite , nom , prenom , matricule, employeur, email, telephone
 --status liste deroulante,
