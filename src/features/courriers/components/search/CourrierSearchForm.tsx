@@ -13,6 +13,7 @@ import {
   Calendar, 
   SlidersHorizontal 
 } from 'lucide-react'
+import EmployeurSelect from '../form/EmployeurSelect'
 
 interface CourrierSearchFormProps {
   onSearch: (criteria: CourrierSearchCriteria) => void
@@ -182,17 +183,17 @@ const DEFAULT_CRITERIA: CourrierSearchCriteria = {
                   </select>
           </div>
           <div>
-            <label className="block text-xs font-medium mb-1.5 text-foreground">Nom</label>
+            <label className="block text-xs font-medium mb-1.5 text-foreground">Nom & prénom</label>
             <input
               type="text"
               value={criteria.nom}
               onChange={(e) => handleInputChange('nom', e.target.value)}
               className="w-full px-3 py-2 text-sm bg-background border border-input rounded-md focus:outline-none focus:ring-2 focus:ring-primary/50 transition-all"
-              placeholder="ex: RAKOTO"
+              placeholder="Votre nom et prénom"
             />
           </div>
 
-          <div>
+          {/* <div>
             <label className="block text-xs font-medium mb-1.5 text-foreground">Prénom</label>
             <input
               type="text"
@@ -201,7 +202,7 @@ const DEFAULT_CRITERIA: CourrierSearchCriteria = {
               className="w-full px-3 py-2 text-sm bg-background border border-input rounded-md focus:outline-none focus:ring-2 focus:ring-primary/50 transition-all"
               placeholder="ex: Jean"
             />
-          </div>
+          </div> */}
 
           <div>
             <label className="block text-xs font-medium mb-1.5 text-foreground">Email</label>
@@ -249,12 +250,11 @@ const DEFAULT_CRITERIA: CourrierSearchCriteria = {
 
           <div>
             <label className="block text-xs font-medium mb-1.5 text-foreground">Employeur</label>
-            <input
-              type="text"
-              value={criteria.employeur}
-              onChange={(e) => handleInputChange('employeur', e.target.value)}
-              className="w-full px-3 py-2 text-sm bg-background border border-input rounded-md focus:outline-none focus:ring-2 focus:ring-primary/50 transition-all"
-              placeholder="Employeur"
+            <EmployeurSelect
+              value={criteria.employeur || ''}
+              onChange={(value) => handleInputChange('employeur', value)}
+              disabled={false}
+              isRecherche={true}
             />
           </div>
         </div>

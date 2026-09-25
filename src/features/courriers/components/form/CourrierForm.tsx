@@ -11,6 +11,7 @@ import { DetailPersonne, Courrier } from '@/features/courriers/types/courrier'
 import { useEntites } from '@/features/courriers/contexts/EntitesContext'
 import { Attachment } from '@/features/messages/types/compose'
 import { cn } from '@/lib/utils'
+import EmployeurSelect from './EmployeurSelect'
 
 interface Props {
   onSuccess: () => void,
@@ -447,11 +448,9 @@ export const CourrierForm = ({ onSuccess, courrier, onClose }: Props) => {
                 </div>
                 <div className="space-y-2">
                   <label className="text-sm font-semibold text-foreground">Employeur</label>
-                  <Input
+                  <EmployeurSelect 
                     value={personne.employeur || ''}
-                    onChange={(e) => handlePersonneChange(index, 'employeur', e.target.value)}
-                    placeholder="Employeur (optionnel)"
-                    className="bg-background border-border disabled:opacity-50"
+                    onChange={(valeur) => handlePersonneChange(index, 'employeur', valeur)}
                     disabled={isFieldDisabled}
                   />
                 </div>
