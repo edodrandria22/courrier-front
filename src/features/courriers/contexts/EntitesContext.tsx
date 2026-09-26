@@ -1,9 +1,8 @@
 'use client'
 
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react'
-import { courrierService } from '../services/courrierService'
 import { Entites } from '../types/courrier'
-
+import { getAllEntites } from '@/features/config/services/constant' 
 interface EntitesContextType {
   entites: Entites[]
   loading: boolean
@@ -34,11 +33,9 @@ export const EntitesProvider: React.FC<EntitesProviderProps> = ({ children }) =>
     try {
       setLoading(true)
       setError(null)
-      const data = await courrierService.getAllEntites()
+      const data = await getAllEntites();
       const entitesArray = Array.isArray(data) ? data : []
       setEntites(entitesArray)
-      // Sauvegarder dans le localStorage
-      localStorage.setItem('entites', JSON.stringify(entitesArray))
     } catch (err) {
       setError('Erreur lors du chargement des entités')
       console.error('Erreur chargement entités:', err)
@@ -48,21 +45,7 @@ export const EntitesProvider: React.FC<EntitesProviderProps> = ({ children }) =>
   }
 
   useEffect(() => {
-    // Vérifier si les entités sont déjà dans le localStorage
-    const cachedEntites = localStorage.getItem('entites')
-    if (cachedEntites) {
-      try {
-        const parsedEntites = JSON.parse(cachedEntites)
-        setEntites(parsedEntites)
-        setLoading(false)
-        // Ne pas recharger en arrière-plan - utiliser uniquement le cache
-      } catch (e) {
-        console.error('Erreur lecture cache entités:', e)
-        loadEntites()
-      }
-    } else {
-      loadEntites()
-    }
+    loadEntites()
   }, [])
 
   const value: EntitesContextType = {

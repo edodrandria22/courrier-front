@@ -1,49 +1,16 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
-
-const EMPLOYEURS = [
-  "Université d'Antananarivo",
-  "Université de Mahajanga",
-  "Université de Tuléar",
-  "Université de Toamasina",
-  "Université de Fianarantsoa",
-  "Université d'Antsiranana",
-  "Université de l'Itasy",
-  "Université de Vakinankaratra",
-  "Université d'Analanjorofo",
-  "Université de SAVA",
-  "Université d'Agnambà",
-  "Université d'Alaotra-Mangoro",
-  "Université d'Anosy",
-  "Université d'Androy",
-  "Université d'Androna",
-  "Université d'Amoron'i Mania",
-  "Université de Menabe",
-  "IST d'Antananarivo",
-  "IST de Diego",
-  "INSTN",
-  "CNRE",
-  "FOFIFA",
-  "CNRO",
-  "CNRIT",
-  "CNARP",
-  "PBZT",
-  "IMVAVET",
-  "CIDST",
-  "CNTEMAD",
-  "CNELA",
-  "MESUPRES",
-  "Autre"
-];
+import { useEmployeur } from "../../contexts/EmployeursContext";
+import { Employeur } from "../../types/courrier";
 
 const ITEMS_PER_PAGE = 8;
 
 interface EmployeurSelectProps {
-  value: string;
+  value: string|number;
   onChange: (value: string) => void;
   disabled?: boolean;
-  isRecherche?: boolean; // 1. Ajout de la nouvelle prop
+  isRecherche?: boolean;
 }
 
 const EmployeurSelect = ({ value, onChange, disabled, isRecherche = false }: EmployeurSelectProps) => {
@@ -53,18 +20,30 @@ const EmployeurSelect = ({ value, onChange, disabled, isRecherche = false }: Emp
   
   const dropdownRef = useRef<HTMLDivElement>(null);
 
-  // 2. Si isRecherche est vrai, on ajoute "Tous" au début de la liste
-  const optionsList = isRecherche ? ["Tous", ...EMPLOYEURS] : EMPLOYEURS;
+  const { Employeur, loading, error } = useEmployeur();
 
-  // Filtrer la liste (inclut "Tous" dans la recherche s'il est présent)
-  const filteredEmployeurs = optionsList.filter((employeur) =>
-    employeur.toLowerCase().includes(searchTerm.toLowerCase())
+  // 1. Formatage des données : on sécurise l'ID et on gère nom/name
+  const employeursList = (Employeur || []).map((emp: any) => ({
+    id: String(emp.id || emp._id || ""), // Sécurise la conversion en String
+    name: emp.nom || emp.name || "Nom inconnu", 
+  }));
+
+  // 2. Intégration de l'option "Tous" si isRecherche est true
+  const optionsList = isRecherche 
+    ? [{ id: "", name: "Tous" }, ...employeursList] 
+    : employeursList;
+
+  // 3. Filtrage de la liste
+  const filteredEmployeurs = optionsList.filter((emp) =>
+    emp.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
+  // Pagination
   const totalPages = Math.ceil(filteredEmployeurs.length / ITEMS_PER_PAGE);
   const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
   const paginatedEmployeurs = filteredEmployeurs.slice(startIndex, startIndex + ITEMS_PER_PAGE);
 
+  // Gestion du clic à l'extérieur pour fermer le menu
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
@@ -75,9 +54,17 @@ const EmployeurSelect = ({ value, onChange, disabled, isRecherche = false }: Emp
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  // 3. Déterminer le texte à afficher sur le bouton principal
+  // 4. Fonction pour afficher le texte du bouton
   const getDisplayText = () => {
-    if (value) return value;
+    if (loading) return "Chargement des employeurs...";
+    if (error) return "Erreur de chargement";
+    
+    // Si une valeur (ID) est présente, on cherche le nom correspondant
+    if (value !== undefined && value !== null && value !== "") {
+      const selectedEmp = optionsList.find(e => String(e.id) === String(value));
+      return selectedEmp ? selectedEmp.name : "Employeur inconnu";
+    }
+    
     if (isRecherche) return "Tous";
     return "Sélectionnez un employeur (optionnel)";
   };
@@ -86,7 +73,7 @@ const EmployeurSelect = ({ value, onChange, disabled, isRecherche = false }: Emp
     <div className="relative w-full" ref={dropdownRef}>
       <button
         type="button"
-        disabled={disabled}
+        disabled={disabled || loading || !!error}
         onClick={() => setIsOpen(!isOpen)}
         className="flex h-10 w-full items-center justify-between rounded-md border border-border bg-background px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
       >
@@ -98,7 +85,7 @@ const EmployeurSelect = ({ value, onChange, disabled, isRecherche = false }: Emp
         </svg>
       </button>
 
-      {isOpen && !disabled && (
+      {isOpen && !disabled && !loading && !error && (
         <div className="absolute z-50 mt-1 w-full rounded-md border border-border bg-background shadow-md">
           
           <div className="border-b border-border p-2">
@@ -117,16 +104,16 @@ const EmployeurSelect = ({ value, onChange, disabled, isRecherche = false }: Emp
 
           <ul className="p-1">
             {paginatedEmployeurs.length > 0 ? (
-              paginatedEmployeurs.map((employeur, idx) => {
-                // 4. Vérifier si cet élément est actuellement sélectionné
-                const isSelected = employeur === "Tous" ? value === "" : value === employeur;
+              paginatedEmployeurs.map((emp, idx) => {
+                // 5. Comparaison stricte en forçant le format String
+                const isSelected = String(value) === String(emp.id);
 
                 return (
                   <li
-                    key={idx}
+                    key={emp.id || `fallback-key-${idx}`} 
                     onClick={() => {
-                      // 5. Si on clique sur "Tous", on renvoie "", sinon la valeur normale
-                      onChange(employeur === "Tous" ? "" : employeur);
+                      // 6. On remonte l'ID sélectionné
+                      onChange(String(emp.id));
                       setIsOpen(false);
                       setSearchTerm("");
                       setCurrentPage(1);
@@ -135,7 +122,7 @@ const EmployeurSelect = ({ value, onChange, disabled, isRecherche = false }: Emp
                       isSelected ? "bg-gray-100 dark:bg-gray-800 font-medium" : ""
                     }`}
                   >
-                    {employeur}
+                    {emp.name}
                   </li>
                 );
               })
