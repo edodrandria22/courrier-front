@@ -65,7 +65,8 @@ export interface DetailPersonne {
   email: string|null;
   telephone: string|null;
   matricule:number|null;
-  employeur:string|null;
+  employeurId: number|null;
+  employeur?:string|null;
   entiteId:number|null;
   entite?:string|null;
 }
@@ -107,6 +108,10 @@ export interface Statistique {
     
 }
 export interface Entites{
+  id: number,
+  name: string
+}
+export interface Employeur{
   id: number,
   name: string
 }

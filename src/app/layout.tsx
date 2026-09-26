@@ -79,6 +79,7 @@ function NotificationWrapper() {
   return <NotificationDisplay />
 }
 import { Toaster } from "@/components/ui/sonner" // ou le bon chemin
+import { EmployeurProvider } from '@/features/courriers/contexts/EmployeursContext'
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -88,15 +89,17 @@ export default function RootLayout({
     <html lang="fr" suppressHydrationWarning>
       <body className={`${geist.variable} ${geistMono.variable} font-sans antialiased`}>
         <RoleProvider>
-          <EntitesProvider>
-            <ThemePresetProvider>
-              <ThemeProvider attribute="class" defaultTheme="light" enableSystem={false}>
-                {children}
-                <NotificationWrapper />
-                <Toaster position="top-right" richColors />
-              </ThemeProvider>
-            </ThemePresetProvider>
-          </EntitesProvider>
+          <EmployeurProvider>
+            <EntitesProvider>
+              <ThemePresetProvider>
+                <ThemeProvider attribute="class" defaultTheme="light" enableSystem={false}>
+                  {children}
+                  <NotificationWrapper />
+                  <Toaster position="top-right" richColors />
+                </ThemeProvider>
+              </ThemePresetProvider>
+            </EntitesProvider>
+          </EmployeurProvider>
         </RoleProvider>
       </body>
     </html>

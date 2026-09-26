@@ -10,7 +10,6 @@ import { useCourrier } from '@/features/courriers/hooks/useCourrier'
 import { DetailPersonne, Courrier } from '@/features/courriers/types/courrier'
 import { useEntites } from '@/features/courriers/contexts/EntitesContext'
 import { Attachment } from '@/features/messages/types/compose'
-import { cn } from '@/lib/utils'
 import EmployeurSelect from './EmployeurSelect'
 
 interface Props {
@@ -27,7 +26,7 @@ export const CourrierForm = ({ onSuccess, courrier, onClose }: Props) => {
   const [isCopied, setIsCopied] = useState(false)
 
   // 1. Initialisation avec une liste au lieu de champs simples
-  const defaultPersonne: DetailPersonne = { name: '', prenom: '', email: '', telephone: '', matricule: null, employeur: '', entiteId: null};
+  const defaultPersonne: DetailPersonne = { name: '', prenom: '', email: '', telephone: '', matricule: null, employeur: '', entiteId: null, employeurId: null};
   const initialPersonnes = courrier?.detailPersonnes?.length 
     ? courrier.detailPersonnes 
     : [];
@@ -73,6 +72,10 @@ export const CourrierForm = ({ onSuccess, courrier, onClose }: Props) => {
     } else if (field === 'entiteId') {
       processedValue = typeof value === 'string' ? (value ? parseInt(value, 10) : null) : value
     }
+    else if (field === 'employeurId') {
+      processedValue = typeof value === 'string' ? (value ? parseInt(value, 10) : null) : value
+    }
+    
     updatedPersonnes[index] = { ...updatedPersonnes[index], [field]: processedValue }
     setFormData((prev) => ({ ...prev, detailPersonnes: updatedPersonnes }))
   }
@@ -449,8 +452,8 @@ export const CourrierForm = ({ onSuccess, courrier, onClose }: Props) => {
                 <div className="space-y-2">
                   <label className="text-sm font-semibold text-foreground">Employeur</label>
                   <EmployeurSelect 
-                    value={personne.employeur || ''}
-                    onChange={(valeur) => handlePersonneChange(index, 'employeur', valeur)}
+                    value={personne.employeurId || ''}
+                    onChange={(valeur) => handlePersonneChange(index, 'employeurId', valeur)}
                     disabled={isFieldDisabled}
                   />
                 </div>

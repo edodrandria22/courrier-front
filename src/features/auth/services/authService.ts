@@ -60,8 +60,6 @@ export const authService = {
       if (typeof window !== 'undefined') {
         localStorage.removeItem('auth_token');
         localStorage.removeItem('user_info');
-        localStorage.removeItem('entites');
-        localStorage.removeItem('roles');
       }
     }
   },
