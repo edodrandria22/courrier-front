@@ -12,25 +12,33 @@ const isInlineType = (type: string) =>
   INLINE_TYPES.some((t) => type.startsWith(t))
 
 export const PieceJointeCard = ({ pj }: { pj: PieceJointe }) => {
-  const [loading, setLoading] = useState(false)
+  const [loadingView, setLoadingView] = useState(false)
+  const [loadingDownload, setLoadingDownload] = useState(false)
 
   const handleOpen = async () => {
-    setLoading(true)
+    setLoadingView(true)
     try {
       const { blob, nom, type } = await courrierService.downloadFichier(pj.id)
       const url = URL.createObjectURL(blob)
-      if (isInlineType(type)) {
-        window.open(url, '_blank')
-        setTimeout(() => URL.revokeObjectURL(url), 10000)
-      } else {
-        const a = document.createElement('a')
-        a.href = url
-        a.download = nom
-        a.click()
-        URL.revokeObjectURL(url)
-      }
+      window.open(url, '_blank')
+      setTimeout(() => URL.revokeObjectURL(url), 10000)
     } finally {
-      setLoading(false)
+      setLoadingView(false)
+    }
+  }
+
+  const handleDownload = async () => {
+    setLoadingDownload(true)
+    try {
+      const { blob, nom } = await courrierService.downloadFichier(pj.id)
+      const url = URL.createObjectURL(blob)
+      const a = document.createElement('a')
+      a.href = url
+      a.download = nom
+      a.click()
+      URL.revokeObjectURL(url)
+    } finally {
+      setLoadingDownload(false)
     }
   }
 
@@ -45,20 +53,30 @@ export const PieceJointeCard = ({ pj }: { pj: PieceJointe }) => {
           <p className="text-[10px] text-muted-foreground/70">{pj.type}</p>
         </div>
       </div>
-      <Button
-        variant="ghost"
-        size="sm"
-        onClick={handleOpen}
-        disabled={loading}
-        className="h-7 gap-1 text-[10px] uppercase font-bold text-primary shrink-0"
-      >
-        {loading
-          ? <Loader2 className="w-3 h-3 animate-spin" />
-          : inline
-            ? <><ExternalLink className="w-3 h-3" /> Voir</>
-            : <><Download className="w-3 h-3" /> Télécharger</>
-        }
-      </Button>
+      <div className="flex gap-1 shrink-0">
+        {inline && (
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={handleOpen}
+            disabled={loadingView}
+            className="h-7 gap-1 text-[10px] uppercase font-bold text-primary"
+            title="Voir"
+          >
+            {loadingView ? <Loader2 className="w-3 h-3 animate-spin" /> : <><ExternalLink className="w-3 h-3" /> Voir</>}
+          </Button>
+        )}
+        <Button
+          variant="ghost"
+          size="sm"
+          onClick={handleDownload}
+          disabled={loadingDownload}
+          className="h-7 gap-1 text-[10px] uppercase font-bold text-primary"
+          title="Télécharger"
+        >
+          {loadingDownload ? <Loader2 className="w-3 h-3 animate-spin" /> : <><Download className="w-3 h-3" /> Télécharger</>}
+        </Button>
+      </div>
     </div>
   )
 }
