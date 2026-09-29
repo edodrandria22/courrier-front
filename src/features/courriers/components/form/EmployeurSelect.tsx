@@ -7,7 +7,7 @@ import { Employeur } from "../../types/courrier";
 const ITEMS_PER_PAGE = 8;
 
 interface EmployeurSelectProps {
-  value: string|number;
+  value: string|number|undefined;
   onChange: (value: string) => void;
   disabled?: boolean;
   isRecherche?: boolean;

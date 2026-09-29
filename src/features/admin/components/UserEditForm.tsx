@@ -6,6 +6,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { utilisateurService } from "@/features/utilisateurs/services/utilisateurService";
 import { RoleSelect } from "../../config/components/RoleSelect";
+import EmployeurSelect from "../../courriers/components/form/EmployeurSelect";
 import { User } from "@/features/auth/types/login";
 import { toast } from "sonner";
 
@@ -18,6 +19,7 @@ const userEditSchema = z.object({
     sigle: z.string().optional(),
     mdp: z.string().optional(),
     conf_mdp: z.string().optional(),
+    idEmployeur: z.string().optional(),
 }).superRefine((data, ctx) => {
     const mdpFilled = data.mdp && data.mdp.trim() !== "";
     const confFilled = data.conf_mdp && data.conf_mdp.trim() !== "";
@@ -40,6 +42,16 @@ const userEditSchema = z.object({
             message: "Les mots de passe ne correspondent pas.",
             path: ["conf_mdp"],
         });
+    }
+
+    if (data.idRole === "4") {
+        if (!data.idEmployeur || data.idEmployeur.length === 0) {
+            ctx.addIssue({
+                code: z.ZodIssueCode.custom,
+                message: "Veuillez sélectionner un employeur pour le rôle OM",
+                path: ["idEmployeur"],
+            });
+        }
     }
 });
 
@@ -76,8 +88,19 @@ export const UserEditForm: React.FC<UserEditFormProps> = ({ user, users, setUser
             sigle: user.sigle ?? "",
             mdp: "",
             conf_mdp: "",
+            idEmployeur: user.employeurId?.toString() ?? "",
         }
     });
+
+    const selectedRoleId = watch("idRole");
+    const showEmployeurSelect = selectedRoleId === "4";
+
+    // Reset idEmployeur when role is not OM (id != 4)
+    useEffect(() => {
+        if (selectedRoleId !== "4") {
+            setValue("idEmployeur", "");
+        }
+    }, [selectedRoleId, setValue]);
 
     useEffect(() => {
         const loadUser = async () => {
@@ -95,6 +118,7 @@ export const UserEditForm: React.FC<UserEditFormProps> = ({ user, users, setUser
                     idRole: user.idRole ? user.idRole.toString() : "",
                     mdp: "",
                     conf_mdp: "",
+                    idEmployeur: user.employeurId ? user.employeurId.toString() : "",
                 });
             } catch (err) {
                 toast.error("Impossible de charger les informations de l'utilisateur.");
@@ -122,6 +146,7 @@ export const UserEditForm: React.FC<UserEditFormProps> = ({ user, users, setUser
                 sigle: data.sigle,
                 idRole: Number(data.idRole),
                 mdp: mdpFilled ? data.mdp : undefined,
+                idEmployeur: data.idEmployeur || null,
             });
             
             setUsers(users?.map(u => u.id === user.id ? updatedUser : u) || []);
@@ -236,6 +261,18 @@ export const UserEditForm: React.FC<UserEditFormProps> = ({ user, users, setUser
                         error={errors.idRole?.message}
                     />
                 </div>
+
+                {/* Ligne 5 : Employeur (conditionnel pour rôle OM id=4) */}
+                {showEmployeurSelect && (
+                    <div className="space-y-1.5 bg-slate-50 dark:bg-slate-800 p-4 rounded-lg border border-slate-200 dark:border-slate-700">
+                        <label className="text-sm font-semibold text-slate-700 dark:text-slate-300">Employeur</label>
+                        <EmployeurSelect
+                            value={watch("idEmployeur")}
+                            onChange={(val) => setValue("idEmployeur", val, { shouldValidate: true })}
+                        />
+                        {errors.idEmployeur && <p className="text-xs text-red-600 dark:text-red-400 font-medium">{errors.idEmployeur.message}</p>}
+                    </div>
+                )}
 
                 {/* Section Sécurisée : Mots de passe */}
                 <div className="mt-8 pt-6 border-t border-slate-100 dark:border-slate-800">

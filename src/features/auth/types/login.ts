@@ -19,4 +19,6 @@ export interface User {
   createdAt?: string;
   sigle: string|null;
   dateInactif: string|null;
+  employeurId: number|null;
+  employeur: string|null;
 }

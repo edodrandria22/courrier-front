@@ -115,7 +115,7 @@ export const UserList: React.FC<UserListProps> = ({
                                                 className={`px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider ${
                                                     user.role === "Utilisateur"
                                                         ? "bg-secondary text-secondary-foreground"
-                                                        : user.role === "Admin"
+                                                        : (user.role === "Admin" ||user.role ==="Superviseur") 
                                                         ? "bg-primary/10 text-primary"
                                                         : "bg-muted text-muted-foreground"
                                                 }`}
@@ -146,7 +146,7 @@ export const UserList: React.FC<UserListProps> = ({
                                                     </svg>
                                                 </button>
 
-                                                {user.role === "Utilisateur" && (
+                                                {(user.role === "Utilisateur" || user.role =="OM") && (
                                                     <button
                                                         onClick={() => setUserToToggle(user)}
                                                         disabled={togglingId === user.id}
@@ -174,7 +174,7 @@ export const UserList: React.FC<UserListProps> = ({
                                                     </button>
                                                 )}
 
-                                                {user.role === "Admin" && (
+                                                {(user.role === "Admin" || user.role ==="Superviseur")&& (
                                                     <button
                                                         onClick={() => setUserToDelete(user)}
                                                         disabled={deletingId === user.id}

@@ -1,11 +1,12 @@
 "use client";
 
-import React from "react";
+import React, { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { utilisateurService } from "@/features/utilisateurs/services/utilisateurService";
 import { RoleSelect } from "../../config/components/RoleSelect";
+import EmployeurSelect from "../../courriers/components/form/EmployeurSelect";
 import { User } from "@/features/auth/types/login";
 import { toast } from "sonner";
 
@@ -18,9 +19,18 @@ const userAdminSchema = z.object({
     idRole: z.string().min(1, "Veuillez choisir un rôle"),
     sigle: z.string().optional(),
     adresse: z.string().min(2, "L'adresse doit faire au moins 2 caractères"),
+    idEmployeur: z.string().optional(),
 }).refine((data) => data.mdp === data.confirmMdp, {
     message: "Les mots de passe ne correspondent pas",
     path: ["confirmMdp"],
+}).refine((data) => {
+    if (data.idRole === "4") {
+        return data.idEmployeur && data.idEmployeur.length > 0;
+    }
+    return true;
+}, {
+    message: "Veuillez sélectionner un employeur pour le rôle OM",
+    path: ["idEmployeur"],
 });
 
 type UserAdminFormValues = z.infer<typeof userAdminSchema>;
@@ -45,9 +55,20 @@ export const UserAdminForm: React.FC<UserAdminFormProps> = ({ setUsers, users, o
     } = useForm<UserAdminFormValues>({
         resolver: zodResolver(userAdminSchema),
         defaultValues: {
-            idRole: ""
+            idRole: "",
+            idEmployeur: ""
         }
     });
+
+    const selectedRoleId = watch("idRole");
+    const showEmployeurSelect = selectedRoleId === "4";
+
+    // Reset idEmployeur when role is not OM (id != 4)
+    useEffect(() => {
+        if (selectedRoleId !== "4") {
+            setValue("idEmployeur", "");
+        }
+    }, [selectedRoleId, setValue]);
 
     const onSubmit = async (data: UserAdminFormValues) => {
         setIsLoading(true);
@@ -56,6 +77,7 @@ export const UserAdminForm: React.FC<UserAdminFormProps> = ({ setUsers, users, o
         const payload = {
             ...data,
             idRole: Number(data.idRole),
+            idEmployeur: data.idEmployeur || null,
         };
 
         try {
@@ -184,6 +206,18 @@ export const UserAdminForm: React.FC<UserAdminFormProps> = ({ setUsers, users, o
                         error={errors.idRole?.message}
                     />
                 </div>
+
+                {/* Ligne 6 : Employeur (conditionnel pour rôle OM id=4) */}
+                {showEmployeurSelect && (
+                    <div className="space-y-1.5 bg-slate-50 dark:bg-slate-800 p-4 rounded-lg border border-slate-200 dark:border-slate-700">
+                        <label className="text-sm font-semibold text-slate-700 dark:text-slate-300">Employeur</label>
+                        <EmployeurSelect
+                            value={watch("idEmployeur")}
+                            onChange={(val) => setValue("idEmployeur", val, { shouldValidate: true })}
+                        />
+                        {errors.idEmployeur && <p className="text-xs text-red-600 dark:text-red-400 font-medium">{errors.idEmployeur.message}</p>}
+                    </div>
+                )}
                 {/* Gestion d'erreur globale */}
                 {error && (
                     <div className="p-3 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-900/50 rounded-lg text-center">

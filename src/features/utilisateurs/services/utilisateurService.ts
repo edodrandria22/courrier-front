@@ -67,7 +67,7 @@ export const utilisateurService = {
             throw error;
         }
     },
-    updateUser: async (id: number, data: { email: string; nom: string; prenom?: string; adresse: string; idRole: number; mdp?: string; sigle?: string }): Promise<User> => {
+    updateUser: async (id: number, data: { email: string; nom: string; prenom?: string; adresse: string; idRole: number; mdp?: string; sigle?: string; idEmployeur?: string | null }): Promise<User> => {
         try {
             const payload: any = {
                 email: data.email,
@@ -76,6 +76,7 @@ export const utilisateurService = {
                 adresse: data.adresse,
                 idRole: Number(data.idRole),
                 sigle: data.sigle,
+                idEmployeur: data.idEmployeur || null,
             };
 
             if (data.mdp && data.mdp.trim() !== "") {
