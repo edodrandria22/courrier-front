@@ -29,7 +29,7 @@ export const CourrierForm = ({ onSuccess, courrier, onClose }: Props) => {
   const defaultPersonne: DetailPersonne = { name: '', prenom: '', email: '', telephone: '', matricule: null, employeur: '', entiteId: null, employeurId: null};
   const initialPersonnes = courrier?.detailPersonnes?.length 
     ? courrier.detailPersonnes 
-    : [];
+    : [defaultPersonne];
 
   const [formData, setFormData] = useState({
     numero: courrier?.numero || '',
@@ -383,7 +383,7 @@ export const CourrierForm = ({ onSuccess, courrier, onClose }: Props) => {
             <div key={index} className="relative border border-border bg-muted/20 p-4 rounded-xl space-y-4">
               
               {/* Bouton pour supprimer une personne (visible seulement s'il y en a plus d'1) */}
-              {formData.detailPersonnes.length > 0 && !isFieldDisabled && (
+              {formData.detailPersonnes.length > 1 && !isFieldDisabled && (
                 <button
                   type="button"
                   onClick={() => removePersonne(index)}

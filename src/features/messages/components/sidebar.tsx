@@ -26,6 +26,13 @@ export default function Sidebar({ user, onNavigate }: SidebarProps) {
   const isAdmin = user?.role === 'Admin'
   const actionItems: any[] = [];
   const systemFolders: any[] = [];
+  const apropos: any[] = [];
+  apropos.push({
+    id: 'apropos',
+    name: 'À propos',
+    icon: ShieldCheck,
+    path: '/message/propos',
+  })
   if (!isAdmin) {
     actionItems.push({
       id: 'new-courrier',
@@ -102,7 +109,7 @@ export default function Sidebar({ user, onNavigate }: SidebarProps) {
   
 
   return (
-    <aside className="w-64 bg-sidebar border-r border-sidebar-border flex flex-col h-screen">
+    <aside className="w-64 bg-sidebar border-r border-sidebar-border flex flex-col h-screen overflow-hidden">
       {/* Logo Image & Nom Projet */}
       <div className="p-6 border-b border-sidebar-border relative">
         {/* Note : J'ai passé le conteneur en flex-col (colonne) et items-center (centré) */}
@@ -130,43 +137,78 @@ export default function Sidebar({ user, onNavigate }: SidebarProps) {
 
         </div>
       </div>
-      {/* Actions List */}
-      <div className="mb-6 mt-5 px-2">
-        <div className="px-4 py-2 text-[10px] font-bold text-muted-foreground uppercase tracking-[0.2em]">
-          Actions
-        </div>
-        <nav className="space-y-1">
-          {actionItems.map((action) => {
-            const Icon = action.icon
-            const isActive = pathname === action.path
-            
-            return (
-              <Link key={action.id} href={action.path} onClick={onNavigate}>
-                <button
-                  className={cn(
-                    'w-full flex items-center gap-3 px-4 py-2.5 rounded-xl transition-all text-sm group text-left relative',
-                    isActive
-                      ? 'bg-sidebar-primary/10 text-sidebar-primary font-bold'
-                      : 'text-sidebar-foreground/70 hover:bg-sidebar-accent/10 hover:text-sidebar-foreground'
-                  )}
-                >
-                  {isActive && (
-                    <span className="absolute left-0 top-1/4 bottom-1/4 w-[3px] rounded-r-full bg-sidebar-primary" />
-                  )}
-                  <Icon className={cn(
-                    "w-4 h-4 transition-transform group-hover:scale-110",
-                    isActive ? "text-sidebar-primary" : "text-muted-foreground"
-                  )} />
-                  {action.name}
-                </button>
-              </Link>
-            )
-          })}
-        </nav>
-      </div>
 
-      {/* Folders List */}
-      <div className="flex-1 overflow-auto px-2">
+      {/* Scrollable Menu Container */}
+      <div className="flex-1 overflow-y-auto px-2 scrollbar-thin">
+        {/* Actions List */}
+        <div className="mb-4 mt-3">
+          <div className="px-4 py-1.5 text-[10px] font-bold text-muted-foreground uppercase tracking-[0.2em]">
+            A propos
+          </div>
+          <nav className="space-y-1">
+            {apropos.map((action) => {
+              const Icon = action.icon
+              const isActive = pathname === action.path
+
+              return (
+                <Link key={action.id} href={action.path} onClick={onNavigate}>
+                  <button
+                    className={cn(
+                      'w-full flex items-center gap-3 px-4 py-2.5 rounded-xl transition-all text-sm group text-left relative',
+                      isActive
+                        ? 'bg-sidebar-primary/10 text-sidebar-primary font-bold'
+                        : 'text-sidebar-foreground/70 hover:bg-sidebar-accent/10 hover:text-sidebar-foreground'
+                    )}
+                  >
+                    {isActive && (
+                      <span className="absolute left-0 top-1/4 bottom-1/4 w-[3px] rounded-r-full bg-sidebar-primary" />
+                    )}
+                    <Icon className={cn(
+                      "w-4 h-4 transition-transform group-hover:scale-110",
+                      isActive ? "text-sidebar-primary" : "text-muted-foreground"
+                    )} />
+                    {action.name}
+                  </button>
+                </Link>
+              )
+            })}
+          </nav>
+        </div>
+        <div className="mb-4 mt-3">
+          <div className="px-4 py-1.5 text-[10px] font-bold text-muted-foreground uppercase tracking-[0.2em]">
+            Actions
+          </div>
+          <nav className="space-y-1">
+            {actionItems.map((action) => {
+              const Icon = action.icon
+              const isActive = pathname === action.path
+
+              return (
+                <Link key={action.id} href={action.path} onClick={onNavigate}>
+                  <button
+                    className={cn(
+                      'w-full flex items-center gap-3 px-4 py-2.5 rounded-xl transition-all text-sm group text-left relative',
+                      isActive
+                        ? 'bg-sidebar-primary/10 text-sidebar-primary font-bold'
+                        : 'text-sidebar-foreground/70 hover:bg-sidebar-accent/10 hover:text-sidebar-foreground'
+                    )}
+                  >
+                    {isActive && (
+                      <span className="absolute left-0 top-1/4 bottom-1/4 w-[3px] rounded-r-full bg-sidebar-primary" />
+                    )}
+                    <Icon className={cn(
+                      "w-4 h-4 transition-transform group-hover:scale-110",
+                      isActive ? "text-sidebar-primary" : "text-muted-foreground"
+                    )} />
+                    {action.name}
+                  </button>
+                </Link>
+              )
+            })}
+          </nav>
+        </div>
+
+        {/* Folders List */}
         <div className="mb-6">
           <div className="px-4 py-2 text-[10px] font-bold text-muted-foreground uppercase tracking-[0.2em]">
             Menu Principal
