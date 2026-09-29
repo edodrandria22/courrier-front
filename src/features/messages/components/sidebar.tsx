@@ -29,7 +29,7 @@ export default function Sidebar({ user, onNavigate }: SidebarProps) {
   const apropos: any[] = [];
   apropos.push({
     id: 'apropos',
-    name: 'Contact',
+    name: 'Contact et support',
     icon: ShieldCheck,
     path: '/message/propos',
   })
