@@ -210,3 +210,4 @@ GET http://localhost:3000/api/notifications/subscribe 404 (Not Found)
 --creer une page pour modifier une courrierValidations -- a faire -- 60mn
 --creer une page statistique -- a faire -- 30 mn
 --creer une page pour superviseur lisete et valider une courrierValidations -- a faire -- 60 mn
+--theme pour le propos -- a faire --30 mn

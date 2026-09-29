@@ -108,7 +108,7 @@ export default function PresentationECourrier() {
                   </svg>
                   <div>
                     <p className="text-xs font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wider">Nom</p>
-                    <p className="text-sm font-medium text-slate-900 dark:text-slate-100">Mr RAKOTOMANGA Samuel</p>
+                    <p className="text-sm font-medium text-slate-900 dark:text-slate-100">Mr RAKOTOARIMANGA Samuel</p>
                   </div>
                 </li>
                 <li className="flex items-start gap-3">
