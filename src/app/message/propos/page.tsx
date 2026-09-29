@@ -16,7 +16,7 @@ export default function PresentationECourrier() {
             Plateforme <span className="text-blue-600 dark:text-blue-400">e-Courrier</span>
           </h1>
           <p className="text-base text-slate-500 dark:text-slate-400 max-w-2xl mx-auto">
-            Ministère de l'Enseignement Supérieur et de la Recherche Scientifique (MESUPRES)
+            Ministère de l'Enseignement Supérieur et de la Recherche Scientifique
           </p>
         </div>
 
@@ -55,13 +55,10 @@ export default function PresentationECourrier() {
             <div className="h-px bg-slate-200 dark:bg-slate-700/80 flex-grow"></div>
           </div>
           
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="flex flex-col gap-6">
             {/* Carte Contact 1 */}
             <div className="bg-white dark:bg-slate-800/90 rounded-xl p-6 shadow-sm dark:shadow-none border border-slate-200/80 dark:border-slate-700 hover:border-slate-300 dark:hover:border-slate-600 transition-all group relative overflow-hidden">
               <div className="absolute top-0 left-0 w-1 h-full bg-blue-500 dark:bg-blue-400"></div>
-              <h3 className="font-semibold text-slate-900 dark:text-slate-100 mb-4 text-lg">
-                Direction (DSINT)
-              </h3>
               <ul className="space-y-4">
                 <li className="flex items-start gap-3">
                   <svg className="w-5 h-5 text-slate-400 dark:text-slate-500 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -98,9 +95,6 @@ export default function PresentationECourrier() {
             {/* Carte Contact 2 */}
             <div className="bg-white dark:bg-slate-800/90 rounded-xl p-6 shadow-sm dark:shadow-none border border-slate-200/80 dark:border-slate-700 hover:border-slate-300 dark:hover:border-slate-600 transition-all group relative overflow-hidden">
               <div className="absolute top-0 left-0 w-1 h-full bg-indigo-500 dark:bg-indigo-400"></div>
-              <h3 className="font-semibold text-slate-900 dark:text-slate-100 mb-4 text-lg">
-                Service Système d'Information
-              </h3>
               <ul className="space-y-4">
                 <li className="flex items-start gap-3">
                   <svg className="w-5 h-5 text-slate-400 dark:text-slate-500 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
