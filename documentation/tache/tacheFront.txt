@@ -203,10 +203,19 @@ GET http://localhost:3000/api/notifications/subscribe 404 (Not Found)
     --mettre en cache le donnee qui ne change pas le role, employeur et entite -- ok -- 60 mn
     --revalidate cache -- ok -- 60 mn
 
---ajouter une employeur sur le page insertion et modification d'un utilisateur -- a faire -- 30mn
-    --par defaut null si ce le role n'est pas OM
---creer une page pour afficher le courrier validation -- a faire -- 60 mn
+    --ajouter une employeur sur le page insertion et modification d'un utilisateur -- ok -- 30mn
+        --par defaut null si ce le role n'est pas OM
+
+29/09/2026
+    --service pour inserer courrier validation -- ok -- 30 mn
+    --service pour avoir tous les courrier validations par utilisateur -- ok --30 mn
+    --service pour avoir tous les courrier validations a valider -- ok -- 30 mn
+    --service pour valider une courrierValidation -- ok -- 30 mn
+    --service pour modifier une courrierValidation -- ok -- 30 mn
 --creer une page pour inserer une courrierValidations -- a faire -- 60 mn
+    --service pour inserer une nouvelle courrier validation -- a faire -- 30 mn
+    --page pour inserer courrierValidation -- a faire -- 30 mn
+--creer une page pour afficher le courrier validation -- a faire -- 60 mn
 --creer une page pour modifier une courrierValidations -- a faire -- 60mn
 --creer une page statistique -- a faire -- 30 mn
 --creer une page pour superviseur lisete et valider une courrierValidations -- a faire -- 60 mn

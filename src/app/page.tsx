@@ -2,6 +2,8 @@
 
 import Image from 'next/image'
 import Link from 'next/link'
+import { useTheme } from 'next-themes'
+import { useEffect, useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { Mail, Lock, Share2, Clock, ShieldCheck, ArrowRight, MapPin, Search, FileText, Archive, Send, Inbox } from 'lucide-react'
 
@@ -121,6 +123,15 @@ const BUTTON_STYLES = {
 // ==========================================
 
 export default function Home() {
+  const { theme } = useTheme()
+  const [mounted, setMounted] = useState(false)
+
+  useEffect(() => {
+    setMounted(true)
+  }, [])
+
+  const logoSrc = mounted && theme === 'dark' ? '/mesupresSombre.jpg' : '/mesupres.jpg'
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-background via-background to-secondary/5 selection:bg-primary/30">
       
@@ -137,8 +148,8 @@ export default function Home() {
           </div>
         </Link> */}
           <div className="relative w-20 h-20">
-            <Image 
-              src={APP_CONFIG.paths.logo} 
+            <Image
+              src={logoSrc}
               alt={`Logo ${APP_CONFIG.title.gradient}`}
               fill
               className="object-contain object-left"

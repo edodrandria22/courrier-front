@@ -3,6 +3,8 @@
 import Link from 'next/link'
 import Image from 'next/image'
 import { usePathname } from 'next/navigation'
+import { useTheme } from 'next-themes'
+import { useEffect, useState } from 'react'
 import {
   Mail,
   ShieldCheck,
@@ -21,6 +23,14 @@ interface SidebarProps {
 
 export default function Sidebar({ user, onNavigate }: SidebarProps) {
   const pathname = usePathname()
+  const { theme } = useTheme()
+  const [mounted, setMounted] = useState(false)
+
+  useEffect(() => {
+    setMounted(true)
+  }, [])
+
+  const logoSrc = mounted && theme === 'dark' ? '/mesupresSombre.jpg' : '/mesupres.jpg'
 
   // 1. Définition de la variable pour les actions
   const isAdmin = user?.role === 'Admin'
@@ -118,9 +128,9 @@ export default function Sidebar({ user, onNavigate }: SidebarProps) {
           {/* Conteneur du Logo */}
           {/* Suppression des bordures, du fond blanc et de l'ombre. Agrandissement de la taille (w-48 h-28) */}
           <div className="relative w-40 h-24 sm:w-48 sm:h-28 transition-all duration-300 flex items-center justify-center">
-            <Image 
-              src="/mesupres.jpg" 
-              alt="Logo MESUPRES" 
+            <Image
+              src={logoSrc}
+              alt="Logo MESUPRES"
               fill
               className="object-contain group-hover:scale-105 transition-transform duration-300"
               priority
