@@ -14,7 +14,7 @@ export async function PUT(
   { params }: { params: Promise<{ id: string }> }
 ) {
   const { id } = await params;
-  return callApiPost(request, `/courriersValidations/${id}`);
+  return callApiPost(request, `/courriersValidations/${id}`,[],true);
 }
 
 

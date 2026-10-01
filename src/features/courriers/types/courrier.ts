@@ -8,6 +8,7 @@ export interface PieceJointe {
   type: string;          // mime type (ex: application/pdf)
   dateFin: string | null;
   createdAt: string;
+  typeFichier?:string;
 }
 
 // ─── Courrier ──────────────────────────────────────────────────────────────

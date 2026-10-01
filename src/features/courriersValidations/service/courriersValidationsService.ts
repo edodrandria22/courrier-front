@@ -1,9 +1,9 @@
 import { useFetchAuth } from '@/hooks/useFetchAuth';
 import { CourrierValidation } from '../type/courrierValidation';
-export const courrierService = {
+export const courrierValidationService = {
   // ─── Courriers ───────────────────────────────────────────────────────────
 
-  getCourriersValidationsByUser: async (dateCursor?: string): Promise<CourrierValidation[]> => {
+  getCourriersValidationsByUser: async (isValid? : string ,dateCursor?: string): Promise<CourrierValidation[]> => {
     try {
       const fetchWithAuth = useFetchAuth();
       // 1. Construire l'URL avec le paramètre de recherche si la date est fournie
@@ -13,6 +13,9 @@ export const courrierService = {
 
       if (dateCursor) {
         params.set("date", dateCursor);
+      }
+      if (isValid) {
+        params.set("isValid", isValid);
       }
       const url = `/api/courriersValidations?${params.toString()}`;
       const res = await fetchWithAuth(url);
@@ -30,7 +33,9 @@ export const courrierService = {
 
     createCourrierValidation: async (
         data: CourrierValidation,
-        files: File[] = []
+        demande: File,
+        lettreInvitation: File ,
+        planVol: File
     ): Promise<CourrierValidation> => {
         try {
             const fetchWithAuth = useFetchAuth();
@@ -46,7 +51,9 @@ export const courrierService = {
             });
 
             formData.append('detailPersonnes', JSON.stringify(data.detailPersonnes));
-            files.forEach((file) => formData.append('fichiers[]', file));
+            demande && formData.append('demande', demande);
+            lettreInvitation && formData.append('lettreInvitation', lettreInvitation);
+            planVol && formData.append('planVol', planVol);
 
             const res = await fetchWithAuth('/api/courriersValidations', {
             method: 'POST',
@@ -64,6 +71,49 @@ export const courrierService = {
             throw error;
         }
     },
+
+    updateCourrierValidation: async (
+        id:number,
+        data: CourrierValidation,
+        demande: File,
+        lettreInvitation: File ,
+        planVol: File
+    ): Promise<CourrierValidation> => {
+        try {
+            const fetchWithAuth = useFetchAuth();
+            const REQUIRED_FIELDS = ['object', 'dateDebut', 'dateFin', 'ville'] as const;
+            const OPTIONAL_FIELDS = ['observation', 'numeroDepart'] as const;
+
+            const formData = new FormData();
+
+            REQUIRED_FIELDS.forEach((key) => formData.append(key, data[key]));
+
+            OPTIONAL_FIELDS.forEach((key) => {
+            if (data[key]) formData.append(key, String(data[key]));
+            });
+
+            formData.append('detailPersonnes', JSON.stringify(data.detailPersonnes));
+            demande && formData.append('demande', demande);
+            lettreInvitation && formData.append('lettreInvitation', lettreInvitation);
+            planVol && formData.append('planVol', planVol);
+
+            const res = await fetchWithAuth(`/api/courriersValidations/${id}`, {
+            method: 'PUT',
+            body: formData,
+            });
+
+            const json = await res.json();
+
+            if (!res.ok) {
+            throw new Error(json.error ?? json.message ?? 'Erreur lors de la création');
+            }
+
+            return json.data as CourrierValidation;
+        } catch (error) {
+            throw error;
+        }
+    },
+
 
 
   downloadFichier: async (id: number): Promise<{ blob: Blob; nom: string; type: string }> => {

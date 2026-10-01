@@ -30,8 +30,15 @@ export const useLogin = () => {
       // Cela garantit que le middleware voit les cookies correctement
       if (user.role === 'Admin') {
         router.push('/message/courrier/recherche')
-      } else {
+      } else if(user.role === 'Utilisateur') {
         router.push('/message/courrier/receive')
+      }
+      else if(user.role === 'Om')
+      {
+        router.push('/message/courriersValidations')
+      }
+      else{
+        router.push('/message/propos')
       }
       
       // Empêcher toute exécution ultérieure

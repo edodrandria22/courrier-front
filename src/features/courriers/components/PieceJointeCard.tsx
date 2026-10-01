@@ -5,20 +5,23 @@ import { FileText, ExternalLink, Download, Loader2 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { PieceJointe } from '../types/courrier'
 import { courrierService } from '../services/courrierService'
+import { courrierValidationService } from '@/features/courriersValidations/service/courriersValidationsService'
 
 const INLINE_TYPES = ['application/pdf', 'image/']
 
 const isInlineType = (type: string) =>
   INLINE_TYPES.some((t) => type.startsWith(t))
 
-export const PieceJointeCard = ({ pj }: { pj: PieceJointe }) => {
+export const PieceJointeCard = ({ pj, isCourrierValidation }: { pj: PieceJointe; isCourrierValidation?: boolean }) => {
+  // console.log('PieceJointeCard', pj, isCourrierValidation)
   const [loadingView, setLoadingView] = useState(false)
   const [loadingDownload, setLoadingDownload] = useState(false)
 
   const handleOpen = async () => {
     setLoadingView(true)
     try {
-      const { blob, nom, type } = await courrierService.downloadFichier(pj.id)
+      const service = isCourrierValidation ? courrierValidationService : courrierService
+      const { blob, nom, type } = await service.downloadFichier(pj.id)
       const url = URL.createObjectURL(blob)
       window.open(url, '_blank')
       setTimeout(() => URL.revokeObjectURL(url), 10000)
@@ -30,7 +33,8 @@ export const PieceJointeCard = ({ pj }: { pj: PieceJointe }) => {
   const handleDownload = async () => {
     setLoadingDownload(true)
     try {
-      const { blob, nom } = await courrierService.downloadFichier(pj.id)
+      const service = isCourrierValidation ? courrierValidationService : courrierService
+      const { blob, nom } = await service.downloadFichier(pj.id)
       const url = URL.createObjectURL(blob)
       const a = document.createElement('a')
       a.href = url

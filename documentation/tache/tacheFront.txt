@@ -212,9 +212,8 @@ GET http://localhost:3000/api/notifications/subscribe 404 (Not Found)
     --service pour avoir tous les courrier validations a valider -- ok -- 30 mn
     --service pour valider une courrierValidation -- ok -- 30 mn
     --service pour modifier une courrierValidation -- ok -- 30 mn
---creer une page pour inserer une courrierValidations -- a faire -- 60 mn
-    --service pour inserer une nouvelle courrier validation -- a faire -- 30 mn
-    --page pour inserer courrierValidation -- a faire -- 30 mn
+    --creer une page pour inserer une courrierValidations -- a faire -- 60 mn
+        --page pour inserer courrierValidation -- a faire -- 30 mn
 --creer une page pour afficher le courrier validation -- a faire -- 60 mn
 --creer une page pour modifier une courrierValidations -- a faire -- 60mn
 --creer une page statistique -- a faire -- 30 mn

@@ -33,7 +33,6 @@ export default function Sidebar({ user, onNavigate }: SidebarProps) {
   const logoSrc = mounted && theme === 'dark' ? '/mesupresSombre.jpg' : '/mesupres.jpg'
 
   // 1. Définition de la variable pour les actions
-  const isAdmin = user?.role === 'Admin'
   const actionItems: any[] = [];
   const systemFolders: any[] = [];
   const apropos: any[] = [];
@@ -43,7 +42,7 @@ export default function Sidebar({ user, onNavigate }: SidebarProps) {
     icon: ShieldCheck,
     path: '/message/propos',
   })
-  if (!isAdmin) {
+  if (user?.role ==='Utilisateur') {
     actionItems.push({
       id: 'new-courrier',
       name: 'Nouveau Courrier',
@@ -69,14 +68,24 @@ export default function Sidebar({ user, onNavigate }: SidebarProps) {
       icon: Send,
       path: '/message/courrier/send',
     },
-    {
-      id: 'recherche',
-      name: 'Recherche',
-      icon: ClipboardEdit,
-      path: '/message/courrier/recherche',
-    }
+    
   )
     
+  }
+  else if(user?.role ==='Om'){
+    actionItems.push({
+      id: 'new-courrier-validation',
+      name: 'CourrierValidation',
+      icon: ClipboardEdit,
+      path: '/message/courriersValidations',
+    },
+    {
+      id: 'send',
+      name: "Boîte d'envoi",
+      icon: Send,
+      path: '/message/courrier/send',
+    },
+  );
   }
   else {
     actionItems.push({
@@ -85,34 +94,14 @@ export default function Sidebar({ user, onNavigate }: SidebarProps) {
       icon: UserIcon,
       path: '/message/utilisateurs',
     })
-    // actionItems.push({
-    //   id: 'new-courrier',
-    //   name: 'Nouveau Courrier',
-    //   icon: ClipboardEdit,
-    //   path: '/message/courrier',
-    // })
     
-    systemFolders.push(
-    // {
-    //   id: 'inbox',
-    //   name: 'Boîte de réception',
-    //   icon: Mail,
-    //   path: '/message/courrier/receive',
-    // },
-    // {
-    //   id: 'send',
-    //   name: "Boîte d'envoie",
-    //   icon: Send,
-    //   path: '/message/courrier/send',
-    // },
-    {
+  }
+  systemFolders.push({
       id: 'recherche',
       name: 'Recherche',
       icon: ClipboardEdit,
       path: '/message/courrier/recherche',
-    })
-    
-  }
+  })
 
   // 2. Définition de la variable pour le menu principal
   
