@@ -411,7 +411,7 @@ export const CourrierListView = ({ courriers, loading, error, onSelect,  onEdit,
 
                         <span
                           className={cn(
-                            "truncate shrink-0",
+                            "truncate",
                             isConfidentiel
                               ? "text-amber-600 font-semibold"
                               : isLu

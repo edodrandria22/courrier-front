@@ -270,7 +270,6 @@ export const CourrierValidationForm = ({ onSuccess, courrierValidation, onCancel
               type="text"
               value={formData.ville}
               onChange={handleInputChange}
-              rows={5}
               placeholder="ville"
               className="resize-none bg-background/50 border-border disabled:opacity-50"
               disabled={isFieldDisabled}

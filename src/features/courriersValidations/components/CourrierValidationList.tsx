@@ -156,9 +156,18 @@ export const CourrierValidationList: React.FC<CourrierValidationListProps> = ({
                                                 </td>
                                         )}
                                         <td className="px-6 py-4">
-                                            <span className="font-semibold text-foreground">
-                                                {courrier.object}
-                                            </span>
+                                            <TooltipProvider>
+                                                <Tooltip delayDuration={200}>
+                                                    <TooltipTrigger asChild>
+                                                        <span className="font-semibold text-foreground truncate block max-w-[200px] cursor-pointer">
+                                                            {courrier.object}
+                                                        </span>
+                                                    </TooltipTrigger>
+                                                    <TooltipContent className="bg-popover text-popover-foreground border border-border px-3 py-2 rounded-md shadow-md max-w-md">
+                                                        <p className="text-sm">{courrier.object}</p>
+                                                    </TooltipContent>
+                                                </Tooltip>
+                                            </TooltipProvider>
                                         </td>
                                         <td className="px-6 py-4 text-muted-foreground font-medium">
                                             {courrier.ville}
