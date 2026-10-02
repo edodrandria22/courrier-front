@@ -14,8 +14,6 @@ import { CourrierValidation } from "@/features/courriersValidations/type/courrie
 export default function CourrierValidationsPage() {
 
     const router = useRouter();
-    const [showForm, setShowForm] = useState(false);
-    const [courrierToEdit, setCourrierToEdit] = useState<CourrierValidation | null>(null);
     const [user, setUser] = useState<User | null>(null);
     const [loading, setLoading] = useState(true);
 
@@ -79,10 +77,8 @@ export default function CourrierValidationsPage() {
         fetchCourriers();
     }, []);
 
-    const [validatingId, setValidatingId] = useState<number | null>(null);
 
     const handleValidate = async (id: number) => {
-        setValidatingId(id);
         try {
             const updatedCourrier = await courrierValidationService.validerCourrierValidation(id);
             setCourriers((prev) =>
@@ -95,15 +91,11 @@ export default function CourrierValidationsPage() {
             } else {
                 toast.error("Une erreur inconnue est survenue.");
             }
-        } finally {
-            setValidatingId(null);
-        }
+        } 
     };
 
-    const [remarquingId, setRemarquingId] = useState<number | null>(null);
 
     const handleRemarque = async (id: number, remarque: string) => {
-        setRemarquingId(id);
         try {
             const updatedCourrier = await courrierValidationService.ajouterRemarque(id, remarque);
             setCourriers((prev) =>
@@ -116,15 +108,13 @@ export default function CourrierValidationsPage() {
             } else {
                 toast.error("Une erreur inconnue est survenue.");
             }
-        } finally {
-            setRemarquingId(null);
-        }
+        } 
     };
 
     const checkAuth = async () => {
         try {
             const user = await authService.checkAuth();
-            if(user.role!="Om")
+            if(user.role!="Admin" && user.role!="Superviseur")
             {
                 authService.logout();
                 router.push(login);
@@ -147,11 +137,6 @@ export default function CourrierValidationsPage() {
     }
 
     if (!user) return null;
-
-    const handleSuccess = () => {
-        setShowForm(false);
-        setCourrierToEdit(null);
-    };
 
     return (
         <div className="p-8 max-w-6xl mx-auto space-y-10 animate-fade-in">
@@ -178,37 +163,16 @@ export default function CourrierValidationsPage() {
                 </div>
             </div>
 
-            {showForm ? (
-                <div className="flex justify-center py-10">
-                    <CourrierValidationForm
-                        onSuccess={handleSuccess}
-                        courriersValidations={courriers}
-                        setCourriersValidations={setCourriers}
-                        onCancel={() => setShowForm(false)}
-                    />
-                </div>
-            ) : courrierToEdit ? (
-                <div className="flex justify-center py-10">
-                    <CourrierValidationForm
-                        courrierValidation={courrierToEdit}
-                        courriersValidations={courriers}
-                        setCourriersValidations={setCourriers}
-                        onSuccess={handleSuccess}
-                        onCancel={() => setCourrierToEdit(null)}
-                    />
-                </div>
-            ) : (
+            
                 <CourrierValidationList
                     courriers={courriers}
                     isLoading={isLoading}
                     fetchCourriersPlus={fetchCourriersPlus}
                     hasMore={hasMore}
-                    onAddCourrier={() => setShowForm(true)}
-                    onEditCourrier={(c) => setCourrierToEdit(c)}
                     onValidate={handleValidate}
                     onRemarque={handleRemarque}
+                    isSupervisor={true}
                 />
-            )}
         </div>
     );
 }

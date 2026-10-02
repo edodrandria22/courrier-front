@@ -33,80 +33,52 @@ export default function Sidebar({ user, onNavigate }: SidebarProps) {
   const logoSrc = mounted && theme === 'dark' ? '/mesupresSombre.jpg' : '/mesupres.jpg'
 
   // 1. Définition de la variable pour les actions
-  const actionItems: any[] = [];
-  const systemFolders: any[] = [];
-  const apropos: any[] = [];
-  apropos.push({
-    id: 'apropos',
-    name: 'Contact et support',
-    icon: ShieldCheck,
-    path: '/message/propos',
-  })
-  if (user?.role ==='Utilisateur') {
-    actionItems.push({
-      id: 'new-courrier',
-      name: 'Nouveau Courrier',
-      icon: ClipboardEdit,
-      path: '/message/courrier',
-    });
-    actionItems.push({
-      id: 'statistique',
-      name: 'Tableau de bord',
-      icon: BarChart3,
-      path: '/message/courrier/statistique',
-    })
-    systemFolders.push(
-    {
-      id: 'inbox',
-      name: 'Boîte de réception',
-      icon: Mail,
-      path: '/message/courrier/receive',
-    },
-    {
-      id: 'send',
-      name: "Boîte d'envoi",
-      icon: Send,
-      path: '/message/courrier/send',
-    },
-    
-  )
-    
-  }
-  else if(user?.role ==='Om'){
-    actionItems.push({
-      id: 'new-courrier-validation',
-      name: 'CourrierValidation',
-      icon: ClipboardEdit,
-      path: '/message/courriersValidations',
-    },
-    {
-      id: 'send',
-      name: "Boîte d'envoi",
-      icon: Send,
-      path: '/message/courrier/send',
-    },
-  );
-  }
-  else {
-    actionItems.push({
-      id: 'utilisateurs',
-      name: 'Utilisateurs',
-      icon: UserIcon,
-      path: '/message/utilisateurs',
-    })
-    
-  }
-  systemFolders.push({
-      id: 'recherche',
-      name: 'Recherche',
-      icon: ClipboardEdit,
-      path: '/message/courrier/recherche',
-  })
+  type MenuItem = {
+    id: string;
+    name: string;
+    icon: React.ElementType;
+    path: string;
+  };
 
-  // 2. Définition de la variable pour le menu principal
-  
-  
+  // 1. Définition unique de chaque item
+  const ITEMS = {
+    apropos: { id: 'apropos', name: 'Contact et support', icon: ShieldCheck, path: '/message/propos' },
+    newCourrier: { id: 'new-courrier', name: 'Nouveau Courrier', icon: ClipboardEdit, path: '/message/courrier' },
+    statistique: { id: 'statistique', name: 'Tableau de bord', icon: BarChart3, path: '/message/courrier/statistique' },
+    inbox: { id: 'inbox', name: 'Boîte de réception', icon: Mail, path: '/message/courrier/receive' },
+    send: { id: 'send', name: "Boîte d'envoi", icon: Send, path: '/message/courrier/send' },
+    courrierValidation: { id: 'new-courrier-validation', name: 'CourrierValidation', icon: ClipboardEdit, path: '/message/courriersValidations' },
+    utilisateurs: { id: 'utilisateurs', name: 'Utilisateurs', icon: UserIcon, path: '/message/utilisateurs' },
+    demandeOm: { id: 'demandeOm', name: 'DemandeOm', icon: ClipboardEdit, path: '/message/demandeOm' },
+    recherche: { id: 'recherche', name: 'Recherche', icon: ClipboardEdit, path: '/message/courrier/recherche' },
+  } satisfies Record<string, MenuItem>;
 
+  // 2. Configuration par rôle
+  const MENU_BY_ROLE: Record<string, { actions: MenuItem[]; folders: MenuItem[] }> = {
+    Utilisateur: {
+      actions: [ITEMS.newCourrier, ITEMS.statistique],
+      folders: [ITEMS.inbox, ITEMS.send],
+    },
+    Om: {
+      actions: [ITEMS.courrierValidation, ITEMS.send],
+      folders: [],
+    },
+    Admin: {
+      actions: [ITEMS.utilisateurs, ITEMS.demandeOm],
+      folders: [],
+    },
+    Superviseur: {
+      actions: [ITEMS.demandeOm],
+      folders: [],
+    },
+  };
+
+  // 3. Construction des menus
+  const roleMenu = MENU_BY_ROLE[user?.role ?? ''] ?? { actions: [], folders: [] };
+
+  const actionItems: MenuItem[] = roleMenu.actions;
+  const systemFolders: MenuItem[] = [...roleMenu.folders, ITEMS.recherche]; // Recherche est commun à tous
+  const apropos: MenuItem[] = [ITEMS.apropos];
   return (
     <aside className="w-64 bg-sidebar border-r border-sidebar-border flex flex-col h-screen overflow-hidden">
       {/* Logo Image & Nom Projet */}

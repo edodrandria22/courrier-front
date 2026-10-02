@@ -218,8 +218,8 @@ GET http://localhost:3000/api/notifications/subscribe 404 (Not Found)
     --creer une page pour afficher le courrier validation -- ok -- 60 mn
     --creer une page pour modifier une courrierValidations -- ok -- 60mn
 02/06/2026
-    --creer une page pour voir le detail de la courrierValidation    
-    --creer une page pour le superviseur , valider et mettre des remarques sur le courrier validation
+    --creer une page pour voir le detail de la courrierValidation --ok --30 mn
+    --creer une page pour le superviseur , valider et mettre des remarques sur le courrier validation -- a faire -- 60 mn
     --mercure pendant l'update et insertion courrier validation 
 --creer une page statistique -- a faire -- 30 mn
 --creer une page pour superviseur lisete et valider une courrierValidations -- a faire -- 60 mn

@@ -5,18 +5,18 @@ import { AppTableSkeleton } from "@/features/common/components/ui/AppTableSkelet
 import { ConfirmDialog } from "@/features/common/components/ui/ConfirmDialog";
 import { useState } from "react";
 import { CourrierValidationDetailsModal } from "./CourrierValidationDetailsModal";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@radix-ui/react-tooltip";
 
 interface CourrierValidationListProps {
     courriers: CourrierValidation[];
     isLoading: boolean;
     fetchCourriersPlus: () => void;
     hasMore: boolean;
-    onAddCourrier: () => void;
-    onEditCourrier: (courrier: CourrierValidation) => void;
+    onAddCourrier?: () => void;
+    onEditCourrier?: (courrier: CourrierValidation) => void;
     onValidate: (id: number) => void;
-    validatingId: number | null;
     onRemarque: (id: number, remarque: string) => void;
-    remarquingId: number | null;
+    isSupervisor?: boolean;
 }
 
 export const CourrierValidationList: React.FC<CourrierValidationListProps> = ({
@@ -27,29 +27,10 @@ export const CourrierValidationList: React.FC<CourrierValidationListProps> = ({
     onAddCourrier,
     onEditCourrier,
     onValidate,
-    validatingId,
     onRemarque,
-    remarquingId,
+    isSupervisor = false
 }) => {
-    const [courrierToValidate, setCourrierToValidate] = useState<CourrierValidation | null>(null);
-    const [courrierToRemarque, setCourrierToRemarque] = useState<CourrierValidation | null>(null);
     const [courrierToView, setCourrierToView] = useState<CourrierValidation | null>(null);
-    const handleConfirmValidate = () => {
-        if (courrierToValidate) {
-            onValidate(courrierToValidate.id!);
-            setCourrierToValidate(null);
-        }
-    };
-
-    const handleConfirmRemarque = () => {
-        if (courrierToRemarque) {
-            const remarque = prompt("Entrez votre remarque :");
-            if (remarque && remarque.trim()) {
-                onRemarque(courrierToRemarque.id!, remarque);
-            }
-            setCourrierToRemarque(null);
-        }
-    };
 
     const formatDate = (dateString: string) => {
         if (!dateString) return "-";
@@ -77,6 +58,7 @@ export const CourrierValidationList: React.FC<CourrierValidationListProps> = ({
                         Liste des courriers en attente de validation.
                     </p>
                 </div>
+                {onAddCourrier && (
                 <button
                     onClick={onAddCourrier}
                     style={{ color: "#ffffff" }}
@@ -87,6 +69,7 @@ export const CourrierValidationList: React.FC<CourrierValidationListProps> = ({
                     </svg>
                     Nouveau courrier
                 </button>
+                )}
             </div>
 
             <div className="bg-card border border-border rounded-xl overflow-hidden shadow-sm">
@@ -94,11 +77,14 @@ export const CourrierValidationList: React.FC<CourrierValidationListProps> = ({
                     <table className="w-full text-left text-sm">
                         <thead className="sticky top-0 z-10 bg-muted/50 border-b border-border">
                             <tr>
+                                {isSupervisor &&(
+                                    <th className="px-6 py-4 font-bold text-foreground uppercase tracking-widest text-[10px]">Demandeur</th>
+                                )}
                                 <th className="px-6 py-4 font-bold text-foreground uppercase tracking-widest text-[10px]">Objet</th>
                                 <th className="px-6 py-4 font-bold text-foreground uppercase tracking-widest text-[10px]">Ville</th>
                                 <th className="px-6 py-4 font-bold text-foreground uppercase tracking-widest text-[10px]">Date Début</th>
                                 <th className="px-6 py-4 font-bold text-foreground uppercase tracking-widest text-[10px]">Date Fin</th>
-                                <th className="px-6 py-4 font-bold text-foreground uppercase tracking-widest text-[10px]">N° Départ</th>
+                                <th className="px-6 py-4 font-bold text-foreground uppercase tracking-widest text-[10px]">Date création</th>
                                 <th className="px-6 py-4 font-bold text-foreground uppercase tracking-widest text-[10px]">Statut</th>
                                 <th className="px-6 py-4 font-bold text-foreground uppercase tracking-widest text-[10px] text-right">Actions</th>
                             </tr>
@@ -113,6 +99,62 @@ export const CourrierValidationList: React.FC<CourrierValidationListProps> = ({
                             ) : (
                                 courriers.map((courrier) => (
                                     <tr key={courrier.id} className="hover:bg-muted/50 transition-colors">
+                                        {isSupervisor && (
+                                            <td className="px-6 py-4 whitespace-nowrap">
+                                                <TooltipProvider>
+                                                    <Tooltip delayDuration={200}>
+                                                    <TooltipTrigger asChild>
+                                                        {/* Conteneur interactif avec effet Hover doux */}
+                                                        <div className="inline-flex items-center gap-3 p-1.5 pr-3 rounded-lg hover:bg-muted/60 border border-transparent hover:border-border transition-all cursor-pointer group">
+                                                        
+                                                        {/* Nom principal & Sous-texte (Email ou Adresse) */}
+                                                        <div className="flex flex-col min-w-0 text-left">
+                                                            <p className="font-medium text-xs text-foreground group-hover:text-primary transition-colors truncate">
+                                                            {courrier.createur?.sigle || `${courrier.createur?.nom || ""} `.trim() || "U"}
+                                                            </p>
+                                                        </div>
+                                                        </div>
+                                                    </TooltipTrigger>
+
+                                                    {/* Tooltip structuré et élégant */}
+                                                    <TooltipContent side="top" className="p-3 max-w-xs space-y-2 shadow-lg border bg-popover text-popover-foreground">
+                                                        <div className="flex items-center gap-2 border-b pb-1.5">
+                                                        <div className="h-2 w-2 rounded-full bg-primary" />
+                                                        <p className="font-semibold text-xs text-foreground">Détails du demandeur</p>
+                                                        </div>
+
+                                                        <div className="grid grid-cols-[auto_1fr] gap-x-3 gap-y-1.5 text-xs">
+                                                        <span className="text-muted-foreground">Nom :</span>
+                                                        <span className="font-medium text-foreground">
+                                                            {courrier.createur?.nom} {courrier.createur?.prenom}
+                                                        </span>
+
+                                                        {courrier.createur?.sigle && (
+                                                            <>
+                                                            <span className="text-muted-foreground">Sigle :</span>
+                                                            <span className="font-medium text-foreground">{courrier.createur.sigle}</span>
+                                                            </>
+                                                        )}
+
+                                                        {courrier.createur?.email && (
+                                                            <>
+                                                            <span className="text-muted-foreground">Email :</span>
+                                                            <span className="font-medium text-foreground truncate">{courrier.createur.email}</span>
+                                                            </>
+                                                        )}
+
+                                                        {courrier.createur?.adresse && (
+                                                            <>
+                                                            <span className="text-muted-foreground">Adresse :</span>
+                                                            <span className="font-medium text-foreground">{courrier.createur.adresse}</span>
+                                                            </>
+                                                        )}
+                                                        </div>
+                                                    </TooltipContent>
+                                                    </Tooltip>
+                                                </TooltipProvider>
+                                                </td>
+                                        )}
                                         <td className="px-6 py-4">
                                             <span className="font-semibold text-foreground">
                                                 {courrier.object}
@@ -128,7 +170,7 @@ export const CourrierValidationList: React.FC<CourrierValidationListProps> = ({
                                             {formatDate(courrier.dateFin)}
                                         </td>
                                         <td className="px-6 py-4 text-muted-foreground font-medium">
-                                            {courrier.numeroDepart ? String(courrier.numeroDepart) : "-"}
+                                            {formatDate(courrier.createdAt || new Date().toDateString())}
                                         </td>
                                         <td className="px-6 py-4">
                                             {getStatutBadge(courrier)}
@@ -147,16 +189,17 @@ export const CourrierValidationList: React.FC<CourrierValidationListProps> = ({
                                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
                                                 </svg>
                                                 </button>
-                                                <button
-                                                    onClick={() => onEditCourrier(courrier)}
-                                                    className="text-slate-400 hover:text-blue-600 transition-colors p-1"
-                                                    title="Modifier le courrier"
-                                                >
-                                                    <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
-                                                    </svg>
-                                                </button>
-
+                                                {onEditCourrier && (
+                                                    <button
+                                                        onClick={() => onEditCourrier(courrier)}
+                                                        className="text-slate-400 hover:text-blue-600 transition-colors p-1"
+                                                        title="Modifier le courrier"
+                                                    >
+                                                        <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
+                                                        </svg>
+                                                    </button>
+                                                )}
                                             </div>
                                         </td>
                                     </tr>
@@ -197,6 +240,9 @@ export const CourrierValidationList: React.FC<CourrierValidationListProps> = ({
                 <CourrierValidationDetailsModal
                 courrier={courrierToView}
                 onClose={() => setCourrierToView(null)}
+                isSupervisor={isSupervisor}
+                onValidate={onValidate}
+                onRemarque={onRemarque}
                 />
             )}
         </div>
