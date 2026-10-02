@@ -10,6 +10,7 @@ import { User } from "@/features/auth/types/login";
 import { courrierValidationService } from "@/features/courriersValidations/service/courriersValidationsService";
 import { toast } from "sonner";
 import { CourrierValidation } from "@/features/courriersValidations/type/courrierValidation";
+import { useMercureSubscription } from "@/hooks/useMercureSubscription";
 
 export default function CourrierValidationsPage() {
 
@@ -67,6 +68,34 @@ export default function CourrierValidationsPage() {
         setDate(""); // Reset pagination when filter changes
         setHasMore(true);
     };
+    // Mercure subscription for new courrier validations
+    const validerDemande = (updatedCourrier: CourrierValidation) => {
+        const exists = courriers?.some(c => c.originId === updatedCourrier.originId);
+        setCourriers(courriers?.map(c => c.originId === updatedCourrier.originId ? updatedCourrier : c));
+        if (exists) {
+            toast.success("Demande validée pour " + updatedCourrier.object);
+        }
+    };
+    const addRemarque = (updatedCourrier: CourrierValidation) => {
+        const exists = courriers?.some(c => c.originId === updatedCourrier.originId);
+        setCourriers(courriers?.map(c => c.originId === updatedCourrier.originId ? updatedCourrier : c));
+        if (exists) {
+            toast.success("Remarque ajoutée à la demande " + updatedCourrier.object);
+        }
+    };
+    useMercureSubscription<CourrierValidation>(
+        "courrierValidationValider",
+        (newCourrier) => {
+            validerDemande(newCourrier);
+        }
+    );
+    useMercureSubscription<CourrierValidation>(
+        "courrierValidationRemarque",
+        (newCourrier) => {
+            addRemarque(newCourrier);
+        }
+    );
+    
 
     useEffect(() => {
         fetchCourriers();
@@ -79,10 +108,7 @@ export default function CourrierValidationsPage() {
         fetchCourriers();
     }, []);
 
-    const [validatingId, setValidatingId] = useState<number | null>(null);
-
     const handleValidate = async (id: number) => {
-        setValidatingId(id);
         try {
             const updatedCourrier = await courrierValidationService.validerCourrierValidation(id);
             setCourriers((prev) =>
@@ -95,15 +121,11 @@ export default function CourrierValidationsPage() {
             } else {
                 toast.error("Une erreur inconnue est survenue.");
             }
-        } finally {
-            setValidatingId(null);
-        }
+        } 
     };
 
-    const [remarquingId, setRemarquingId] = useState<number | null>(null);
 
     const handleRemarque = async (id: number, remarque: string) => {
-        setRemarquingId(id);
         try {
             const updatedCourrier = await courrierValidationService.ajouterRemarque(id, remarque);
             setCourriers((prev) =>
@@ -116,9 +138,7 @@ export default function CourrierValidationsPage() {
             } else {
                 toast.error("Une erreur inconnue est survenue.");
             }
-        } finally {
-            setRemarquingId(null);
-        }
+        } 
     };
 
     const checkAuth = async () => {
@@ -161,7 +181,7 @@ export default function CourrierValidationsPage() {
                         Validation
                     </span>
                     <h1 className="text-4xl font-bold text-foreground tracking-tight">
-                        Gestion des Courriers
+                        Gestion des demandes
                     </h1>
                 </div>
                 <div className="flex items-center gap-3">

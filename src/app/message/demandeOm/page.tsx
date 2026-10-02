@@ -10,6 +10,7 @@ import { User } from "@/features/auth/types/login";
 import { courrierValidationService } from "@/features/courriersValidations/service/courriersValidationsService";
 import { toast } from "sonner";
 import { CourrierValidation } from "@/features/courriersValidations/type/courrierValidation";
+import { useMercureSubscription } from "@/hooks/useMercureSubscription";
 
 export default function CourrierValidationsPage() {
 
@@ -69,6 +70,31 @@ export default function CourrierValidationsPage() {
     useEffect(() => {
         fetchCourriers();
     }, [statusFilter]);
+
+    // Mercure subscription for new courrier validations
+    const ajouterNouvelleDemande = (newCourrier: CourrierValidation) => {
+        setCourriers((prev) => [newCourrier, ...prev]);
+        toast.success("Nouvelle demande d'ordre de mission reçue");
+    };
+    const updateCourrier = (updatedCourrier: CourrierValidation) => {
+        const exists = courriers?.some(c => c.originId === updatedCourrier.originId);
+        setCourriers(courriers?.map(c => c.originId === updatedCourrier.originId ? updatedCourrier : c));
+        if (exists) {
+            toast.success("Demande d'ordre de mission mise à jour du " + updatedCourrier.createur?.sigle + " d'object " + updatedCourrier.object);
+        }
+    };
+    useMercureSubscription<CourrierValidation>(
+        "courrierValidationInsert",
+        (newCourrier) => {
+            ajouterNouvelleDemande(newCourrier);
+        }
+    );
+    useMercureSubscription<CourrierValidation>(
+        "courrierValidationUpdate",
+        (newCourrier) => {
+            updateCourrier(newCourrier);
+        }
+    );
 
     const login = process.env.NEXT_PUBLIC_LOGIN_URL || '/login';
 
@@ -146,7 +172,7 @@ export default function CourrierValidationsPage() {
                         Validation
                     </span>
                     <h1 className="text-4xl font-bold text-foreground tracking-tight">
-                        Gestion des Courriers
+                        Gestion des demandes
                     </h1>
                 </div>
                 <div className="flex items-center gap-3">

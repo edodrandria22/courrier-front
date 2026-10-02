@@ -253,6 +253,7 @@ export const CourrierValidationForm = ({ onSuccess, courrierValidation, onCancel
             <label className="text-sm font-semibold text-foreground">Objet</label>
             <Input
               name="object"
+              type="text"
               value={formData.object}
               onChange={handleInputChange}
               required
@@ -264,8 +265,9 @@ export const CourrierValidationForm = ({ onSuccess, courrierValidation, onCancel
 
           <div className="space-y-2">
             <label className="text-sm font-semibold text-foreground">Ville</label>
-            <Textarea
+            <Input
               name="ville"
+              type="text"
               value={formData.ville}
               onChange={handleInputChange}
               rows={5}
@@ -324,7 +326,7 @@ export const CourrierValidationForm = ({ onSuccess, courrierValidation, onCancel
                 onChange={handleDemandeChange}
                 className="w-full px-3 py-2 text-sm bg-background border border-input rounded-md focus:outline-none focus:ring-2 focus:ring-primary/50 disabled:opacity-50"
                 disabled={loading}
-                accept=".pdf,.doc,.docx"
+                accept=".pdf,.doc,.docx,.jpg,.jpeg,.png,.gif,.webp"
               />
               {demande && (
                 <div className="mt-2 p-3 bg-primary/10 border border-primary/20 rounded-md">
@@ -379,7 +381,7 @@ export const CourrierValidationForm = ({ onSuccess, courrierValidation, onCancel
                 onChange={handleLettreInvitationChange}
                 className="w-full px-3 py-2 text-sm bg-background border border-input rounded-md focus:outline-none focus:ring-2 focus:ring-primary/50 disabled:opacity-50"
                 disabled={loading}
-                accept=".pdf,.doc,.docx"
+                accept=".pdf,.doc,.docx,.jpg,.jpeg,.png,.gif,.webp"
               />
               {lettreInvitation && (
                 <div className="mt-2 p-3 bg-primary/10 border border-primary/20 rounded-md">
@@ -434,7 +436,7 @@ export const CourrierValidationForm = ({ onSuccess, courrierValidation, onCancel
                 onChange={handlePlanVolChange}
                 className="w-full px-3 py-2 text-sm bg-background border border-input rounded-md focus:outline-none focus:ring-2 focus:ring-primary/50 disabled:opacity-50"
                 disabled={loading}
-                accept=".pdf,.doc,.docx"
+                accept=".pdf,.doc,.docx,.jpg,.jpeg,.png,.gif,.webp"
               />
               {planVol && (
                 <div className="mt-2 p-3 bg-primary/10 border border-primary/20 rounded-md">

@@ -28,18 +28,16 @@ export const useLogin = () => {
       
       // 4. Rediriger avec window.location.href pour forcer le rechargement complet
       // Cela garantit que le middleware voit les cookies correctement
-      if (user.role === 'Admin') {
-        router.push('/message/courrier/recherche')
-      } else if(user.role === 'Utilisateur') {
-        router.push('/message/courrier/receive')
-      }
-      else if(user.role === 'Om')
-      {
-        router.push('/message/courriersValidations')
-      }
-      else{
-        router.push('/message/propos')
-      }
+      const DEFAULT_ROUTE = '/message/propos';
+
+      const ROUTE_BY_ROLE: Record<string, string> = {
+        Admin: '/message/courrier/recherche',
+        Utilisateur: '/message/courrier/receive',
+        Om: '/message/courriersValidations',
+        Superviseur: '/message/demandeOm',
+      };
+
+      router.push(ROUTE_BY_ROLE[user.role] ?? DEFAULT_ROUTE);
       
       // Empêcher toute exécution ultérieure
       return
