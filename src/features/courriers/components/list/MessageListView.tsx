@@ -24,13 +24,14 @@ import { useMessages } from '@/features/messages/hooks/useMessages'
 import { TransfererDialog } from '@/features/messages/components/TransfererDialog'
 import { useRouter } from 'next/navigation'
 import { toast } from 'sonner'
+import { User } from '@/features/auth/types/login'
 // ... (dans votre composant)
 interface Props {
   courrier: Courrier
   messages: MessageCourrier[]
   loading: boolean
   error: string | null
-  currentUserId: string | null
+  currentUser: User | null
   onSelect: (message: MessageCourrier) => void
   onBack: () => void
   isRecherche?: boolean,
@@ -42,8 +43,8 @@ interface Props {
   onCloture: (id: number) => Promise<void>
 }
 
-export const MessageListView = ({ courrier, messages, loading, error, currentUserId, onSelect, onBack, isRecherche = false, updateHistorique, hasMoreMessages, onLoadMore, loadingMore, onTransferSuccess, onCloture }: Props) => {
-  const { isMessageVisible, isLastRecipient,isLastMessage, isDestinataireOf } = useMessagePermissions(messages, currentUserId);
+export const MessageListView = ({ courrier, messages, loading, error, currentUser, onSelect, onBack, isRecherche = false, updateHistorique, hasMoreMessages, onLoadMore, loadingMore, onTransferSuccess, onCloture }: Props) => {
+  const { isMessageVisible, isLastRecipient,isLastMessage, isDestinataireOf } = useMessagePermissions(messages, currentUser?.id?.toString() || '');
 
   // var isDestinataire = false;
   // if (messages.length > 0) {
@@ -671,8 +672,12 @@ export const MessageListView = ({ courrier, messages, loading, error, currentUse
                     {/* Corps du tableau */}
                     <tbody className="divide-y divide-border">
                       {messages.map((message, index) => {
-                        const accessible = isMessageVisible(message)
-                        const isRead = !!message.isReadAt
+                        var accessible = isMessageVisible(message);
+                        if(currentUser?.role === 'Admin'|| currentUser?.role === 'Superviseur') {
+                          accessible = true;
+                        }
+
+                        const isRead = !!message.isReadAt;
 
                         return (
                           <tr

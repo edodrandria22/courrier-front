@@ -39,12 +39,12 @@ export const CourrierValidationList: React.FC<CourrierValidationListProps> = ({
 
     const getStatutBadge = (courrier: CourrierValidation) => {
         if (courrier.dateValidation) {
-            return <span className="px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider bg-green-100 text-green-700">Validé</span>;
+            return <span className="px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider bg-secondary/10 text-secondary border border-secondary/20 dark:bg-secondary/20 dark:border-secondary/30">Validé</span>;
         }
         if (courrier.observationSuperviseur) {
-            return <span className="px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider bg-orange-100 text-orange-700">En attente</span>;
+            return <span className="px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider bg-muted text-muted-foreground border border-border whitespace-nowrap">En attente</span>;
         }
-        return <span className="px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider bg-blue-100 text-blue-700">Nouveau</span>;
+        return <span className="px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider bg-primary/10 text-primary border border-primary/20 dark:bg-primary/20 dark:border-primary/30">Nouveau</span>;
     };
 
     return (

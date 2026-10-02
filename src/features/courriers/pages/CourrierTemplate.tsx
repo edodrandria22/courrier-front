@@ -347,7 +347,7 @@ const handleLocalCloturation = useCallback(async (id: number) => {
           messages={messages}
           loading={loading && messages.length === 0}
           error={error}
-          currentUserId={String(currentUserId)}
+          currentUser={user}
           onSelect={(m) => setStep({ level: 'detail', courrier: step.courrier, message: m })}
           onBack={() => setStep({ level: 'courriers' })}
           isRecherche={isRecherche}

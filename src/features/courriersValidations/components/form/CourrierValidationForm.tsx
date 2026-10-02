@@ -40,11 +40,11 @@ export const CourrierValidationForm = ({ onSuccess, courrierValidation, onCancel
   };
 
   const [formData, setFormData] = useState({
-    object: courrierValidation?.object,
-    ville: courrierValidation?.ville,
+    object: courrierValidation?.object || '',
+    ville: courrierValidation?.ville || '',
     dateDebut: formatDateForInput(courrierValidation?.dateDebut),
     dateFin: formatDateForInput(courrierValidation?.dateFin),
-    numeroDepart:courrierValidation?.numeroDepart,
+    numeroDepart: courrierValidation?.numeroDepart?.toString() || '',
     observation: courrierValidation?.observation || '',
     detailPersonnes: initialPersonnes // Remplacement des champs plats par un tableau
   });
@@ -179,7 +179,7 @@ export const CourrierValidationForm = ({ onSuccess, courrierValidation, onCancel
         ville: formData.ville || '',
         dateDebut: formData.dateDebut || '',
         dateFin: formData.dateFin || '',
-        numeroDepart: formData.numeroDepart || null,
+        numeroDepart: formData.numeroDepart ? parseInt(formData.numeroDepart, 10) : null,
         observation: formData.observation || '',
         detailPersonnes: processedDetailPersonnes,
         originId: courrierValidation?.originId || null,
@@ -197,7 +197,8 @@ export const CourrierValidationForm = ({ onSuccess, courrierValidation, onCancel
       onSuccess()
     } catch (err) {
       if (err instanceof Error) {
-        setError(err.message)
+        setError(err.message);
+        toast.error(err.message);
       } else {
         setError("Une erreur est survenue")
       }
@@ -242,7 +243,7 @@ export const CourrierValidationForm = ({ onSuccess, courrierValidation, onCancel
               <Input
                 type="number"
                 name="numeroDepart"
-                value={(formData.numeroDepart)?.toString()}
+                value={formData.numeroDepart}
                 onChange={handleInputChange}
                 // required
                 placeholder="Numero de depart"
@@ -325,7 +326,7 @@ export const CourrierValidationForm = ({ onSuccess, courrierValidation, onCancel
                 onChange={handleDemandeChange}
                 className="w-full px-3 py-2 text-sm bg-background border border-input rounded-md focus:outline-none focus:ring-2 focus:ring-primary/50 disabled:opacity-50"
                 disabled={loading}
-                accept=".pdf,.doc,.docx,.jpg,.jpeg,.png,.gif,.webp"
+                accept=".pdf,.jpg,.jpeg,.png"
               />
               {demande && (
                 <div className="mt-2 p-3 bg-primary/10 border border-primary/20 rounded-md">
@@ -380,7 +381,7 @@ export const CourrierValidationForm = ({ onSuccess, courrierValidation, onCancel
                 onChange={handleLettreInvitationChange}
                 className="w-full px-3 py-2 text-sm bg-background border border-input rounded-md focus:outline-none focus:ring-2 focus:ring-primary/50 disabled:opacity-50"
                 disabled={loading}
-                accept=".pdf,.doc,.docx,.jpg,.jpeg,.png,.gif,.webp"
+                accept=".pdf,.jpg,.jpeg,.png"
               />
               {lettreInvitation && (
                 <div className="mt-2 p-3 bg-primary/10 border border-primary/20 rounded-md">
@@ -435,7 +436,7 @@ export const CourrierValidationForm = ({ onSuccess, courrierValidation, onCancel
                 onChange={handlePlanVolChange}
                 className="w-full px-3 py-2 text-sm bg-background border border-input rounded-md focus:outline-none focus:ring-2 focus:ring-primary/50 disabled:opacity-50"
                 disabled={loading}
-                accept=".pdf,.doc,.docx,.jpg,.jpeg,.png,.gif,.webp"
+                accept=".pdf,.jpg,.jpeg,.png"
               />
               {planVol && (
                 <div className="mt-2 p-3 bg-primary/10 border border-primary/20 rounded-md">
