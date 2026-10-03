@@ -503,11 +503,11 @@ export const MessageListView = ({ courrier, messages, loading, error, currentUse
                   {!isEditingObs && (
                     <Button 
                       variant="ghost" 
-                      size="icon" 
-                      className="h-6 w-6 opacity-0 group-hover:opacity-100 transition-opacity absolute right-0 top-2"
+                      size="sm" 
+                      className="h-6 px-2 text-xs opacity-0 group-hover:opacity-100 transition-opacity absolute right-0 top-2"
                       onClick={() => setIsEditingObs(true)}
                     >
-                      <Edit2 className="h-3.5 w-3.5 text-muted-foreground hover:text-foreground" />
+                      Modifier
                     </Button>
                   )}
                 </div>
