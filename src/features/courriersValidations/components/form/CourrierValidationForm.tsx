@@ -216,12 +216,12 @@ export const CourrierValidationForm = ({ onSuccess, courrierValidation, onCancel
           <div>
             {courrierValidation ? (
               <h2 className="text-lg font-bold text-foreground">
-                Modifier le Courrier Validation {courrierValidation?.id}
+                Modifier la demande {courrierValidation?.id}
               </h2>
             ) : (
               <>
-                <h2 className="text-lg font-bold text-foreground">Nouveau Courrier Validation</h2>
-                <p className="text-sm text-muted-foreground">Enregistrement d'un nouveau courrier entrant.</p>
+                <h2 className="text-lg font-bold text-foreground">Nouvelle demande</h2>
+                <p className="text-sm text-muted-foreground">Enregistrement d'une nouvelle demande.</p>
               </>
             )}
           </div>
@@ -265,13 +265,13 @@ export const CourrierValidationForm = ({ onSuccess, courrierValidation, onCancel
           </div>
 
           <div className="space-y-2">
-            <label className="text-sm font-semibold text-foreground">Ville</label>
+            <label className="text-sm font-semibold text-foreground">Ville de séjour</label>
             <Input
               name="ville"
               type="text"
               value={formData.ville}
               onChange={handleInputChange}
-              placeholder="ville"
+              placeholder="ville de séjour"
               className="resize-none bg-background/50 border-border disabled:opacity-50"
               disabled={isFieldDisabled}
             />
@@ -311,7 +311,7 @@ export const CourrierValidationForm = ({ onSuccess, courrierValidation, onCancel
                 value={formData.observation}
                 onChange={handleInputChange}
                 rows={5}
-                placeholder="Remarque sur le courrier (optionnel)"
+                placeholder="Remarque sur le demande (optionnel)"
                 className="resize-none bg-background/50 border-border disabled:opacity-50"
                 disabled={loading}
               />
@@ -319,7 +319,7 @@ export const CourrierValidationForm = ({ onSuccess, courrierValidation, onCancel
 
             <div className="space-y-2">
               <label className="text-sm font-semibold text-foreground">
-                Demande <span className="text-red-500">*</span>
+                Scan de votre demande en pdf ou image <span className="text-red-500">(5 Mo max)</span> <span className="text-red-500">*</span>
               </label>
               <input
                 type="file"
@@ -374,7 +374,7 @@ export const CourrierValidationForm = ({ onSuccess, courrierValidation, onCancel
 
             <div className="space-y-2">
               <label className="text-sm font-semibold text-foreground">
-                Lettre d'invitation <span className="text-red-500">*</span>
+                Scan de votre lettre d'invitation en pdf ou image <span className="text-red-500">(5 Mo max)</span> <span className="text-red-500">*</span>
               </label>
               <input
                 type="file"
@@ -429,7 +429,7 @@ export const CourrierValidationForm = ({ onSuccess, courrierValidation, onCancel
 
             <div className="space-y-2">
               <label className="text-sm font-semibold text-foreground">
-                Plan de vol <span className="text-red-500">*</span>
+                Scan de votre plan de vol en pdf ou image <span className="text-red-500">(5 Mo max)</span> <span className="text-red-500">*</span>
               </label>
               <input
                 type="file"
@@ -626,7 +626,7 @@ export const CourrierValidationForm = ({ onSuccess, courrierValidation, onCancel
               transition: 'all 0.2s'
             }}
           >
-            {loading ? 'Traitement...' : <span className="flex items-center gap-2"><Send className="w-4 h-4" /> {courrierValidation ? 'Enregistrer la modification' : 'Créer le courrier'}</span>}
+            {loading ? 'Traitement...' : <span className="flex items-center gap-2"><Send className="w-4 h-4" /> {courrierValidation ? 'Enregistrer la modification' : 'Créer le demande'}</span>}
           </button>
         </div>
       </form>

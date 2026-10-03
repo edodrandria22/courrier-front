@@ -196,7 +196,7 @@ export const CourrierListView = ({ courriers, loading, error, onSelect,  onEdit,
                 )}
               >
                 <Square className="w-3.5 h-3.5" />
-                Non traiter {nbNonTraite !== undefined && nbNonTraite > 0 && `(${nbNonTraite})`}
+                Non traiter {nbNonTraite !== undefined && nbNonTraite > 0 && <span className="text-red-600 dark:text-red-400">({nbNonTraite})</span>}
               </button>
               {isRecu !== undefined && setIsRecu && (
                 <button
@@ -210,7 +210,7 @@ export const CourrierListView = ({ courriers, loading, error, onSelect,  onEdit,
                   )}
                 >
                   <Package className="w-3.5 h-3.5" />
-                  En route {nbIsRecu !== undefined && nbIsRecu > 0 && `(${nbIsRecu})`}
+                  En route {nbIsRecu !== undefined && nbIsRecu > 0 && <span className="text-red-600 dark:text-red-400">({nbIsRecu})</span>}
                 </button>
               )}
             </div>
