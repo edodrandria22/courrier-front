@@ -41,6 +41,7 @@ export const CourrierValidationForm = ({ onSuccess, courrierValidation, onCancel
 
   const [formData, setFormData] = useState({
     object: courrierValidation?.object || '',
+    pays: courrierValidation?.pays || '',
     ville: courrierValidation?.ville || '',
     dateDebut: formatDateForInput(courrierValidation?.dateDebut),
     dateFin: formatDateForInput(courrierValidation?.dateFin),
@@ -176,6 +177,7 @@ export const CourrierValidationForm = ({ onSuccess, courrierValidation, onCancel
 
       const courrierData: CourrierValidation = {
         object: formData.object || '',
+        pays: formData.pays || '',
         ville: formData.ville || '',
         dateDebut: formData.dateDebut || '',
         dateFin: formData.dateFin || '',
@@ -263,7 +265,18 @@ export const CourrierValidationForm = ({ onSuccess, courrierValidation, onCancel
               disabled={isFieldDisabled}
             />
           </div>
-
+          <div className="space-y-2">
+            <label className="text-sm font-semibold text-foreground">Pays de séjour</label>
+            <Input
+              name="pays"
+              type="text"
+              value={formData.pays}
+              onChange={handleInputChange}
+              placeholder="Pays de séjour"
+              className="resize-none bg-background/50 border-border disabled:opacity-50"
+              disabled={isFieldDisabled}
+            />
+          </div>
           <div className="space-y-2">
             <label className="text-sm font-semibold text-foreground">Ville de séjour</label>
             <Input

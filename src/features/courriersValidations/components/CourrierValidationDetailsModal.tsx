@@ -88,6 +88,7 @@ export const CourrierValidationDetailsModal: React.FC<CourrierValidationDetailsM
               <h4 className="font-semibold text-primary mb-3 uppercase tracking-wider text-xs">Informations Générales</h4>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
                 <div><span className="text-muted-foreground block text-xs">Objet</span> <span className="font-medium">{courrier.object}</span></div>
+                <div><span className="text-muted-foreground block text-xs">Pays</span> <span className="font-medium">{courrier.pays}</span></div>
                 <div><span className="text-muted-foreground block text-xs">Ville</span> <span className="font-medium">{courrier.ville}</span></div>
                 <div><span className="text-muted-foreground block text-xs">Période</span> <span className="font-medium">{formatDate(courrier.dateDebut)} - {formatDate(courrier.dateFin)}</span></div>
                 <div><span className="text-muted-foreground block text-xs">N° Départ</span> <span className="font-medium">{courrier.numeroDepart ? String(courrier.numeroDepart) : "-"}</span></div>

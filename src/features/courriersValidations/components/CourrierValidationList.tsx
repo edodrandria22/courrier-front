@@ -81,10 +81,8 @@ export const CourrierValidationList: React.FC<CourrierValidationListProps> = ({
                                     <th className="px-6 py-4 font-bold text-foreground uppercase tracking-widest text-[10px]">Demandeur</th>
                                 )}
                                 <th className="px-6 py-4 font-bold text-foreground uppercase tracking-widest text-[10px]">Objet</th>
-                                <th className="px-6 py-4 font-bold text-foreground uppercase tracking-widest text-[10px]">Ville</th>
-                                <th className="px-6 py-4 font-bold text-foreground uppercase tracking-widest text-[10px]">Date Début</th>
-                                <th className="px-6 py-4 font-bold text-foreground uppercase tracking-widest text-[10px]">Date Fin</th>
-                                <th className="px-6 py-4 font-bold text-foreground uppercase tracking-widest text-[10px]">Date création</th>
+                                <th className="px-6 py-4 font-bold text-foreground uppercase tracking-widest text-[10px]">Pays</th>
+                                <th className="px-6 py-4 font-bold text-foreground uppercase tracking-widest text-[10px]">Date de départ</th>
                                 <th className="px-6 py-4 font-bold text-foreground uppercase tracking-widest text-[10px]">Statut</th>
                                 <th className="px-6 py-4 font-bold text-foreground uppercase tracking-widest text-[10px] text-right">Actions</th>
                             </tr>
@@ -170,17 +168,20 @@ export const CourrierValidationList: React.FC<CourrierValidationListProps> = ({
                                             </TooltipProvider>
                                         </td>
                                         <td className="px-6 py-4 text-muted-foreground font-medium">
-                                            {courrier.ville}
+                                            {courrier.pays}
                                         </td>
+                                        {/* <td className="px-6 py-4 text-muted-foreground font-medium">
+                                            {courrier.ville}
+                                        </td> */}
                                         <td className="px-6 py-4 text-muted-foreground font-medium">
                                             {formatDate(courrier.dateDebut)}
                                         </td>
-                                        <td className="px-6 py-4 text-muted-foreground font-medium">
+                                        {/* <td className="px-6 py-4 text-muted-foreground font-medium">
                                             {formatDate(courrier.dateFin)}
-                                        </td>
-                                        <td className="px-6 py-4 text-muted-foreground font-medium">
+                                        </td> */}
+                                        {/* <td className="px-6 py-4 text-muted-foreground font-medium">
                                             {formatDate(courrier.createdAt || new Date().toDateString())}
-                                        </td>
+                                        </td> */}
                                         <td className="px-6 py-4">
                                             {getStatutBadge(courrier)}
                                         </td>

@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { 
   Inbox, AlertCircle, Clock, CheckCircle2, Archive, Search, X, 
   User, Hash, FileText, Eye, MoreVertical, Lock, 
@@ -17,6 +17,7 @@ import { cn } from '@/lib/utils'
 import { Courrier } from '../../types/courrier'
 import { formatDateTime } from '@/hooks/utils'
 import { generateCourrierPDF } from '../../utils/generateCourrierPDF'
+import { toast } from 'sonner'
 import {
   Tooltip,
   TooltipContent,
@@ -63,6 +64,31 @@ export const CourrierListView = ({ courriers, loading, error, onSelect,  onEdit,
   const [searchField, setSearchField] = useState<SearchField>('nom')
 
   const activeField = SEARCH_FIELDS.find(f => f.value === searchField)!
+
+  // Notification pour nbNonTraite et nbIsRecu
+  useEffect(() => {
+    if (nbNonTraite !== undefined && nbNonTraite > 0) {
+      toast.error(`${nbNonTraite} courrier(s) non traité(s)`, {
+        duration: Infinity,
+        action: {
+          label: 'Fermer',
+          onClick: () => toast.dismiss(),
+        },
+      })
+    }
+  }, [nbNonTraite])
+
+  useEffect(() => {
+    if (nbIsRecu !== undefined && nbIsRecu > 0) {
+      toast.error(`${nbIsRecu} courrier(s) en route`, {
+        duration: Infinity,
+        action: {
+          label: 'Fermer',
+          onClick: () => toast.dismiss(),
+        },
+      })
+    }
+  }, [nbIsRecu])
   
   const filtered = query.trim()
   ? courriers.filter((c) => {

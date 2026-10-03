@@ -39,7 +39,7 @@ export const courrierValidationService = {
     ): Promise<CourrierValidation> => {
         try {
             const fetchWithAuth = useFetchAuth();
-            const REQUIRED_FIELDS = ['object', 'dateDebut', 'dateFin', 'ville'] as const;
+            const REQUIRED_FIELDS = ['object', 'dateDebut', 'dateFin', 'ville','pays'] as const;
             const OPTIONAL_FIELDS = ['observation', 'numeroDepart'] as const;
 
             const formData = new FormData();
@@ -81,7 +81,7 @@ export const courrierValidationService = {
     ): Promise<CourrierValidation> => {
         try {
             const fetchWithAuth = useFetchAuth();
-            const REQUIRED_FIELDS = ['object', 'dateDebut', 'dateFin', 'ville'] as const;
+            const REQUIRED_FIELDS = ['object', 'dateDebut', 'dateFin', 'ville','pays'] as const;
             const OPTIONAL_FIELDS = ['observation', 'numeroDepart'] as const;
 
             const formData = new FormData();

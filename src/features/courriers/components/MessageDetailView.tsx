@@ -184,11 +184,11 @@ export const MessageDetailView = ({ courrier, message, messages, currentUserId, 
               </Avatar>
               <div className="min-w-0">
                 <p className="text-xs font-bold text-foreground">{message.expediteur?.nom}</p>
-                {message.expediteur?.adresse && (
+                {/* {message.expediteur?.adresse && (
                   <p className="text-[10px] text-muted-foreground/70 flex items-center gap-1 truncate">
                     <MapPin className="w-2.5 h-2.5 shrink-0" /> {message.expediteur?.adresse}
                   </p>
-                )}
+                )} */}
               </div>
             </div>
 
@@ -197,11 +197,11 @@ export const MessageDetailView = ({ courrier, message, messages, currentUserId, 
             <div className={cn('flex items-center gap-2 flex-1 min-w-0 justify-end', message.dateValidation ? 'text-emerald-400' : 'text-primary')}>
               <div className="min-w-0 text-right">
                 <p className="text-xs font-bold">{message.destinataire.nom}</p>
-                {message.destinataire.adresse && (
+                {/* {message.destinataire.adresse && (
                   <p className="text-[10px] text-muted-foreground/70 flex items-center gap-1 justify-end truncate">
                     <MapPin className="w-2.5 h-2.5 shrink-0" /> {message.destinataire.adresse}
                   </p>
-                )}
+                )} */}
               </div>
               <Avatar className="h-9 w-9 border border-current/20 shrink-0">
                 <AvatarFallback className={cn('text-xs font-bold bg-current/10')}>

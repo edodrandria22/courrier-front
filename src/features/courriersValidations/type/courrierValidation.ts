@@ -3,6 +3,7 @@ import { DetailPersonne, PieceJointe } from "@/features/courriers/types/courrier
 export interface CourrierValidation {
   id?: number;
   object: string;
+  pays:string;
   ville:string;
   dateDebut:string;
   dateFin:string;
