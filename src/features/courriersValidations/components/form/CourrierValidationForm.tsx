@@ -239,7 +239,7 @@ export const CourrierValidationForm = ({ onSuccess, courrierValidation, onCancel
           
  
             <div className="space-y-2">
-              <label className="text-sm font-semibold text-foreground">Numero d'arrivée</label>
+              <label className="text-sm font-semibold text-foreground">Numero de départ (Optionnel)</label>
               <Input
                 type="number"
                 name="numeroDepart"
@@ -277,7 +277,7 @@ export const CourrierValidationForm = ({ onSuccess, courrierValidation, onCancel
             />
           </div>
           <div className="space-y-2">
-            <label className="text-sm font-semibold text-foreground">Date de debut</label>
+            <label className="text-sm font-semibold text-foreground">Date de départ</label>
             <Input
               name="dateDebut"
               value={formData.dateDebut}
@@ -290,7 +290,7 @@ export const CourrierValidationForm = ({ onSuccess, courrierValidation, onCancel
             />
           </div>
           <div className="space-y-2">
-            <label className="text-sm font-semibold text-foreground">Date fin</label>
+            <label className="text-sm font-semibold text-foreground">Date de retour</label>
             <Input
               name="dateFin"
               value={formData.dateFin}
