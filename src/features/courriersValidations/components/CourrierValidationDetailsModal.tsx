@@ -107,7 +107,7 @@ export const CourrierValidationDetailsModal: React.FC<CourrierValidationDetailsM
                 )}
                 {courrier.observationSuperviseur && (
                   <div className="col-span-1 md:col-span-2 bg-amber-500/10 p-3 rounded border border-amber-500/30 dark:bg-amber-900/20 dark:border-amber-700/30">
-                    <span className="text-muted-foreground block text-xs mb-1 text-amber-700 dark:text-amber-400 font-semibold">Observation secrétaire général</span>
+                    <span className="text-muted-foreground block text-xs mb-1 text-amber-700 dark:text-amber-400 font-semibold">Observation</span>
                     <p className="font-medium text-amber-800 dark:text-amber-300">{courrier.observationSuperviseur}</p>
                   </div>
                 )}
