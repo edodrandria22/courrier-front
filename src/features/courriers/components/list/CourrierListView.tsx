@@ -70,31 +70,31 @@ export const CourrierListView = ({ courriers, loading, error, onSelect,  onEdit,
   const lastNbIsRecu = useRef<number | undefined>(undefined)
 
   // Notification pour nbNonTraite et nbIsRecu
-  useEffect(() => {
-    if (nbNonTraite !== undefined && nbNonTraite > 0 && nbNonTraite !== lastNbNonTraite.current) {
-      toast.error(`${nbNonTraite} courrier(s) non traité(s)`, {
-        duration: Infinity,
-        action: {
-          label: 'Fermer',
-          onClick: () => toast.dismiss(),
-        },
-      })
-      lastNbNonTraite.current = nbNonTraite
-    }
-  }, [nbNonTraite])
+  // useEffect(() => {
+  //   if (nbNonTraite !== undefined && nbNonTraite > 0 && nbNonTraite !== lastNbNonTraite.current) {
+  //     toast.error(`${nbNonTraite} courrier(s) non traité(s)`, {
+  //       duration: Infinity,
+  //       action: {
+  //         label: 'Fermer',
+  //         onClick: () => toast.dismiss(),
+  //       },
+  //     })
+  //     lastNbNonTraite.current = nbNonTraite
+  //   }
+  // }, [nbNonTraite])
 
-  useEffect(() => {
-    if (nbIsRecu !== undefined && nbIsRecu > 0 && nbIsRecu !== lastNbIsRecu.current) {
-      toast.error(`${nbIsRecu} courrier(s) en route`, {
-        duration: Infinity,
-        action: {
-          label: 'Fermer',
-          onClick: () => toast.dismiss(),
-        },
-      })
-      lastNbIsRecu.current = nbIsRecu
-    }
-  }, [nbIsRecu])
+  // useEffect(() => {
+  //   if (nbIsRecu !== undefined && nbIsRecu > 0 && nbIsRecu !== lastNbIsRecu.current) {
+  //     toast.error(`${nbIsRecu} courrier(s) en route`, {
+  //       duration: Infinity,
+  //       action: {
+  //         label: 'Fermer',
+  //         onClick: () => toast.dismiss(),
+  //       },
+  //     })
+  //     lastNbIsRecu.current = nbIsRecu
+  //   }
+  // }, [nbIsRecu])
   
   const filtered = query.trim()
   ? courriers.filter((c) => {
