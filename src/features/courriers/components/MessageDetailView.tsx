@@ -17,6 +17,7 @@ import { useMessages } from '@/features/messages/hooks/useMessages'
 import { useEffect, useRef, useState } from 'react'
 import { toast } from 'sonner'
 import { useRouter } from 'next/navigation'
+import { ConfirmDialog } from '@/features/common/components/ui/ConfirmDialog'
 interface Props {
   courrier: Courrier
   message: MessageCourrier
@@ -47,6 +48,8 @@ export const MessageDetailView = ({ courrier, message, messages, currentUserId, 
   const isConfidentiel = courrier.isConfidentiel; // Vérification de la confidentialité
   const router = useRouter();
   const isValidExterne = message.destinataire.id === 2 && isLastMessage(message);
+  const [userToDelete, setUserToDelete] = useState<String | null>(null);
+
   // const handleMarkAsUnread = async () => {
   //   const result = await marquerNonLu(message.id);
   //   if (result.success) {
@@ -282,7 +285,7 @@ export const MessageDetailView = ({ courrier, message, messages, currentUserId, 
               <Button
                 variant="outline"
                 size="sm"
-                onClick={cloturer}
+                onClick={() => setUserToDelete("String")}
                 disabled={loadingCloturer}
                 className="text-xs border-amber-500/30 text-amber-600 hover:bg-amber-500/10 gap-1.5"
               >
@@ -298,6 +301,20 @@ export const MessageDetailView = ({ courrier, message, messages, currentUserId, 
                   </>
                 )}
               </Button>
+              <ConfirmDialog
+                  open={!!userToDelete}
+                  title="Cloturation du courrier"
+                  description={
+                    userToDelete
+                    ? "Êtes-vous sûre de clôturer ?"
+                    : ""
+                  }
+                  confirmLabel="Oui"
+                  cancelLabel="Non"
+                  isLoading={loadingCloturer}
+                  onConfirm={cloturer}
+                  onCancel={() => setUserToDelete(null)}
+                />
             </>
           )}
         </div>

@@ -25,6 +25,7 @@ import { TransfererDialog } from '@/features/messages/components/TransfererDialo
 import { useRouter } from 'next/navigation'
 import { toast } from 'sonner'
 import { User } from '@/features/auth/types/login'
+import { ConfirmDialog } from '@/features/common/components/ui/ConfirmDialog'
 // ... (dans votre composant)
 interface Props {
   courrier: Courrier
@@ -52,6 +53,7 @@ export const MessageListView = ({ courrier, messages, loading, error, currentUse
   // }
   // console.log(courrier)
   const isButtonLu = isLastRecipient && !courrier.isReadAt;
+  const [userToDelete, setUserToDelete] = useState<String | null>(null);
 
   const statusLu = courrier.isReadAt ? 'arrivée' : 'non arrivée'
   const status = courrier.cloturePar ? 'finalise' : statusLu;
@@ -182,7 +184,7 @@ export const MessageListView = ({ courrier, messages, loading, error, currentUse
             <Button
                             variant="outline"
                             size="sm"
-                            onClick={cloturer}
+                            onClick={() => setUserToDelete("String")}
                             disabled={loadingCloturer}
                             className="text-xs border-amber-500/30 text-amber-600 hover:bg-amber-500/10 gap-1.5"
                           >
@@ -199,6 +201,7 @@ export const MessageListView = ({ courrier, messages, loading, error, currentUse
                             )}
             </Button>
           </div>
+          
         )}
       </div>
 
@@ -827,6 +830,20 @@ export const MessageListView = ({ courrier, messages, loading, error, currentUse
           </div>
         )}
       </div>
+      <ConfirmDialog
+                open={!!userToDelete}
+                title="Cloturation du courrier"
+                description={
+                  userToDelete
+                  ? "Êtes-vous sûre de clôturer ?"
+                  : ""
+                }
+                confirmLabel="Oui"
+                cancelLabel="Non"
+                isLoading={loadingCloturer}
+                onConfirm={cloturer}
+                onCancel={() => setUserToDelete(null)}
+            />
     </div>
   )
 }
