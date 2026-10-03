@@ -52,10 +52,10 @@ export const CourrierValidationList: React.FC<CourrierValidationListProps> = ({
             <div className="flex items-center justify-between">
                 <div>
                     <h2 className="text-xl font-bold text-foreground">
-                        Demande d'ordre de mission
+                        Demande d'ordre de mission et/ou note de présentation
                     </h2>
                     <p className="text-sm text-muted-foreground mt-1">
-                        Liste des demandes d'ordre de mission.
+                        Liste des demandes d'ordre de mission et/ou note de présentation.
                     </p>
                 </div>
                 {onAddCourrier && (
