@@ -218,7 +218,7 @@ export const CourrierValidationForm = ({ onSuccess, courrierValidation, onCancel
           <div>
             {courrierValidation ? (
               <h2 className="text-lg font-bold text-foreground">
-                Modifier la demande
+                Corriger la demande
               </h2>
             ) : (
               <>
@@ -639,7 +639,7 @@ export const CourrierValidationForm = ({ onSuccess, courrierValidation, onCancel
               transition: 'all 0.2s'
             }}
           >
-            {loading ? 'Traitement...' : <span className="flex items-center gap-2"><Send className="w-4 h-4" /> {courrierValidation ? 'Enregistrer la modification' : 'Créer le demande'}</span>}
+            {loading ? 'Traitement...' : <span className="flex items-center gap-2"><Send className="w-4 h-4" /> {courrierValidation ? 'Corriger' : 'Créer le demande'}</span>}
           </button>
         </div>
       </form>
