@@ -77,7 +77,7 @@ export const UserAdminForm: React.FC<UserAdminFormProps> = ({ setUsers, users, o
         const payload = {
             ...data,
             idRole: Number(data.idRole),
-            idEmployeur: data.idEmployeur || null,
+            idEmployeur: Number(data.idEmployeur) || null,
         };
 
         try {

@@ -76,7 +76,7 @@ export const utilisateurService = {
                 adresse: data.adresse,
                 idRole: Number(data.idRole),
                 sigle: data.sigle,
-                idEmployeur: data.idEmployeur || null,
+                idEmployeur: Number(data.idEmployeur) || null,
             };
 
             if (data.mdp && data.mdp.trim() !== "") {
