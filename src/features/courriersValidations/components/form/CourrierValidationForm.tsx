@@ -218,7 +218,7 @@ export const CourrierValidationForm = ({ onSuccess, courrierValidation, onCancel
           <div>
             {courrierValidation ? (
               <h2 className="text-lg font-bold text-foreground">
-                Modifier la demande {courrierValidation?.id}
+                Modifier la demande
               </h2>
             ) : (
               <>
