@@ -47,14 +47,23 @@ export const PieceJointeCard = ({ pj, isCourrierValidation }: { pj: PieceJointe;
   }
 
   const inline = isInlineType(pj.type)
+  const getTypeLabel = (type:String) => {
+    const labels = {
+      planVol: "Plan de vol",
+      lettreInvitation: "Lettre d'invitation",
+      demande: "Demande",
+    };
 
+    return labels[type as keyof typeof labels] || type || "";
+  };
   return (
     <div className="flex items-center justify-between p-3 bg-muted/20 border border-border rounded-xl group hover:border-primary/30 transition-colors">
       <div className="flex items-center gap-3 min-w-0">
         <FileText className="w-4 h-4 text-primary shrink-0" />
         <div className="min-w-0">
           <p className="text-xs font-medium text-foreground/80 truncate">{pj.nom}</p>
-          <p className="text-[10px] text-muted-foreground/70">{pj.type}</p>
+          {/* <p className="text-[10px] text-muted-foreground/70">{pj.type}</p> */}
+          {pj.typeFichier&&(<p className="text-[10px] text-muted-foreground/70">{getTypeLabel(pj.typeFichier)}</p>)}
         </div>
       </div>
       <div className="flex gap-1 shrink-0">

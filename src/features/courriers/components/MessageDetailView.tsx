@@ -177,11 +177,11 @@ export const MessageDetailView = ({ courrier, message, messages, currentUserId, 
           </label>
           <div className="flex flex-col sm:flex-row items-center gap-3 p-4 bg-muted/20 border border-border rounded-xl">
             <div className="flex items-center gap-2 flex-1 min-w-0">
-              <Avatar className="h-9 w-9 border border-border shrink-0">
+              {/* <Avatar className="h-9 w-9 border border-border shrink-0">
                 <AvatarFallback className="bg-muted/30 text-primary text-xs font-bold">
                   {initials(message.expediteur?.nom || '')}
                 </AvatarFallback>
-              </Avatar>
+              </Avatar> */}
               <div className="min-w-0">
                 <p className="text-xs font-bold text-foreground">{message.expediteur?.nom}</p>
                 {/* {message.expediteur?.adresse && (
@@ -203,11 +203,11 @@ export const MessageDetailView = ({ courrier, message, messages, currentUserId, 
                   </p>
                 )} */}
               </div>
-              <Avatar className="h-9 w-9 border border-current/20 shrink-0">
+              {/* <Avatar className="h-9 w-9 border border-current/20 shrink-0">
                 <AvatarFallback className={cn('text-xs font-bold bg-current/10')}>
                   {initials(message.destinataire.nom)}
                 </AvatarFallback>
-              </Avatar>
+              </Avatar> */}
             </div>
           </div>
         </div>
