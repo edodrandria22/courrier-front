@@ -49,7 +49,7 @@ export default function Sidebar({ user, onNavigate }: SidebarProps) {
     send: { id: 'send', name: "Boîte d'envoi", icon: Send, path: '/message/courrier/send' },
     courrierValidation: { id: 'new-courrier-validation', name: 'Nouvelle demande', icon: ClipboardEdit, path: '/message/courriersValidations' },
     utilisateurs: { id: 'utilisateurs', name: 'Utilisateurs', icon: UserIcon, path: '/message/utilisateurs' },
-    demandeOm: { id: 'demandeOm', name: 'DemandeOm', icon: ClipboardEdit, path: '/message/demandeOm' },
+    demandeOm: { id: 'demandeOm', name: 'Demande', icon: ClipboardEdit, path: '/message/demandeOm' },
     recherche: { id: 'recherche', name: 'Recherche', icon: ClipboardEdit, path: '/message/courrier/recherche' },
   } satisfies Record<string, MenuItem>;
 
