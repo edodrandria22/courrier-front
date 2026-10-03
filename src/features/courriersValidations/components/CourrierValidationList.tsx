@@ -203,7 +203,7 @@ export const CourrierValidationList: React.FC<CourrierValidationListProps> = ({
                                                         className="text-xs font-medium text-slate-600 hover:text-blue-600 hover:bg-blue-50 border border-slate-200 hover:border-blue-200 rounded px-2.5 py-1 transition-colors"
                                                         title="Modifier le courrier"
                                                     >
-                                                        Modifier
+                                                        Corriger
                                                     </button>
                                                 )}
                                             </div>
