@@ -661,10 +661,11 @@ export const MessageListView = ({ courrier, messages, loading, error, currentUse
                         <th className="px-4 py-3 font-medium">Expéditeur</th>
                         <th className="px-4 py-3 font-medium">Destinataire</th>
                         <th className="px-4 py-3 font-medium">Statut</th>
+                        <th className="px-4 py-3 font-medium">Nombre PJ</th>
+                        <th className="px-4 py-3 font-medium">Date</th>
                         <th className="px-4 py-3 font-medium max-w-[250px]">Bordereau d'envoi</th>
                         <th className="px-4 py-3 font-medium">Numero depart</th>
                         <th className="px-4 py-3 font-medium">Numero arrivée</th>
-                        <th className="px-4 py-3 font-medium">Date</th>
                         <th className="px-4 py-3 font-medium w-10"></th>
                       </tr>
                     </thead>
@@ -757,7 +758,13 @@ export const MessageListView = ({ courrier, messages, loading, error, currentUse
                                 </Badge>
                               )}
                             </td>
-
+                            <td className="px-4 py-3 whitespace-nowrap">
+                              {message.fichiers.length}
+                            </td>
+                            {/* 6. Date */}
+                            <td className="px-4 py-3 whitespace-nowrap text-xs text-muted-foreground tabular-nums">
+                              {formatDateTime(message.createdAt)}
+                            </td>
                             {/* 5. Observation / Commentaire */}
                             <td className="px-4 py-3 max-w-[200px] sm:max-w-[250px] truncate">
                                 <span className={cn('text-sm truncate block', !isRead ? 'text-foreground/90 font-medium' : 'text-muted-foreground')}>
@@ -769,11 +776,6 @@ export const MessageListView = ({ courrier, messages, loading, error, currentUse
                             </td>
                             <td className="px-4 py-3 whitespace-nowrap">
                               {message.numeroDestinataire}
-                            </td>
-
-                            {/* 6. Date */}
-                            <td className="px-4 py-3 whitespace-nowrap text-xs text-muted-foreground tabular-nums">
-                              {formatDateTime(message.createdAt)}
                             </td>
 
                             {/* 7. Action */}
