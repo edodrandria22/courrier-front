@@ -293,7 +293,7 @@ export const TransfererDialog = ({ messageId, onSuccess }: Props) => {
           {/* Fichiers */}
           <div className="space-y-3">
             <label className="text-sm font-semibold text-foreground">
-              Documents <span className="text-muted-foreground font-normal">(optionnel)</span>
+              Pièces jointes <span className="text-muted-foreground font-normal">(optionnel)</span>
             </label>
             <div
               onClick={() => !transferring && fileInputRef.current?.click()}
