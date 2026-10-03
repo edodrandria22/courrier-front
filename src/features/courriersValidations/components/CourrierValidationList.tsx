@@ -190,24 +190,20 @@ export const CourrierValidationList: React.FC<CourrierValidationListProps> = ({
                                             <div className="flex items-center justify-end gap-1">
                                                 {/* NOUVEAU BOUTON: Voir les détails */}
                                                 <button
-                                                onClick={() => setCourrierToView(courrier)}
-                                                className="text-slate-400 hover:text-emerald-600 transition-colors p-1"
-                                                title="Voir les détails"
+                                                    onClick={() => setCourrierToView(courrier)}
+                                                    className="text-xs font-medium text-slate-600 hover:text-emerald-600 hover:bg-emerald-50 border border-slate-200 hover:border-emerald-200 rounded px-2.5 py-1 transition-colors"
+                                                    title="Voir les détails"
                                                 >
-                                                <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
-                                                </svg>
+                                                    Voir
                                                 </button>
+
                                                 {onEditCourrier && courrier.dateValidation === null && (
                                                     <button
                                                         onClick={() => onEditCourrier(courrier)}
-                                                        className="text-slate-400 hover:text-blue-600 transition-colors p-1"
+                                                        className="text-xs font-medium text-slate-600 hover:text-blue-600 hover:bg-blue-50 border border-slate-200 hover:border-blue-200 rounded px-2.5 py-1 transition-colors"
                                                         title="Modifier le courrier"
                                                     >
-                                                        <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
-                                                        </svg>
+                                                        Modifier
                                                     </button>
                                                 )}
                                             </div>
