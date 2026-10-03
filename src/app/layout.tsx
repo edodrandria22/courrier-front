@@ -30,7 +30,7 @@ export const viewport: Viewport = {
 }
 
 export const metadata: Metadata = {
-  title: 'Gestion de courrier Mesupres',
+  title: 'e-Courrier MESUPRES',
   description: 'Plateforme de gestion de courrier sécurisée avec envoi de pièces jointes, dossiers personnalisés et notifications temps réel.',
   generator: 'edodrandria',
   // icons: {
