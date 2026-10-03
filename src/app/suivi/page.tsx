@@ -89,7 +89,7 @@ export default function TrackingPage() {
                 <Hash className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground/30 group-focus-within:text-primary group-focus-within:rotate-12 transition-all duration-300 pointer-events-none" />
                 <Input
                   id="reference"
-                  placeholder="Référence du courrier"
+                  placeholder="Entrer ici la référence du courrier"
                   value={reference}
                   onChange={(e) => setReference(e.target.value)}
                   disabled={loading || isSuccess}

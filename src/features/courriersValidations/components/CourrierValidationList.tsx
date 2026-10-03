@@ -42,7 +42,7 @@ export const CourrierValidationList: React.FC<CourrierValidationListProps> = ({
             return <span className="px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider bg-secondary/10 text-secondary border border-secondary/20 dark:bg-secondary/20 dark:border-secondary/30">Validé</span>;
         }
         if (courrier.observationSuperviseur) {
-            return <span className="px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider bg-muted text-muted-foreground border border-border whitespace-nowrap">En attente</span>;
+            return <span className="px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider bg-muted text-muted-foreground border border-border whitespace-nowrap">Refusé</span>;
         }
         return <span className="px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider bg-primary/10 text-primary border border-primary/20 dark:bg-primary/20 dark:border-primary/30">Nouveau</span>;
     };
