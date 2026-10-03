@@ -230,7 +230,7 @@ export const CourrierValidationDetailsModal: React.FC<CourrierValidationDetailsM
             </button>
 
             {/* Boutons réservés au superviseur */}
-            {isSupervisor && (
+            {isSupervisor && courrier.dateValidation === null && (
               <div className="flex items-center gap-2">
                 <button
                   type="button"
