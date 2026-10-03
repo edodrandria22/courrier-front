@@ -45,12 +45,13 @@ interface Props {
   isRerchercheReferenceUnique?: boolean,
 }
 
-type SearchField = 'nom' | 'reference' | 'description'
+type SearchField = 'nom' | 'reference' | 'description' | 'matricule';
 
 const SEARCH_FIELDS: { value: SearchField; label: string; icon: React.ElementType; placeholder: string }[] = [
   { value: 'description', label: 'Contenu',   icon: FileText, placeholder: 'Rechercher dans l\'objet ou description...' },
   { value: 'reference',   label: 'Référence', icon: Hash,     placeholder: 'Entrer le référence' },
   { value: 'nom',         label: 'Nom',       icon: User,     placeholder: 'Rechercher par nom ou prénom...' },
+  { value: 'matricule',         label: 'Matricule',       icon: User,     placeholder: 'Rechercher par matricule...' },
 ]
 
 const STATUT_CONFIG: Record<string, { label: string; icon: React.ElementType; className: string }> = {
@@ -66,8 +67,8 @@ export const CourrierListView = ({ courriers, loading, error, onSelect,  onEdit,
   const activeField = SEARCH_FIELDS.find(f => f.value === searchField)!
 
   // Refs pour éviter les notifications en double
-  const lastNbNonTraite = useRef<number | undefined>(undefined)
-  const lastNbIsRecu = useRef<number | undefined>(undefined)
+  // const lastNbNonTraite = useRef<number | undefined>(undefined)
+  // const lastNbIsRecu = useRef<number | undefined>(undefined)
 
   // Notification pour nbNonTraite et nbIsRecu
   // useEffect(() => {
@@ -111,6 +112,16 @@ export const CourrierListView = ({ courriers, loading, error, onSelect,  onEdit,
           return nomComplet.includes(q);
         });
       }
+      if (searchField === 'matricule') {
+        // On vérifie si au moins une personne dans le tableau correspond à la recherche
+        return c.detailPersonnes?.some((personne) => {
+          const matricule = personne.matricule || '';
+         
+          const nomComplet = `${matricule}`.toLowerCase();
+          
+          return nomComplet.includes(q);
+        });
+      }
 
       if (searchField === 'reference') {
         return (c.reference || '').toLowerCase().includes(q);
@@ -122,6 +133,7 @@ export const CourrierListView = ({ courriers, loading, error, onSelect,  onEdit,
           (c.object || '').toLowerCase().includes(q)
         );
       }
+      
 
       return false;
     })
