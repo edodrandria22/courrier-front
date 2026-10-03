@@ -89,8 +89,8 @@ export const CourrierValidationDetailsModal: React.FC<CourrierValidationDetailsM
               <h4 className="font-semibold text-primary mb-3 uppercase tracking-wider text-xs">Informations Générales</h4>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
                 <div><span className="text-muted-foreground block text-xs">Objet</span> <span className="font-medium">{courrier.object}</span></div>
-                <div><span className="text-muted-foreground block text-xs">Pays</span> <span className="font-medium">{courrier.pays}</span></div>
-                <div><span className="text-muted-foreground block text-xs">Ville</span> <span className="font-medium">{courrier.ville}</span></div>
+                <div><span className="text-muted-foreground block text-xs">Pays de séjour</span> <span className="font-medium">{courrier.pays}</span></div>
+                <div><span className="text-muted-foreground block text-xs">Ville de séjour</span> <span className="font-medium">{courrier.ville}</span></div>
                 <div><span className="text-muted-foreground block text-xs">Période</span> <span className="font-medium">{formatDate(courrier.dateDebut)} - {formatDate(courrier.dateFin)}</span></div>
                 <div><span className="text-muted-foreground block text-xs">N° Départ</span> <span className="font-medium">{courrier.numeroDepart ? String(courrier.numeroDepart) : "-"}</span></div>
                 
@@ -107,7 +107,7 @@ export const CourrierValidationDetailsModal: React.FC<CourrierValidationDetailsM
                 )}
                 {courrier.observationSuperviseur && (
                   <div className="col-span-1 md:col-span-2 bg-amber-500/10 p-3 rounded border border-amber-500/30 dark:bg-amber-900/20 dark:border-amber-700/30">
-                    <span className="text-muted-foreground block text-xs mb-1 text-amber-700 dark:text-amber-400 font-semibold">Observation</span>
+                    <span className="text-muted-foreground block text-xs mb-1 text-amber-700 dark:text-amber-400 font-semibold">Remarque</span>
                     <p className="font-medium text-amber-800 dark:text-amber-300">{courrier.observationSuperviseur}</p>
                   </div>
                 )}
