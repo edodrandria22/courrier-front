@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import { PieceJointeCard } from "@/features/courriers/components/PieceJointeCard";
 import { CourrierValidation } from "../type/courrierValidation";
 import { ConfirmDialog } from "@/features/common/components/ui/ConfirmDialog";
+import { Building, Hash, Mail, Phone, UserIcon } from "lucide-react";
 interface CourrierValidationDetailsModalProps {
   courrier: CourrierValidation;
   onClose: () => void;
@@ -114,56 +115,88 @@ export const CourrierValidationDetailsModal: React.FC<CourrierValidationDetailsM
             </div>
 
             {/* Personnes associées */}
-            <div>
-              <h4 className="font-semibold border-b pb-2 mb-3 text-sm">Personnes associées</h4>
-              {courrier.detailPersonnes && courrier.detailPersonnes.length > 0 ? (
-                <div className="grid gap-3">
-                  {courrier.detailPersonnes.map((personne, idx) => (
-                    <div key={idx} className="p-3 bg-muted/50 border border-border rounded-md text-sm">
-                      <div className="font-semibold text-foreground flex items-center gap-2 mb-2">
-                        <div className="h-6 w-6 rounded-full bg-primary/10 text-primary flex items-center justify-center text-xs">
-                          {personne.name?.charAt(0) || personne.prenom?.charAt(0) || "U"}
-                        </div>
-                        <span>{personne.name} {personne.prenom || ""}</span>
-                      </div>
+            <div className="space-y-2">
+              <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
+                Informations Demandeur{courrier.detailPersonnes && courrier.detailPersonnes.length > 1 ? 's' : ''}
+              </h3>
 
-                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-2 text-xs pl-8">
-                        {personne.email && (
-                          <div>
-                            <span className="text-muted-foreground block text-[10px] uppercase">Email</span>
-                            <span className="font-medium text-foreground">{personne.email}</span>
-                          </div>
+              {/* On vérifie si la liste existe et contient des éléments */}
+              {courrier.detailPersonnes && courrier.detailPersonnes.length > 0 ? (
+                <div className="space-y-3"> {/* Conteneur pour espacer chaque bloc personne */}
+                  {courrier.detailPersonnes.map((personne, index) => (
+                    <div 
+                      key={index} 
+                      className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs border rounded-md p-3 bg-background relative"
+                    >
+                      {/* Petit badge optionnel pour numéroter s'il y a plusieurs personnes */}
+                      {courrier.detailPersonnes.length > 1 && (
+                        <span className="absolute top-2 right-2 text-[10px] bg-muted px-1.5 py-0.5 rounded text-muted-foreground font-medium">
+                          #{index + 1}
+                        </span>
+                      )}
+                      {/* Nom & Prénom */}
+                      {personne.entite && (
+                        <p className="flex items-center gap-2 text-foreground sm:col-span-2">
+                          <Hash className="w-3.5 h-3.5 text-muted-foreground shrink-0" />
+                          <span className="font-medium">Entité :</span> 
+                          <span className="text-foreground">{personne.entite}</span>
+                        </p>
+                      )}
+
+                      {/* Nom & Prénom */}
+                      <p className="flex items-center gap-2 text-foreground sm:col-span-2 border-t pt-2">
+                        <UserIcon className="w-3.5 h-3.5 text-muted-foreground shrink-0" />
+                        <span className="font-medium">Nom :</span> {personne.name || "—"} {personne.prenom || ""}
+                      </p>
+                      {/* Matricule (Affiché uniquement s'il existe) */}
+                      {personne.matricule && (
+                        <p className="flex items-center gap-2 text-foreground sm:col-span-2 border-t pt-2">
+                          <Hash className="w-3.5 h-3.5 text-muted-foreground shrink-0" />
+                          <span className="font-medium">Matricule :</span> 
+                          <span className="text-foreground">{personne.matricule}</span>
+                        </p>
+                      )}
+
+                      {/* Employeur (Affiché uniquement s'il existe) */}
+                      {personne.employeur && (
+                        <p className="flex items-center gap-2 text-foreground sm:col-span-2 border-t pt-2">
+                          <Building className="w-3.5 h-3.5 text-muted-foreground shrink-0" />
+                          <span className="font-medium">Employeur :</span> 
+                          <span className="text-foreground">{personne.employeur}</span>
+                        </p>
+                      )}
+
+                      {/* Email */}
+                      <p className="flex items-center gap-2 text-foreground sm:col-span-2 border-t pt-2 mt-1">
+                        <Mail className="w-3.5 h-3.5 text-muted-foreground shrink-0" />
+                        <span className="font-medium">Email :</span> 
+                        {personne.email ? (
+                          <a href={`mailto:${personne.email}`} className="text-primary hover:underline break-all">
+                            {personne.email}
+                          </a>
+                        ) : "—"}
+                      </p>
+
+                      {/* Téléphone (Affiché uniquement s'il existe) */}
+                      <p className="flex items-center gap-2 text-foreground sm:col-span-2 border-t pt-2">
+                        <Phone className="w-3.5 h-3.5 text-muted-foreground shrink-0" />
+                        <span className="font-medium">Téléphone :</span>
+                        {personne.telephone ? (
+                          <a href={`tel:${personne.telephone}`} className="text-primary hover:underline">
+                            {personne.telephone}
+                          </a>
+                        ) : (
+                          <span className="text-muted-foreground">—</span>
                         )}
-                        {personne.telephone && (
-                          <div>
-                            <span className="text-muted-foreground block text-[10px] uppercase">Téléphone</span>
-                            <span className="font-medium text-foreground">{personne.telephone}</span>
-                          </div>
-                        )}
-                        {personne.matricule && (
-                          <div>
-                            <span className="text-muted-foreground block text-[10px] uppercase">Matricule</span>
-                            <span className="font-medium text-foreground">{personne.matricule}</span>
-                          </div>
-                        )}
-                        {personne.employeur && (
-                          <div>
-                            <span className="text-muted-foreground block text-[10px] uppercase">Employeur</span>
-                            <span className="font-medium text-foreground">{personne.employeur}</span>
-                          </div>
-                        )}
-                        {personne.entite && (
-                          <div>
-                            <span className="text-muted-foreground block text-[10px] uppercase">Entité</span>
-                            <span className="font-medium text-foreground">{personne.entite}</span>
-                          </div>
-                        )}
-                      </div>
+                      </p>
                     </div>
                   ))}
                 </div>
               ) : (
-                <p className="text-sm text-muted-foreground italic">Aucune personne associée</p>
+                /* Message de repli si aucune personne n'est enregistrée */
+                <div className="text-xs text-muted-foreground italic p-3 border border-dashed rounded-md text-center bg-muted/30">
+                  Aucun demandeur renseigné
+                </div>
               )}
             </div>
 
