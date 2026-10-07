@@ -92,7 +92,7 @@ interface Props {
 
 
 
-type SearchField = 'nom' | 'reference' | 'description'
+type SearchField = 'nom' | 'reference' | 'description' | 'matricule'
 
 
 
@@ -103,6 +103,8 @@ const SEARCH_FIELDS: { value: SearchField; label: string; icon: React.ElementTyp
   { value: 'reference',   label: 'Référence', icon: Hash,     placeholder: 'Entrer le référence' },
 
   { value: 'nom',         label: 'Nom',       icon: User,     placeholder: 'Rechercher par nom ou prénom...' },
+  
+  { value: 'matricule',   label: 'Matricule', icon: Hash,     placeholder: 'Rechercher par matricule...' },
 
 ]
 
@@ -203,6 +205,26 @@ export const CourrierListView = ({ courriers, loading, error, onSelect,  onEdit,
           // On combine les deux pour permettre une recherche sur le nom complet
 
           const nomComplet = `${nom} ${prenom}`.toLowerCase();
+
+          
+
+          return nomComplet.includes(q);
+
+        });
+
+      }
+      if (searchField === 'matricule') {
+
+        // On vérifie si au moins une personne dans le tableau correspond à la recherche
+
+        return c.detailPersonnes?.some((personne) => {
+
+          const matricule = personne.matricule || '';
+
+
+          // On combine les deux pour permettre une recherche sur le nom complet
+
+          const nomComplet = `${matricule}`.toLowerCase();
 
           
 
