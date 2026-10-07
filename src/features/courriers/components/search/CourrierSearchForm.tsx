@@ -318,7 +318,7 @@ const DEFAULT_CRITERIA: CourrierSearchCriteria = {
               >
                 <option value="">Tous les statuts</option>
                 <option value="en_cours">En cours</option>
-                <option value="finalise">Finalisé</option>
+                <option value="finalise">Clôturé</option>
               </select>
             </div>
 
