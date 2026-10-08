@@ -2,6 +2,7 @@
 
 import { useState, useRef, useEffect } from 'react'
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
+import { VisuallyHidden } from '@radix-ui/react-visually-hidden'
 import { Button } from '@/components/ui/button'
 import { Textarea } from '@/components/ui/textarea'
 import { Forward, FileText, X, Paperclip, Check, ChevronsUpDown, Loader2, User } from 'lucide-react'
@@ -149,7 +150,13 @@ export const TransfererDialog = ({ messageId, onSuccess }: Props) => {
 
       <DialogContent className="bg-card border-border text-foreground sm:max-w-[500px]">
         <DialogHeader>
-          <DialogTitle>Transférer le message</DialogTitle>
+          {!transferring ? (
+            <DialogTitle>Transférer le message</DialogTitle>
+          ) : (
+            <VisuallyHidden>
+              <DialogTitle>Transfert en cours</DialogTitle>
+            </VisuallyHidden>
+          )}
         </DialogHeader>
 
         <div className="py-4 space-y-4 max-h-[70vh] overflow-y-auto px-1">
