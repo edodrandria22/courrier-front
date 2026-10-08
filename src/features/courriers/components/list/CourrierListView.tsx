@@ -136,51 +136,51 @@ export const CourrierListView = ({ courriers, loading, error, onSelect,  onEdit,
 
   // Notification pour nbNonTraite et nbIsRecu
 
-  useEffect(() => {
+  // useEffect(() => {
 
-    if (nbNonTraite !== undefined && nbNonTraite > 0) {
+  //   if (nbNonTraite !== undefined && nbNonTraite > 0) {
 
-      toast.error(`${nbNonTraite} courrier(s) non traité(s)`, {
+  //     toast.error(`${nbNonTraite} courrier(s) non traité(s)`, {
 
-        duration: Infinity,
+  //       duration: Infinity,
 
-        action: {
+  //       action: {
 
-          label: 'Fermer',
+  //         label: 'Fermer',
 
-          onClick: () => toast.dismiss(),
+  //         onClick: () => toast.dismiss(),
 
-        },
+  //       },
 
-      })
+  //     })
 
-    }
+  //   }
 
-  }, [nbNonTraite])
+  // }, [nbNonTraite])
 
 
 
-  useEffect(() => {
+  // useEffect(() => {
 
-    if (nbIsRecu !== undefined && nbIsRecu > 0) {
+  //   if (nbIsRecu !== undefined && nbIsRecu > 0) {
 
-      toast.error(`${nbIsRecu} courrier(s) en route`, {
+  //     toast.error(`${nbIsRecu} courrier(s) en route`, {
 
-        duration: Infinity,
+  //       duration: Infinity,
 
-        action: {
+  //       action: {
 
-          label: 'Fermer',
+  //         label: 'Fermer',
 
-          onClick: () => toast.dismiss(),
+  //         onClick: () => toast.dismiss(),
 
-        },
+  //       },
 
-      })
+  //     })
 
-    }
+  //   }
 
-  }, [nbIsRecu])
+  // }, [nbIsRecu])
 
   
 
