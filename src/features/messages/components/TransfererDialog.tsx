@@ -153,7 +153,30 @@ export const TransfererDialog = ({ messageId, onSuccess }: Props) => {
         </DialogHeader>
 
         <div className="py-4 space-y-4 max-h-[70vh] overflow-y-auto px-1">
-          <div className="space-y-2">
+          {/* Barre de progression pendant le transfert */}
+          {transferring ? (
+            <div className="flex flex-col items-center justify-center py-12 space-y-4">
+              <Loader2 className="w-12 h-12 animate-spin text-primary" />
+              <div className="space-y-2 w-full max-w-xs">
+                <div className="flex items-center justify-center text-sm text-muted-foreground">
+                  Transfert en cours...
+                </div>
+                <div className="h-2 w-full bg-muted rounded-full overflow-hidden">
+                  <div
+                    className="h-full bg-primary rounded-full"
+                    style={{
+                      width: '100%',
+                      background: 'linear-gradient(90deg, transparent, var(--primary), transparent)',
+                      backgroundSize: '200% 100%',
+                      animation: 'shimmer 2s infinite'
+                    }}
+                  />
+                </div>
+              </div>
+            </div>
+          ) : (
+            <>
+              <div className="space-y-2">
             <label className="text-sm font-semibold text-foreground">
               Numero de depart <span className="text-muted-foreground font-normal"></span>
             </label>
@@ -350,6 +373,8 @@ export const TransfererDialog = ({ messageId, onSuccess }: Props) => {
               {transferError}
             </div>
           )}
+            </>
+          )}
         </div>
 
         {/* Actions */}
@@ -371,7 +396,7 @@ export const TransfererDialog = ({ messageId, onSuccess }: Props) => {
           >
             {transferring || isClosing ? (
               <>
-                <Loader2 className="w-4 h-4 animate-spin" />
+                {/* <Loader2 className="w-4 h-4 animate-spin" /> */}
                 Envoi...
               </>
             ) : (
