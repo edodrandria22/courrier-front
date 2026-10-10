@@ -294,7 +294,7 @@ export const MessageDetailView = ({ courrier, message, messages, currentUserId, 
             </Button>
           )} */}
           
-          {canTransfer && isLastMessage(message) && !courrier.cloturePar && courrier.isReadAt && (
+          {canTransfer && isLastMessage(message) && !courrier.cloturePar && message.isReadAt && (
             <>
               <TransfererDialog messageId={message.id} onSuccess={onSuccessTransfere} />
               <Button
