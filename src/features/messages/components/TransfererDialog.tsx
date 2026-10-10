@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useRef, useEffect } from 'react'
+import { useTheme } from 'next-themes'
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
 import { VisuallyHidden } from '@radix-ui/react-visually-hidden'
 import { Button } from '@/components/ui/button'
@@ -33,6 +34,8 @@ interface Props {
 }
 
 export const TransfererDialog = ({ messageId, onSuccess }: Props) => {
+  const { theme } = useTheme()
+
   // États de la modale
   const [open, setOpen] = useState(false)
   const [isClosing, setIsClosing] = useState(false)
@@ -163,6 +166,11 @@ export const TransfererDialog = ({ messageId, onSuccess }: Props) => {
           {/* Barre de progression pendant le transfert */}
           {transferring ? (
             <div className="flex flex-col items-center justify-center py-12 space-y-4">
+              <img
+                src={theme === 'dark' ? '/mesupresSombre.jpg' : '/mesupres.jpg'}
+                alt="Logo Mesupress"
+                className="h-12 w-auto"
+              />
               <Loader2 className="w-12 h-12 animate-spin text-primary" />
               <div className="space-y-2 w-full max-w-xs">
                 <div className="flex items-center justify-center text-sm text-muted-foreground">
@@ -385,32 +393,37 @@ export const TransfererDialog = ({ messageId, onSuccess }: Props) => {
         </div>
 
         {/* Actions */}
-        <div className="flex items-center justify-end gap-3 pt-4 border-t border-border">
-          <Button
-            type="button"
-            variant="ghost"
-            onClick={() => setOpen(false)}
-            disabled={transferring}
-          >
-            Annuler
-          </Button>
-          <Button
-            type="button"
-            style={{ color: '#ffffff' }}
-            onClick={handleTransferer}
-            disabled={transferring || !selectedUserId || loadingUsers || isClosing}
-            className="bg-primary hover:opacity-90 text-primary-foreground min-w-[140px] flex items-center gap-2"
-          >
-            {transferring || isClosing ? (
-              <>
-                {/* <Loader2 className="w-4 h-4 animate-spin" /> */}
-                Envoi...
-              </>
-            ) : (
-              'Transférer'
-            )}
-          </Button>
-        </div>
+        {!transferring ? (
+          <div className="flex items-center justify-end gap-3 pt-4 border-t border-border">
+            <Button
+              type="button"
+              variant="ghost"
+              onClick={() => setOpen(false)}
+              disabled={transferring}
+            >
+              Annuler
+            </Button>
+            <Button
+              type="button"
+              style={{ color: '#ffffff' }}
+              onClick={handleTransferer}
+              disabled={transferring || !selectedUserId || loadingUsers || isClosing}
+              className="bg-primary hover:opacity-90 text-primary-foreground min-w-[140px] flex items-center gap-2"
+            >
+              {isClosing ? (
+                'Envoi...'
+              ) : (
+                'Transférer'
+              )}
+            </Button>
+          </div>
+        ) : (
+          <div className="flex flex-col items-center justify-center pt-4 border-border gap-3">
+            <div className="flex items-center gap-2 px-4 py-2 bg-primary/5 border border-primary/10 rounded-lg">
+              <p className="text-xs font-semibold text-primary whitespace-nowrap">Ministère de l'Enseignement Supérieur et de la Recherche Scientifique</p>
+            </div>
+          </div>
+        )}
       </DialogContent>
     </Dialog>
   )

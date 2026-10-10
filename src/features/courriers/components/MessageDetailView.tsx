@@ -133,28 +133,30 @@ export const MessageDetailView = ({ courrier, message, messages, currentUserId, 
           <ArrowLeft className="w-4 h-4" />
         </Button>
         <div className="flex-1 min-w-0">
-          <div className="flex items-center gap-2 flex-wrap mb-1">
+          <div className="flex items-center justify-between gap-2 flex-wrap mb-1">
             <p className="text-xs font-mono text-primary/70">{courrier.reference}</p>
-            
-            {/* Badge de confidentialité */}
-            {isConfidentiel && (
-              <Badge variant="outline" className="text-[10px] px-2 py-0 h-5 bg-amber-50 text-amber-700 border-amber-200 dark:bg-amber-900/30 dark:text-amber-400 dark:border-amber-800 flex items-center gap-1">
-                <Lock className="w-2.5 h-2.5" /> Confidentiel
-              </Badge>
-            )}
 
-            {message.isReadAt && (
-              <Badge variant="outline" className="text-[10px] px-2 py-0 h-5 bg-emerald-500/10 text-emerald-400 border-emerald-500/20 flex items-center">
-                <CheckCircle2 className="w-3 h-3 mr-1" /> Arrivée
-              </Badge>
-            )}
+            <div className="flex items-center gap-2 flex-wrap">
+              {/* Badge de confidentialité */}
+              {isConfidentiel && (
+                <Badge variant="outline" className="text-[10px] px-2 py-0 h-5 bg-amber-50 text-amber-700 border-amber-200 dark:bg-amber-900/30 dark:text-amber-400 dark:border-amber-800 flex items-center gap-1">
+                  <Lock className="w-2.5 h-2.5" /> Confidentiel
+                </Badge>
+              )}
 
-            {courrier.cloturePar && (
-              <Badge variant="secondary" className="h-5 px-1.5 text-[10px] font-medium gap-1 bg-green-100 text-green-700 hover:bg-green-100 dark:bg-green-900/30 dark:text-green-400">
-                <CheckCircle2 className="w-3 h-3" />
-                Finalisé
-              </Badge>
-            )}
+              {message.isReadAt && (
+                <Badge variant="outline" className="text-[10px] px-2 py-0 h-5 bg-emerald-500/10 text-emerald-400 border-emerald-500/20 flex items-center">
+                  <CheckCircle2 className="w-3 h-3 mr-1" /> Arrivée
+                </Badge>
+              )}
+
+              {courrier.cloturePar && (
+                <Badge variant="secondary" className="h-5 px-1.5 text-[10px] font-medium gap-1 bg-green-100 text-green-700 hover:bg-green-100 dark:bg-green-900/30 dark:text-green-400">
+                  <CheckCircle2 className="w-3 h-3" />
+                  Finalisé
+                </Badge>
+              )}
+            </div>
           </div>
           
           {/* Titre stylisé en fonction de la confidentialité */}

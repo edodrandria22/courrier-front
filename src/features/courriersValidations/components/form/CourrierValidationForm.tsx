@@ -12,6 +12,7 @@ import { CourrierValidation } from '../../type/courrierValidation'
 import { courrierValidationService } from '../../service/courriersValidationsService'
 import { toast } from 'sonner'
 import { PieceJointeCard } from '@/features/courriers/components/PieceJointeCard'
+import { LoadingOverlay } from '@/features/common/components/LoadingOverlay'
 
 interface Props {
   onSuccess: () => void,
@@ -210,6 +211,7 @@ export const CourrierValidationForm = ({ onSuccess, courrierValidation, onCancel
   }
   const isFieldDisabled = loading;
   return (
+    <>
     <Card className="max-w-3xl mx-auto border-border bg-card shadow-none md:border md:shadow-sm">
       <form onSubmit={handleFormSubmit} className="p-6 space-y-8">
 
@@ -644,5 +646,7 @@ export const CourrierValidationForm = ({ onSuccess, courrierValidation, onCancel
         </div>
       </form>
     </Card>
+    <LoadingOverlay isOpen={loading} message="Traitement en cours..." />
+  </>
   )
 }
