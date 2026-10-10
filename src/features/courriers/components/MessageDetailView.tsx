@@ -166,7 +166,20 @@ export const MessageDetailView = ({ courrier, message, messages, currentUserId, 
             {courrier.object}
           </h2>
           
-          <p className="text-xs text-muted-foreground mt-0.5">{formatDate(message.createdAt)}</p>
+          <div className="flex flex-wrap items-center gap-3 mt-1.5">
+            <div className="flex items-center gap-1.5 px-2 py-1 bg-primary/5 border border-primary/10 rounded-md">
+              <ArrowRight className="w-3 h-3 text-primary/70" />
+              <span className="text-xs text-muted-foreground">Départ :</span>
+              <span className="text-xs font-medium text-foreground">{formatDate(message.createdAt)}</span>
+            </div>
+            {message.isReadAt && (
+              <div className="flex items-center gap-1.5 px-2 py-1 bg-emerald-500/5 border border-emerald-500/10 rounded-md">
+                <CheckCircle2 className="w-3 h-3 text-emerald-500/70" />
+                <span className="text-xs text-muted-foreground">Arrivée :</span>
+                <span className="text-xs font-medium text-emerald-600 dark:text-emerald-400">{formatDate(message.isReadAt)}</span>
+              </div>
+            )}
+          </div>
         </div>
       </div>
 

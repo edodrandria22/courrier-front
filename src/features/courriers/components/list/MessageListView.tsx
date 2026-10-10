@@ -344,7 +344,7 @@ export const MessageListView = ({ courrier, messages, loading, error, currentUse
                       </div> */}
                       <div className="min-w-0">
                         <p className="font-medium text-xs truncate">
-                          {courrier.destinataire?.sigle || `${courrier.destinataire?.nom} ${courrier.destinataire?.prenom}`}
+                          {courrier.destinataire ? (courrier.destinataire.sigle || `${courrier.destinataire.nom} ${courrier.destinataire.prenom || ''}`) : ''}
                         </p>
                         {/* <p className="text-[11px] text-muted-foreground truncate">
                           {courrier.destinataire?.adresse}
