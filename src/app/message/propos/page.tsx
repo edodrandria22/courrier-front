@@ -1,4 +1,5 @@
 import React from 'react';
+import { FileText } from 'lucide-react';
 
 export default function PresentationECourrier() {
   return (
@@ -18,6 +19,15 @@ export default function PresentationECourrier() {
           <p className="text-base text-muted-foreground max-w-2xl mx-auto">
             Ministère de l'Enseignement Supérieur et de la Recherche Scientifique
           </p>
+          <a
+            href="/manuel_procedu_eCourrier.pdf#toolbar=0&navpanes=0&scrollbar=0"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-2 px-6 py-3 bg-primary text-white rounded-lg font-medium hover:bg-primary/90 transition-all shadow-sm hover:shadow-md"
+          >
+            <FileText className="w-5 h-5" />
+            Manuel de procédure
+          </a>
         </div>
 
         {/* Section de présentation */}
@@ -66,7 +76,7 @@ export default function PresentationECourrier() {
                   </svg>
                   <div>
                     <p className="text-xs font-medium text-muted-foreground uppercase tracking-wider">Nom</p>
-                    <p className="text-sm font-medium text-foreground">Dr RASOAMANANA Radoniaina A.</p>
+                    <p className="text-sm font-medium text-foreground">Dr RASOAMANANA Radoniaina Andriantsiresy</p>
                   </div>
                 </li>
                 <li className="flex items-start gap-3">
