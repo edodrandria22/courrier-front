@@ -19,6 +19,10 @@ export default function PresentationECourrier() {
           <p className="text-base text-muted-foreground max-w-2xl mx-auto">
             Ministère de l'Enseignement Supérieur et de la Recherche Scientifique
           </p>
+          <div className="w-full h-px bg-border my-4"></div>
+          <p className="text-base font-semibold text-foreground">
+            Télécharger le manuel ici
+          </p>
           <a
             href="/manuel_procedu_eCourrier.pdf#toolbar=0&navpanes=0&scrollbar=0"
             target="_blank"
