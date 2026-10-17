@@ -1,6 +1,7 @@
 export interface CourrierSearchCriteria {
   reference?: string;
   object?: string;
+  description?: string;
   nom?: string;
   prenom?: string;
   email?: string;

@@ -59,6 +59,7 @@ const DEFAULT_CRITERIA: CourrierSearchCriteria = {
     reference: criteria?.reference ?? '',
     object: criteria?.object ?? '',
     nom: criteria?.nom ?? '',
+    description: criteria?.description ?? '',
     prenom: criteria?.prenom ?? '',
     email: criteria?.email ?? '',
     telephone: criteria?.telephone ?? '',
@@ -159,7 +160,17 @@ const DEFAULT_CRITERIA: CourrierSearchCriteria = {
               value={criteria.object}
               onChange={(e) => handleInputChange('object', e.target.value)}
               className="w-full px-3 py-2 text-sm bg-background border border-input rounded-md focus:outline-none focus:ring-2 focus:ring-primary/50 transition-all"
-              placeholder="Objet de la demande..."
+              placeholder="Objet de la courrier..."
+            />
+          </div>
+          <div>
+            <label className="block text-xs font-medium mb-1.5 text-foreground">Description</label>
+            <input
+              type="text"
+              value={criteria.description}
+              onChange={(e) => handleInputChange('description', e.target.value)}
+              className="w-full px-3 py-2 text-sm bg-background border border-input rounded-md focus:outline-none focus:ring-2 focus:ring-primary/50 transition-all"
+              placeholder="Description de la courrier..."
             />
           </div>
           <div className="space-y-2">
