@@ -12,12 +12,14 @@ import { useMercureSubscription } from '@/hooks/useMercureSubscription'
 import { User } from '@/features/auth/types/login'
 import { Button } from '@/components/ui/button'
 import { Search, ArrowLeft } from 'lucide-react'
+import { useCurrentUser } from '@/features/auth/hooks/useCurrentUser'
 
 interface CourrierSearchTemplateProps {
   onCourrierSelect?: (courrier: Courrier) => void
 }
 
 export const CourrierSearchTemplate = ({ onCourrierSelect }: CourrierSearchTemplateProps) => {
+  const { user } = useCurrentUser();
   const [searchResults, setSearchResults] = useState<Courrier[]>([])
   const [loading, setLoading] = useState(false);
   const [loadingMore, setLoadingMore] = useState(false);
@@ -181,6 +183,11 @@ export const CourrierSearchTemplate = ({ onCourrierSelect }: CourrierSearchTempl
     setReferenceUniqueCriteria(null)
     setReferenceUniqueHasMore(true)
   }
+
+  const onDelete = (deletedId: number) => {
+    setSearchResults(prev => prev.filter(c => c.id !== deletedId))
+    setReferenceUniqueResults(prev => prev.filter(c => c.id !== deletedId))
+  }
   
   // Si un courrier est sélectionné, afficher la template avec les messages
   if (selectedCourrier) {
@@ -266,6 +273,8 @@ export const CourrierSearchTemplate = ({ onCourrierSelect }: CourrierSearchTempl
                 onLoadMore={loadMoreResults}
                 loadingMore={loadingMore}
                 isRerchercheReferenceUnique={isReferenceUniqueView}
+                user={user}
+                onDelete={onDelete}
               />
           )}
         </div>

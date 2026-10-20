@@ -1,10 +1,11 @@
 'use client'
 
-import { 
-  ArrowLeft, ArrowRight, CheckCircle2, AlertCircle, Plus, Lock, 
+import {
+  ArrowLeft, ArrowRight, CheckCircle2, AlertCircle, Plus, Lock,
   UserIcon, Mail, Phone, Calendar, Clock, FileText, Hash, Building,
   Edit2,
-  Loader2
+  Loader2,
+  Trash2
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
@@ -26,6 +27,7 @@ import { useRouter } from 'next/navigation'
 import { toast } from 'sonner'
 import { User } from '@/features/auth/types/login'
 import { ConfirmDialog } from '@/features/common/components/ui/ConfirmDialog'
+import { messageService } from '@/features/messages/services/messageService'
 // ... (dans votre composant)
 interface Props {
   courrier: Courrier
@@ -42,9 +44,10 @@ interface Props {
   loadingMore?: boolean
   onTransferSuccess?: () => void
   onCloture: (id: number) => Promise<void>
+  onDelete?: (id: number) => void
 }
 
-export const MessageListView = ({ courrier, messages, loading, error, currentUser, onSelect, onBack, isRecherche = false, updateHistorique, hasMoreMessages, onLoadMore, loadingMore, onTransferSuccess, onCloture }: Props) => {
+export const MessageListView = ({ courrier, messages, loading, error, currentUser, onSelect, onBack, isRecherche = false, updateHistorique, hasMoreMessages, onLoadMore, loadingMore, onTransferSuccess, onCloture, onDelete }: Props) => {
   const { isMessageVisible, isLastRecipient,isLastMessage, isDestinataireOf } = useMessagePermissions(messages, currentUser?.id?.toString() || '');
 
   // var isDestinataire = false;
@@ -54,6 +57,9 @@ export const MessageListView = ({ courrier, messages, loading, error, currentUse
   // console.log(courrier)
   const isButtonLu = isLastRecipient && !courrier.isReadAt;
   const [userToDelete, setUserToDelete] = useState<String | null>(null);
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false)
+  const [messageToDelete, setMessageToDelete] = useState<{ id: number; idString: string } | null>(null)
+  const [isDeleting, setIsDeleting] = useState(false)
 
   const statusLu = courrier.isReadAt ? 'arrivée' : 'non arrivée'
   const status = courrier.cloturePar ? 'finalise' : statusLu;
@@ -72,7 +78,7 @@ export const MessageListView = ({ courrier, messages, loading, error, currentUse
   };
   const cloturer = async () => {
     setLoadingCloturer(true);
-    
+
     try {
       await onCloture(courrier.id || 0);
     } catch (err) {
@@ -83,6 +89,29 @@ export const MessageListView = ({ courrier, messages, loading, error, currentUse
       setLoadingCloturer(false);
     }
   };
+
+  const handleDeleteMessage = (messageId: number, idString: string) => {
+    setMessageToDelete({ id: messageId, idString })
+    setDeleteDialogOpen(true)
+  }
+
+  const confirmDeleteMessage = async () => {
+    if (messageToDelete === null) return
+
+    setIsDeleting(true)
+    try {
+      await messageService.deleteMessage(messageToDelete.id)
+      toast.success('Message supprimé avec succès')
+      onDelete?.(messageToDelete.id)
+    } catch (error) {
+      const message = error instanceof Error ? error.message : 'Erreur lors de la suppression du message'
+      toast.error(message)
+    } finally {
+      setIsDeleting(false)
+      setDeleteDialogOpen(false)
+      setMessageToDelete(null)
+    }
+  }
 
   const handleMarquerLuWithNumero = async () => {
     if (!courrier.messageId) return;
@@ -783,9 +812,25 @@ export const MessageListView = ({ courrier, messages, loading, error, currentUse
 
                             {/* 7. Action */}
                             <td className="px-4 py-3 whitespace-nowrap text-right">
-                              {accessible && (
-                                <ArrowRight className="w-4 h-4 text-muted-foreground/40 group-hover:text-primary group-hover:translate-x-0.5 transition-all inline-block" />
-                              )}
+                              <div className="flex items-center justify-end gap-2">
+                                {accessible && (
+                                  <ArrowRight className="w-4 h-4 text-muted-foreground/40 group-hover:text-primary group-hover:translate-x-0.5 transition-all inline-block" />
+                                )}
+                                {currentUser?.role === 'Admin' && isLastMessage(message) && messages.length > 1 && !courrier.cloturePar && (
+                                  <Button
+                                    variant="ghost"
+                                    size="icon"
+                                    title="Supprimer"
+                                    className="h-8 w-8 rounded-full text-destructive hover:text-destructive hover:bg-destructive/10"
+                                    onClick={(e) => {
+                                      e.stopPropagation()
+                                      handleDeleteMessage(message.id, String(message.id))
+                                    }}
+                                  >
+                                    <Trash2 className="w-4 h-4" />
+                                  </Button>
+                                )}
+                              </div>
                             </td>
                           </tr>
                         )
@@ -844,6 +889,19 @@ export const MessageListView = ({ courrier, messages, loading, error, currentUse
                 onConfirm={cloturer}
                 onCancel={() => setUserToDelete(null)}
             />
+      <ConfirmDialog
+        open={deleteDialogOpen}
+        title="Supprimer le message"
+        description="Êtes-vous sûr de vouloir supprimer le message ? Cette action est irréversible."
+        confirmLabel="Supprimer"
+        cancelLabel="Annuler"
+        isLoading={isDeleting}
+        onConfirm={confirmDeleteMessage}
+        onCancel={() => {
+          setDeleteDialogOpen(false)
+          setMessageToDelete(null)
+        }}
+      />
     </div>
   )
 }

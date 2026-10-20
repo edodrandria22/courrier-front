@@ -373,5 +373,21 @@ export const courrierService = {
       logger.exception('courrierService.getNonTraite - Exception', error);
       throw error;
     }
-  }
+  },
+  deleteCourrier: async (id: number): Promise<void> => {
+    try {
+      const fetchWithAuth = useFetchAuth();
+      const res = await fetchWithAuth(`/api/courriers/${id}`, {
+        method: 'DELETE',
+      });
+      if (!res.ok) {
+        const json = await res.json();
+        throw new Error(json.error ?? json.message ?? 'Erreur lors de la suppression');
+      }
+    } catch (error) {
+      logger.exception('courrierService.deleteCourrier - Exception', error);
+      throw error;
+    }
+  },
+
 };

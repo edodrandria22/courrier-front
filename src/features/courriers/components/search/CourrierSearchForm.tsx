@@ -32,6 +32,7 @@ export const CourrierSearchForm = ({ onSearch, loading = false, reinitialiser, i
 const DEFAULT_CRITERIA: CourrierSearchCriteria = {
     reference: '',
     object: '',
+    description: '',
     nom: '',
     prenom: '',
     email: '',

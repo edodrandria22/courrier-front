@@ -221,5 +221,9 @@ GET http://localhost:3000/api/notifications/subscribe 404 (Not Found)
     --creer une page pour voir le detail de la courrierValidation --ok --30 mn
     --creer une page pour le superviseur , valider et mettre des remarques sur le courrier validation -- ok -- 60 mn
     --mercure pendant l'update et insertion courrier validation -- 60 mn
---mettre ... si object est trop long pour courrier liste -- a faire -- 30 mn
---creer une page statistique -- a faire -- 30 mn
+    --mettre ... si object est trop long pour courrier liste -- a faire -- 30 mn
+20/10/2026
+    --creer service pour supprimer une courrier -- ok -- 15 mn
+    --creer service pour supprimer une message -- ok -- 15 mn 
+    --modifier la page liste des courrier pour supprimer si l'utilisateur est admin -- ok -- 30 mn
+    --modifier la page liste message pour supprimer le message si admin -- ok -- 30mn

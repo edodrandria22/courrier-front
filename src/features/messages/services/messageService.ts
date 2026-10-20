@@ -1,5 +1,6 @@
 import { logger } from '@/lib/logger';
 import { MessageFolder } from '../types/message';
+import { useFetchAuth } from '@/hooks/useFetchAuth';
 
 export const messageService = {
   getMessages: async (folder: MessageFolder = 'inbox') => {
@@ -130,6 +131,21 @@ export const messageService = {
       return { success: true };
     } catch (error) {
       // return { success: false, error: error instanceof Error ? error.message : String(error) };
+      throw error;
+    }
+  },
+  deleteMessage: async (id: number): Promise<void> => {
+    try {
+      const fetchWithAuth = useFetchAuth();
+      const res = await fetchWithAuth(`/api/messages/${id}`, {
+        method: 'DELETE',
+      });
+      if (!res.ok) {
+        const json = await res.json();
+        throw new Error(json.error ?? json.message ?? 'Erreur lors de la suppression');
+      }
+    } catch (error) {
+      logger.exception('messageService.deleteMessage - Exception', error);
       throw error;
     }
   },

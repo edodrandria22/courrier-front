@@ -4,19 +4,21 @@
 
 import { useState, useEffect, useRef } from 'react'
 
-import { 
+import {
 
-  Inbox, AlertCircle, Clock, CheckCircle2, Archive, Search, X, 
+  Inbox, AlertCircle, Clock, CheckCircle2, Archive, Search, X,
 
-  User, Hash, FileText, Eye, MoreVertical, Lock, 
+  User, Hash, FileText, Eye, MoreVertical, Lock,
 
-  ArrowUpRight, ArrowDownLeft, Pencil, 
+  ArrowUpRight, ArrowDownLeft, Pencil,
 
   CheckSquare,
 
   Square,
 
-  Package
+  Package,
+
+  Trash2
 
 } from 'lucide-react'
 
@@ -38,6 +40,10 @@ import { generateCourrierPDF } from '../../utils/generateCourrierPDF'
 
 import { toast } from 'sonner'
 
+import { courrierService } from '../../services/courrierService'
+
+import { ConfirmDialog } from '@/features/common/components/ui/ConfirmDialog'
+
 import {
 
   Tooltip,
@@ -49,6 +55,7 @@ import {
   TooltipTrigger,
 
 } from "@/components/ui/tooltip";
+import { User as UserClass } from '@/features/auth/types/login'
 
 
 
@@ -63,6 +70,8 @@ interface Props {
   onSelect: (courrier: Courrier) => void,
 
   onEdit?: (courrier: Courrier) => void
+
+  onDelete?: (id: number) => void
 
   isUpdate?: boolean,
 
@@ -87,6 +96,7 @@ interface Props {
   loadingMore?: boolean,
 
   isRerchercheReferenceUnique?: boolean,
+  user? : UserClass|null
 
 }
 
@@ -122,15 +132,42 @@ const STATUT_CONFIG: Record<string, { label: string; icon: React.ElementType; cl
 
 
 
-export const CourrierListView = ({ courriers, loading, error, onSelect,  onEdit, isUpdate = false, isTraiterAt, setIsTraiterAt, setHasMoreCourriers, nbNonTraite, isRecu, setIsRecu, nbIsRecu, hasMoreCourriers, onLoadMore, loadingMore, isRerchercheReferenceUnique = false}: Props) => {
+export const CourrierListView = ({ courriers, loading, error, onSelect,  onEdit, onDelete, isUpdate = false, isTraiterAt, setIsTraiterAt, setHasMoreCourriers, nbNonTraite, isRecu, setIsRecu, nbIsRecu, hasMoreCourriers, onLoadMore, loadingMore, isRerchercheReferenceUnique = false, user }: Props) => {
 
   const [query, setQuery] = useState('')
 
   const [searchField, setSearchField] = useState<SearchField>('nom')
 
 
-
+  const isAdmin = user?.role == "Admin";
   const activeField = SEARCH_FIELDS.find(f => f.value === searchField)!
+
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false)
+  const [courrierToDelete, setCourrierToDelete] = useState<{ id: number; object: string } | null>(null)
+  const [isDeleting, setIsDeleting] = useState(false)
+
+  const handleDelete = (courrierId: number, courrierObject: string) => {
+    setCourrierToDelete({ id: courrierId, object: courrierObject })
+    setDeleteDialogOpen(true)
+  }
+
+  const confirmDelete = async () => {
+    if (courrierToDelete === null) return
+
+    setIsDeleting(true)
+    try {
+      await courrierService.deleteCourrier(courrierToDelete.id)
+      toast.success('Courrier supprimé avec succès')
+      onDelete?.(courrierToDelete.id)
+    } catch (error) {
+      const message = error instanceof Error ? error.message : 'Erreur lors de la suppression du courrier'
+      toast.error(message);
+    } finally {
+      setIsDeleting(false)
+      setDeleteDialogOpen(false)
+      setCourrierToDelete(null)
+    }
+  }
 
 
 
@@ -1034,29 +1071,33 @@ export const CourrierListView = ({ courriers, loading, error, onSelect,  onEdit,
 
                     <div className="absolute right-0 opacity-0 group-hover:opacity-100 flex items-center gap-1 transition-opacity">
 
-                      {/* <Button
+                      {isRerchercheReferenceUnique && isAdmin &&
+                        <Button
 
-                        variant="ghost"
+                          variant="ghost"
 
-                        size="icon"
+                          size="icon"
 
-                        title="Afficher le PDF"
+                          title="Supprimer"
 
-                        className="h-8 w-8 rounded-full text-muted-foreground hover:text-foreground hover:bg-muted"
+                          className="h-8 w-8 rounded-full text-destructive hover:text-destructive hover:bg-destructive/10"
 
-                        onClick={(e) => { 
+                          onClick={(e) => {
 
-                          e.stopPropagation() 
+                            e.stopPropagation()
 
-                          generateCourrierPDF(courrier, 'view') 
+                            if (courrier.id) {
+                              handleDelete(courrier.id, courrier.object || 'ce courrier')
+                            }
 
-                        }}
+                          }}
 
-                      >
+                        >
 
-                        <Eye className="w-4 h-4" />
+                          <Trash2 className="w-4 h-4" />
 
-                      </Button> */}
+                        </Button>
+                      }
 
                       {isUpdate && (
 
@@ -1157,6 +1198,20 @@ export const CourrierListView = ({ courriers, loading, error, onSelect,  onEdit,
         </div>
 
       )}
+
+      <ConfirmDialog
+        open={deleteDialogOpen}
+        title="Supprimer le courrier"
+        description={`Êtes-vous sûr de vouloir supprimer le courrier "${courrierToDelete?.object || ''}" ? Cette action est irréversible.`}
+        confirmLabel="Supprimer"
+        cancelLabel="Annuler"
+        isLoading={isDeleting}
+        onConfirm={confirmDelete}
+        onCancel={() => {
+          setDeleteDialogOpen(false)
+          setCourrierToDelete(null)
+        }}
+      />
 
     </div>
 

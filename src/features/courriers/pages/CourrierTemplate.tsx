@@ -255,14 +255,14 @@ const handleLocalCloturation = useCallback(async (id: number) => {
     try {
       // 3. Exécuter la fonction asynchrone
       const { success, courrier } = await cloturer(id);
-      
-  
+
+
       // 4. (Optionnel mais recommandé) Vérifier le succès avant de mettre à jour l'état
       if (success && courrier) {
         // Attendre 1 seconde pour laisser le temps au backend de charger les données
         await new Promise(resolve => setTimeout(resolve, 1000));
-        
-        setCourriers(prev => 
+
+        setCourriers(prev =>
           prev.map(m => m.id === id ? { ...m, cloturePar: courrier.cloturePar , dateValidation: courrier.dateValidation } : m)
         );
         if(isRecherche){
@@ -271,9 +271,9 @@ const handleLocalCloturation = useCallback(async (id: number) => {
         setIsTraiterAt(true);
         setIsRecu(null);
         setStep({ level: 'courriers' });
-        
+
       }
-     
+
     } catch (error) {
       if (error instanceof Error) {
                     toast.error(error.message); // Affiche le vrai message d'erreur
@@ -283,9 +283,13 @@ const handleLocalCloturation = useCallback(async (id: number) => {
       }
       console.error("Erreur lors de la clôture :", error);
     }
-    
+
   // 5. Ne pas oublier d'ajouter 'cloturer' dans le tableau des dépendances
 }, [cloturer, setCourriers]);
+
+const handleDeleteMessage = useCallback((deletedId: number) => {
+  setMessages(prev => prev.filter(m => m.id !== deletedId))
+}, []);
 
 // 2. Ajouter "async" devant les paramètres de la fonction
 // const handleCloturer = useCallback(async (id: number) => {
@@ -356,6 +360,7 @@ const handleLocalCloturation = useCallback(async (id: number) => {
           onLoadMore={loadMoreMessages}
           loadingMore={loading}
           onCloture={handleLocalCloturation}
+          onDelete={handleDeleteMessage}
         />
       </div>
     )
