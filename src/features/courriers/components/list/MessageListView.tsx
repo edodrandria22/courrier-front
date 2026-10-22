@@ -533,10 +533,10 @@ export const MessageListView = ({ courrier, messages, loading, error, currentUse
                     Observation
                   </span>
                   {!isEditingObs && (
-                    <Button 
-                      variant="ghost" 
-                      size="sm" 
-                      className="h-6 px-2 text-xs opacity-0 group-hover:opacity-100 transition-opacity absolute right-0 top-2"
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      className="h-6 px-2 text-xs absolute right-0 top-2"
                       onClick={() => setIsEditingObs(true)}
                     >
                       Modifier
@@ -587,10 +587,28 @@ export const MessageListView = ({ courrier, messages, loading, error, currentUse
             {isButtonLu && (
               <div className="flex flex-col gap-2">
                 {!isShowingNumeroArrivee ? (
-                  <Button 
-                    size="sm" 
-                    style={{ color: '#ffffff' }}
-                    className="h-8 text-xs"
+                  <Button
+                    size="sm"
+                    style={{
+                      width: '100%',
+                      height: '35px',
+                      backgroundColor: 'var(--secondary)',
+                      color: '#ffffff',
+                      borderWidth: '2px',
+                      borderStyle: 'solid',
+                      borderColor: 'var(--secondary)',
+                      borderRadius: '12px',
+                      fontSize: '16px',
+                      fontWeight: '700',
+                      cursor: loadingMarquer ? 'not-allowed' : 'pointer',
+                      opacity: loadingMarquer ? '0.6' : '1',
+                      boxShadow: '0 10px 15px -3px rgba(30, 64, 175, 0.3), 0 4px 6px -2px rgba(30, 64, 175, 0.1)',
+                      transition: 'all 0.2s',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      gap: '8px'
+                    }}
                     onClick={marquerLuMessage}
                     disabled={loadingMarquer}
                   >
