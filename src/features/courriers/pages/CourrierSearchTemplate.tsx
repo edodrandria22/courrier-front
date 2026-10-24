@@ -32,6 +32,7 @@ export const CourrierSearchTemplate = ({ onCourrierSelect }: CourrierSearchTempl
   // Etape 1 = liste des courriers par référence unique (isRerchercheReferenceUnique=true)
   // Etape 2 = liste complète des courriers pour la référence sélectionnée (isRerchercheReferenceUnique=false)
   const [isReferenceUniqueView, setIsReferenceUniqueView] = useState(true)
+  const [lastDateCursor, setLastDateCursor] = useState<string | undefined>(undefined)
 
   // On conserve l'état de l'étape 1 (référence unique) pour pouvoir y revenir sans refaire d'appel réseau
   const [referenceUniqueResults, setReferenceUniqueResults] = useState<Courrier[]>([])
@@ -64,6 +65,7 @@ export const CourrierSearchTemplate = ({ onCourrierSelect }: CourrierSearchTempl
     setSearchCriteria(criteria)
     setHasMore(true)
     setIsReferenceUniqueView(true)
+    setLastDateCursor(undefined)
 
     try {
       const results = await courrierService.searchCourriersReference(criteria)
@@ -72,6 +74,12 @@ export const CourrierSearchTemplate = ({ onCourrierSelect }: CourrierSearchTempl
       // On sauvegarde l'état de l'étape "référence unique" pour le bouton retour
       setReferenceUniqueResults(results)
       setReferenceUniqueCriteria(criteria)
+
+      // Mettre à jour le curseur avec la date du dernier résultat
+      if (results.length > 0) {
+        const lastResult = results[results.length - 1]
+        setLastDateCursor(lastResult.dateMessage)
+      }
 
       // Si moins de résultats que la limite, pas de "plus de résultats"
       const stillHasMore = results.length >= nbLimitCourrier
@@ -91,17 +99,13 @@ export const CourrierSearchTemplate = ({ onCourrierSelect }: CourrierSearchTempl
 
     const loadMoreResults = async () => {
     if (loading || loadingMore || !hasMore || !searchCriteria) return
-    
+
     setLoadingMore(true)
-    
+
     try {
-      // Ajouter un curseur basé sur le dernier résultat
-      const lastResult = searchResults[searchResults.length - 1];
-      const dateCursor = lastResult?.dateMessage
-      
       const newResults = isReferenceUniqueView
-        ? await courrierService.searchCourriersReference(searchCriteria, dateCursor)
-        : await courrierService.searchCourriers(searchCriteria, dateCursor)
+        ? await courrierService.searchCourriersReference(searchCriteria, lastDateCursor)
+        : await courrierService.searchCourriers(searchCriteria, lastDateCursor)
 
       // En vue "référence unique", on écarte les courriers dont la référence
       // est déjà présente dans la liste actuelle (évite les doublons de référence)
@@ -109,6 +113,12 @@ export const CourrierSearchTemplate = ({ onCourrierSelect }: CourrierSearchTempl
       const filteredResults = isReferenceUniqueView
         ? newResults.filter(c => !existingReferences.has(c.reference))
         : newResults
+
+      // Mettre à jour le curseur avec la date du dernier résultat obtenu
+      if (newResults.length > 0) {
+        const lastNewResult = newResults[newResults.length - 1]
+        setLastDateCursor(lastNewResult.dateMessage)
+      }
 
       const stillHasMore = !(newResults.length === 0 || newResults.length < nbLimitCourrier)
 
