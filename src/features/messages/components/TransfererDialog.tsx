@@ -10,7 +10,12 @@ import { Forward, FileText, X, Paperclip, Check, ChevronsUpDown, Loader2, User }
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from "@/components/ui/command";
 import { cn } from '@/lib/utils'
-
+        import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip" // Ajustez le chemin selon votre structure de projet
 import { useTransferer } from '../hooks/useTransferer'
 import { useUtilisateurs } from '@/features/utilisateurs/hooks/useUtilisateurs'
 import type { User as Utilisateur} from '@/features/auth/types/login'
@@ -240,7 +245,7 @@ export const TransfererDialog = ({ messageId, onSuccess }: Props) => {
               <PopoverContent className="w-[var(--radix-popover-trigger-width)] p-0">
                 <Command shouldFilter={false}>
                   <CommandInput 
-                    placeholder="Tapez le nom complet..." 
+                    placeholder="Tapez le sigle..." 
                     value={searchQuery}
                     onValueChange={setSearchQuery}
                   />
@@ -269,10 +274,23 @@ export const TransfererDialog = ({ messageId, onSuccess }: Props) => {
                                 selectedUserId === u.id ? "opacity-100" : "opacity-0"
                               )}
                             />
-                            <div className="flex flex-col">
-                              <span className="font-semibold">{u.nom} {u.prenom}</span>
-                              <span className="text-xs text-muted-foreground truncate">{u.adresse}</span>
-                            </div>
+                            <TooltipProvider>
+                                <Tooltip>
+                                  <TooltipTrigger asChild>
+                                    <span className={cn('text-sm cursor-pointer')}>
+                                      {u?.sigle || `${u?.nom || ''} ${u?.prenom || ''}` || ''}
+                                    </span>
+                                  </TooltipTrigger>
+                                  <TooltipContent className="max-w-xs">
+                                    <div className="space-y-1">
+                                      <p><strong>Nom :</strong> {u?.nom || ''} {u?.prenom || ''}</p>
+                                    </div>
+                                    <div className="space-y-1">
+                                      <p><strong>Adresse :</strong> {u?.adresse || ''}</p>
+                                    </div>
+                                  </TooltipContent>
+                                </Tooltip>
+                              </TooltipProvider>
                           </CommandItem>
                         ))}
 
