@@ -1,24 +1,24 @@
 import { ThemePreset } from '../types/theme'
 
 export const THEME_PRESETS: ThemePreset[] = [
-  {
-    id: 'cyan',
-    name: 'Cyan',
-    primary: 'oklch(0.75 0.15 190)',
-    secondary: 'oklch(0.86 0.22 126)',
-  },
-  {
-    id: 'indigo',
-    name: 'Indigo',
-    primary: 'oklch(0.65 0.15 270)',
-    secondary: 'oklch(0.75 0.15 50)',
-  },
-  {
-    id: 'emerald',
-    name: 'Emerald',
-    primary: 'oklch(0.70 0.17 155)',
-    secondary: 'oklch(0.75 0.15 45)',
-  },
+  // {
+  //   id: 'cyan',
+  //   name: 'Cyan',
+  //   primary: 'oklch(0.75 0.15 190)',
+  //   secondary: 'oklch(0.86 0.22 126)',
+  // },
+  // {
+  //   id: 'indigo',
+  //   name: 'Indigo',
+  //   primary: 'oklch(0.65 0.15 270)',
+  //   secondary: 'oklch(0.75 0.15 50)',
+  // },
+  // {
+  //   id: 'emerald',
+  //   name: 'Emerald',
+  //   primary: 'oklch(0.70 0.17 155)',
+  //   secondary: 'oklch(0.75 0.15 45)',
+  // },
   {
     id: 'redGreen',
     name: 'Rouge & Vert',
