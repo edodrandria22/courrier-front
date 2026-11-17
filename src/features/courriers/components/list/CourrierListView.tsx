@@ -695,7 +695,7 @@ export const CourrierListView = ({ courriers, loading, error, onSelect,  onEdit,
 
                 
 
-                { !isUpdate && !isRerchercheReferenceUnique && (
+                {/* { !isUpdate && !isRerchercheReferenceUnique && (
 
                   <div className="flex-none w-24 text-center">
 
@@ -703,7 +703,7 @@ export const CourrierListView = ({ courriers, loading, error, onSelect,  onEdit,
 
                   </div>
 
-                )}
+                )} */}
 
 
 
@@ -993,7 +993,7 @@ export const CourrierListView = ({ courriers, loading, error, onSelect,  onEdit,
 
                       </div>
 
-                      {courrier.numeroExpediteur && !isRerchercheReferenceUnique && (
+                      {/* {courrier.numeroExpediteur && !isRerchercheReferenceUnique && (
 
                         <div className="flex-none">
 
@@ -1011,7 +1011,7 @@ export const CourrierListView = ({ courriers, loading, error, onSelect,  onEdit,
 
                         </div>
 
-                      )}
+                      )} */}
 
 
 
