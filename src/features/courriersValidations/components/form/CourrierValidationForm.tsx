@@ -326,7 +326,7 @@ export const CourrierValidationForm = ({ onSuccess, courrierValidation, onCancel
                 value={formData.observation}
                 onChange={handleInputChange}
                 rows={5}
-                placeholder="Remarque sur le demande (optionnel)"
+                placeholder="Remarque sur la demande (optionnel)"
                 className="resize-none bg-background/50 border-border disabled:opacity-50"
                 disabled={loading}
               />
